@@ -2,18 +2,18 @@
 # -*- coding: utf-8 -*-
 
 """
-test_inline-plz
+test_inlineplz
 ----------------------------------
 
-Tests for `inline-plz` module.
+Tests for `inlineplz` module.
 """
 
 import unittest
 
-from inline-plz import inline-plz
+from inlineplz import inlineplz
 
 
-class TestInline-plz(unittest.TestCase):
+class TestInlineplz(unittest.TestCase):
 
     def setUp(self):
         pass
