@@ -1,0 +1,47 @@
+Messages
+========
+
+docs\conf.py
+  Line: 34
+    pylint: syntax-error / invalid syntax
+
+inline-plz\parsers\base.py
+  Line: 4
+    pylint: unused-import / Unused Message imported from message
+  Line: 9
+    pylint: redefined-builtin / Redefining built-in 'input' (col 20)
+
+inline-plz\parsers\prospector.py
+  Line: 5
+    pylint: unused-import / Unused Message imported from message
+  Line: 8
+    pylint: redefined-builtin / Redefining built-in 'input' (col 20)
+  Line: 17
+    pylint: undefined-variable / Undefined variable 'message' (col 32)
+  Line: 24
+    pylint: undefined-variable / Undefined variable 'message' (col 32)
+  Line: 25
+    pylint: redefined-variable-type / Redefinition of current_line type from str to int (col 16)
+
+travis_pypi_setup.py
+  Line: 20
+    pylint: bare-except / No exception type(s) specified
+  Line: 113
+    pylint: misplaced-comparison-constant / Comparison should be __name__ == '__main__' (col 3)
+  Line: 114
+    pylint: wrong-import-position / Import "import argparse" should be placed at the top of the module (col 4)
+
+
+
+Check Information
+=================
+         Started: 2016-01-09 12:50:17.649090
+        Finished: 2016-01-09 12:50:19.027461
+      Time Taken: 1.38 seconds
+       Formatter: grouped
+        Profiles: default, no_doc_warnings, no_test_warnings, strictness_medium, strictness_high, strictness_veryhigh, no_member_warnings
+      Strictness: None
+  Libraries Used:
+       Tools Run: dodgy, mccabe, pep8, profile-validator, pyflakes, pylint
+  Messages Found: 11
+

@@ -11,7 +11,8 @@ import inlineplz.parsers as parsers
 
 def inline(filename, parser, interface, owner, repo, pr, token, url):
     with open(filename) as inputfile:
-        messages = parsers.PARSERS[parser].parse(inputfile.read())
+        my_parser = parsers.PARSERS[parser]()
+        messages = my_parser.parse(inputfile.read())
     my_interface = interfaces.INTERFACES[interface](owner, repo, pr, token, url)
     my_interface.post_messages(messages)
 

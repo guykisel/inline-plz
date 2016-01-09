@@ -49,7 +49,7 @@ lint:
 	flake8 inline-plz tests
 
 test:
-	python setup.py test
+	py.test
 
 test-all:
 	tox
