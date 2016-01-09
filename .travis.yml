@@ -10,6 +10,9 @@ env:
   - TOXENV=py27
   - TOXENV=py26
   - TOXENV=pypy
+  global:
+    secure: eW5KydEtvXk60uHdVtJCfgJecq/FprPWMvH1KdJSc83+g9jyoAy9sh215Y9CN4FDAp45tFb3BquJkXUJ/sMyiZdvX/2arCzWdgUrQKcCmKVPdjcLve1PDE+r3xuF6Czcg9FnbtTPcg6PSWKHhOsClDmp+xHRC7ua9p6se/EnkNggcn3ZHQ3qJ1NybwfEvIo8CcxgwsF0Yo9qzTpkBbeYKe9ALmFIdjhK9mmhXyCdvC+qRv8yWcjdUvDAYCaWYRFiR+1siiTwSJHYa1FOceCKOzE+iB4dCphYjgfdUL8mPJ/1hFQg+Ci/9rcttZvY5EFsewIPE9rLd6Mfd6i0aDPD3YN7dMtRWd/mqgflLPA1835rOVtsSpCLQ7gQMVQmYC5lpIyjkQF82YJxQfMH+gXrMTdhxPNHMizRFWlWwjS3ztPnvOK+4CyRkFZ7kzHdYvaGZU2JY6mjWA/ZB1XS2ehHYzddzrbf6Qdl344L5TJ0UssVO7Y5srz/uh9pCPkABZdRqEJqrhR5L6i9vZViGmC6WdUgsj2icUP9rFmT7Q3XJtgZQFzQM8fQO/z8OAeCPuDUmZZcIUktDGR94RQEnW4gDwjJLhAgtabxjr6ajZDA0TPluBg/8s+gh0/Nzeq9bE89qpFtAe+rtGoDlJBK0B4HPbCSVN/8zMPtwUAFNxydbwM=
+
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -U tox
