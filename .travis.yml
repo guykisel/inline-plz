@@ -4,6 +4,7 @@
 language: python
 
 env:
+  matrix:
   - TOXENV=py35
   - TOXENV=py34
   - TOXENV=py33
@@ -11,8 +12,7 @@ env:
   - TOXENV=py26
   - TOXENV=pypy
   global:
-    secure: eW5KydEtvXk60uHdVtJCfgJecq/FprPWMvH1KdJSc83+g9jyoAy9sh215Y9CN4FDAp45tFb3BquJkXUJ/sMyiZdvX/2arCzWdgUrQKcCmKVPdjcLve1PDE+r3xuF6Czcg9FnbtTPcg6PSWKHhOsClDmp+xHRC7ua9p6se/EnkNggcn3ZHQ3qJ1NybwfEvIo8CcxgwsF0Yo9qzTpkBbeYKe9ALmFIdjhK9mmhXyCdvC+qRv8yWcjdUvDAYCaWYRFiR+1siiTwSJHYa1FOceCKOzE+iB4dCphYjgfdUL8mPJ/1hFQg+Ci/9rcttZvY5EFsewIPE9rLd6Mfd6i0aDPD3YN7dMtRWd/mqgflLPA1835rOVtsSpCLQ7gQMVQmYC5lpIyjkQF82YJxQfMH+gXrMTdhxPNHMizRFWlWwjS3ztPnvOK+4CyRkFZ7kzHdYvaGZU2JY6mjWA/ZB1XS2ehHYzddzrbf6Qdl344L5TJ0UssVO7Y5srz/uh9pCPkABZdRqEJqrhR5L6i9vZViGmC6WdUgsj2icUP9rFmT7Q3XJtgZQFzQM8fQO/z8OAeCPuDUmZZcIUktDGR94RQEnW4gDwjJLhAgtabxjr6ajZDA0TPluBg/8s+gh0/Nzeq9bE89qpFtAe+rtGoDlJBK0B4HPbCSVN/8zMPtwUAFNxydbwM=
-
+    secure: PUynuK5RJA+tCe5OW6OL3XRFHmd6hj5iRgGyI9l40cy0THRX3Y+DCbvh+2BCHV+zFmhkGZV3px5YqemhbL+9fPSrg73AxVizKDtHxhT8vk0OHKniaw9t4MMdVcI4V2y5p891q0Nh+r69tV4T8p+AfgtTovPFp+4vaN7zlMpTlICzP5zcKTJV25J4oRhIyuxdh4G7IOd49LawRNIZ5O3VnpvXXfZrGB1K85QICKIKYfZpGVOov0x5iLfdEa9xFWFkxpRKAnjwZw1mtoNUOma+VAD89Z8nZJAytVT7lnBxgm7pLl55bHWVBeIe8peTdyoCp8J4dj6XYC1Ps+YBqxCBgPCyPhfpeYn6qXKGElFBNGRHicyjpYSJY1DKUAl5HgmOUiQIE71N2AdIL6f12GKqeXqYT37HWPcMAqR0zQmVvyzvPBsCzMuUUV0oHz089yihI+7WrWmHYKE2tA/KHDhzDYrxKzvy7fF4g6ixSLtonevfDyyIVWHVr3jgjLua4LgulnDMG6cKL3JoxID6O5cIw5Z/Aw/j+OirtCrtyUJprgsXyP4E02G5nBrcdAJ9q/lg5BKqbtdeb8EuuPisL33pKxEvtZ5H9Sju6w8eprFh15YStifv9qOcGBlnMHs2ud3/+V/2Vsq+y+puozrGMGW9iA9PHCli5SkXa3h6cd5/5xo=
 
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install: pip install -U tox
