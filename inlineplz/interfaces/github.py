@@ -27,22 +27,21 @@ class GitHubInterface(InterfaceBase):
                 continue
             msg_position = self.position(msg)
             if msg_position:
-                # check for dupes so we don't spam the PR
-                duplicate = False
-                for comment in self.pull_request.review_comments():
-                    if (comment.position == msg_position and
-                            comment.path == msg.path and
-                            comment.body.strip() == msg.content.strip()):
-                        duplicate = True
-                        break
-                    continue
-                if not duplicate:
+                if not self.is_duplicate(msg, msg_position):
                     self.pull_request.create_review_comment(
                         msg.content,
                         self.sha,
                         msg.path,
                         msg_position
                     )
+
+    def is_duplicate(self, message, position):
+        for comment in self.pull_request.review_comments():
+            if (comment.position == position and
+                    comment.path == message.path and
+                    comment.body.strip() == message.content.strip()):
+                return True
+        return False
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
