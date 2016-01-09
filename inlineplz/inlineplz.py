@@ -4,7 +4,6 @@
 from __future__ import absolute_import
 
 import argparse
-import pprint
 
 import inlineplz.interfaces as interfaces
 import inlineplz.parsers as parsers
@@ -43,7 +42,7 @@ def inline(filename, parser, interface, owner, repo, pr, token, url, dryrun):
     # TODO: implement dryrun as an interface instead of a special case here
     if dryrun:
         for msg in messages:
-            pprint.pprint(msg)
+            print(str(msg))
         return
     my_interface = interfaces.INTERFACES[interface](owner, repo, pr, token, url)
     my_interface.post_messages(messages)

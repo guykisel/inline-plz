@@ -7,3 +7,11 @@ class Message(object):
         self.path = path
         self.line_number = line_number
         self.content = content
+
+    def __str__(self):
+        return """
+Message:
+    Path: {0}
+    Line number: {1}
+    Content: {2}
+        """.format(self.path, self.line_number, self.content).strip()
