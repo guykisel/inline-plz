@@ -16,7 +16,7 @@ class ProspectorParser(ParserBase):
 
         messages_found = False
 
-        for line in lint_data.split('/n'):
+        for line in lint_data.split('\n'):
             # check for message block
             if not messages_found:
                 if line.strip() == 'Messages':
