@@ -32,15 +32,15 @@ setup(
     author_email='guy.kisel@gmail.com',
     url='https://github.com/guykisel/inline-plz',
     packages=[
-        'inline-plz',
+        'inlineplz',
     ],
-    package_dir={'inline-plz':
-                 'inline-plz'},
+    package_dir={'inlineplz':
+                 'inlineplz'},
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",
     zip_safe=False,
-    keywords='inline-plz',
+    keywords='inlineplz',
     classifiers=[
         'Development Status :: 2 - Pre-Alpha',
         'Intended Audience :: Developers',
