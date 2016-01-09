@@ -18,6 +18,8 @@ class ProspectorParser(ParserBase):
 
         for line in lint_data.split('\n'):
             # check for message block
+            if not line.strip():
+                continue
             if not messages_found:
                 if line.strip() == 'Messages':
                     messages_found = True
@@ -27,14 +29,24 @@ class ProspectorParser(ParserBase):
                 break
             # new filename
             if not line.startswith(' '):
-                messages.append(Message(current_filename, current_line, current_message_content))
+                if current_message_content:
+                    messages.append(Message(
+                        current_filename,
+                        current_line,
+                        current_message_content
+                    ))
                 current_filename = line.strip()
                 current_line = ''
                 current_message_content = ''
                 continue
             # new line number
             elif not line.startswith('    '):
-                messages.append(Message(current_filename, current_line, current_message_content))
+                if current_message_content:
+                    messages.append(Message(
+                        current_filename,
+                        current_line,
+                        current_message_content
+                    ))
                 current_line = int(line.replace('  Line: ', '').strip())
                 current_message_content = ''
                 continue
