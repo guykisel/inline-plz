@@ -29,3 +29,10 @@ deploy:
     tags: true
     repo: guykisel/inline-plz
     condition: $TOXENV == py27
+
+addons:
+  apt:
+    sources:
+      - deadsnakes
+    packages:
+      - python3.5-dev
