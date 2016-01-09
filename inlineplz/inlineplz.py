@@ -14,20 +14,28 @@ def main():
     parser.add_argument('--pr', type=int)
     parser.add_argument('--owner', type=str)
     parser.add_argument('--repo', type=str)
+    parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--token', type=str)
     parser.add_argument('--filename', type=str, required=True)
     parser.add_argument('--parser', type=str, required=True, choices=parsers.PARSERS)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
     parser.add_argument('--dryrun', action='store_true')
-
     args = parser.parse_args()
+
+    if args.repo_slug:
+        owner = args.repo_slug.split('/')[0]
+        repo = args.repo_slug.split('/')[1]
+    else:
+        owner = args.owner
+        repo = args.repo
+
     inline(
         args.filename,
         args.parser,
         args.interface,
-        args.owner,
-        args.repo,
+        owner,
+        repo,
         args.pr,
         args.token,
         args.url,
