@@ -21,6 +21,7 @@ class GitHubInterface(InterfaceBase):
             ['git', 'rev-parse', 'HEAD']
         ).strip().decode('utf-8')
         # diff with rename recognition
+        # TODO: support PRs to branches other than master
         self.diff = subprocess.check_output(
             ['git', 'diff', '-M', 'master..' + self.sha]
         ).strip().decode('utf-8')
