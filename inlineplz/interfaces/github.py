@@ -20,7 +20,10 @@ class GitHubInterface(InterfaceBase):
         self.sha = subprocess.check_output(
             ['git', 'rev-parse', 'HEAD']
         ).strip().decode('utf-8')
-        self.diff = self.pull_request.diff()
+        # diff with rename recognition
+        self.diff = subprocess.check_output(
+            ['git', 'diff', '-M', 'master..' + self.sha]
+        ).strip().decode('utf-8')
 
     def post_messages(self, messages):
         for msg in messages:
@@ -46,7 +49,7 @@ class GitHubInterface(InterfaceBase):
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
-        patch = unidiff.PatchSet(self.diff.decode('utf-8').split('\n'))
+        patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
             if os.path.normpath(patched_file.target_file) == os.path.normpath('b/' + message.path):
                 offset = 1
