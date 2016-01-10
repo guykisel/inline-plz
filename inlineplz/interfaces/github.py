@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
+import os.path
 import subprocess
 
 import github3
 import unidiff
 
-from .base import InterfaceBase
+from inlineplz.interfaces.base import InterfaceBase
 
 
 class GitHubInterface(InterfaceBase):
@@ -19,7 +20,11 @@ class GitHubInterface(InterfaceBase):
         self.sha = subprocess.check_output(
             ['git', 'rev-parse', 'HEAD']
         ).strip().decode('utf-8')
-        self.diff = self.pull_request.diff()
+        # diff with rename recognition
+        # TODO: support PRs to branches other than master
+        self.diff = subprocess.check_output(
+            ['git', 'diff', '-M', 'master..' + self.sha]
+        ).strip().decode('utf-8')
 
     def post_messages(self, messages):
         for msg in messages:
@@ -45,9 +50,9 @@ class GitHubInterface(InterfaceBase):
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
-        patch = unidiff.PatchSet(self.diff.decode('utf-8').split('\n'))
+        patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
-            if patched_file.target_file == 'b/' + message.path:
+            if os.path.normpath(patched_file.target_file) == os.path.normpath('b/' + message.path):
                 offset = 1
                 for hunk_no, hunk in enumerate(patched_file):
                     for position, hunk_line in enumerate(hunk):
