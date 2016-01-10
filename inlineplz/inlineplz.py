@@ -5,8 +5,8 @@ from __future__ import absolute_import
 
 import argparse
 
-import inlineplz.interfaces as interfaces
-import inlineplz.parsers as parsers
+from . import interfaces as interfaces
+from . import parsers as parsers
 
 
 def main():
