@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-from .base import ParserBase
-from ..message import Message
+from inlineplz.parsers.base import ParserBase
+from inlineplz.message import Message
 
 
 class ProspectorParser(ParserBase):

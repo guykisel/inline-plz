@@ -6,7 +6,7 @@ import subprocess
 import github3
 import unidiff
 
-from .base import InterfaceBase
+from inlineplz.interfaces.base import InterfaceBase
 
 
 class GitHubInterface(InterfaceBase):
