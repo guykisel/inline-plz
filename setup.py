@@ -58,7 +58,7 @@ setup(
     tests_require=test_requirements,
     entry_points={
         'console_scripts': [
-            'inline-plz = inlineplz.inlineplz:main'
+            'inline-plz = inlineplz.main:main'
         ],
     }
 )
