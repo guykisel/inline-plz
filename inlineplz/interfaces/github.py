@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
+import os.path
 import subprocess
 
 import github3
@@ -47,7 +48,7 @@ class GitHubInterface(InterfaceBase):
         """Calculate position within the PR, which is not the line number"""
         patch = unidiff.PatchSet(self.diff.decode('utf-8').split('\n'))
         for patched_file in patch:
-            if patched_file.target_file == 'b/' + message.path:
+            if os.path.normpath(patched_file.target_file) == os.path.normpath('b/' + message.path):
                 offset = 1
                 for hunk_no, hunk in enumerate(patched_file):
                     for position, hunk_line in enumerate(hunk):
