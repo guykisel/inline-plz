@@ -2,12 +2,12 @@
 from __future__ import absolute_import
 
 import os.path
-import subprocess
 
 import github3
 import unidiff
 
 from inlineplz.interfaces.base import InterfaceBase
+from inlineplz.util import git
 
 
 class GitHubInterface(InterfaceBase):
@@ -17,14 +17,11 @@ class GitHubInterface(InterfaceBase):
         else:
             self.gh = github3.GitHubEnterprise(url, token=token)
         self.pull_request = self.gh.pull_request(owner, repo, pr)
-        self.sha = subprocess.check_output(
-            ['git', 'rev-parse', 'HEAD']
-        ).strip().decode('utf-8')
-        # diff with rename recognition
-        # TODO: support PRs to branches other than master
-        self.diff = subprocess.check_output(
-            ['git', 'diff', '-M', 'master..' + self.sha]
-        ).strip().decode('utf-8')
+        self.commits = [c for c in self.pull_request.commits()]
+        self.last_sha = self.commits[-1].sha
+        self.first_sha = self.commits[0].sha
+        self.parent_sha = git.parent_sha(self.first_sha)
+        self.diff = git.diff(self.parent_sha, self.last_sha)
 
     def post_messages(self, messages):
         for msg in messages:
@@ -35,8 +32,9 @@ class GitHubInterface(InterfaceBase):
                 if not self.is_duplicate(msg, msg_position):
                     self.pull_request.create_review_comment(
                         msg.content,
-                        self.sha,
-                        msg.path,
+                        self.last_sha,
+                        # need to make paths unixy to make github happy
+                        msg.path.replace('\\', '/'),
                         msg_position
                     )
 
