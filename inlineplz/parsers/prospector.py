@@ -10,9 +10,9 @@ class ProspectorParser(ParserBase):
 
     def parse(self, lint_data):
         messages = []
+        current_message = None
         current_filename = ''
         current_line = ''
-        current_message_content = ''
 
         messages_found = False
 
@@ -29,28 +29,15 @@ class ProspectorParser(ParserBase):
                 break
             # new filename
             if not line.startswith(' '):
-                if current_message_content:
-                    messages.append(Message(
-                        current_filename,
-                        current_line,
-                        current_message_content
-                    ))
                 current_filename = line.strip()
-                current_line = ''
-                current_message_content = ''
                 continue
             # new line number
             elif not line.startswith('    '):
-                if current_message_content:
-                    messages.append(Message(
-                        current_filename,
-                        current_line,
-                        current_message_content
-                    ))
                 current_line = int(line.replace('  Line: ', '').strip())
-                current_message_content = ''
+                current_message = Message(current_filename, current_line)
+                messages.append(current_message)
                 continue
             # new content
-            current_message_content += line.lstrip()
+            current_message.comments.append(line.lstrip())
 
         return messages
