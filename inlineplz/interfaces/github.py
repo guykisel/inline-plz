@@ -40,7 +40,7 @@ class GitHubInterface(InterfaceBase):
     def is_duplicate(self, message, position):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
-                    os.path.normpath(comment.path) == os.path.normpath(message.path) and
+                    comment.path == message.path and
                     comment.body.strip() == message.content.strip()):
                 return True
         return False
