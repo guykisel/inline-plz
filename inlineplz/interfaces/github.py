@@ -33,8 +33,7 @@ class GitHubInterface(InterfaceBase):
                     self.pull_request.create_review_comment(
                         msg.content,
                         self.last_sha,
-                        # need to make paths unixy to make github happy
-                        msg.path.replace('\\', '/'),
+                        msg.path,
                         msg_position
                     )
 
@@ -50,7 +49,8 @@ class GitHubInterface(InterfaceBase):
         """Calculate position within the PR, which is not the line number"""
         patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
-            if os.path.normpath(patched_file.target_file) == os.path.normpath('b/' + message.path):
+            target = patched_file.target_file.lstrip('b/')
+            if target == message.path:
                 offset = 1
                 for hunk_no, hunk in enumerate(patched_file):
                     for position, hunk_line in enumerate(hunk):
