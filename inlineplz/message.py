@@ -4,7 +4,7 @@
 class Message(object):
 
     def __init__(self, path, line_number):
-        self.path = path
+        self.path = path.replace('\\', '/')
         self.line_number = line_number
         self.comments = []
 
