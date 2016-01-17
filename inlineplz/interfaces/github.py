@@ -19,7 +19,8 @@ class GitHubInterface(InterfaceBase):
             self.gh = github3.GitHubEnterprise(url, token=token)
         self.pull_request = self.gh.pull_request(owner, repo, pr)
         self.sha = git.current_sha()
-        self.diff = git.diff(git.parent_sha(self.sha), self.sha)
+        self.first_sha = self.pull_request.commits().next()
+        self.diff = git.diff(git.parent_sha(self.first_sha), self.sha)
 
     def post_messages(self, messages):
         for msg in messages:
