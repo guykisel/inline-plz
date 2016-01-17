@@ -8,6 +8,7 @@ import github3
 import unidiff
 
 from inlineplz.interfaces.base import InterfaceBase
+from inlineplz.util import git
 
 
 class GitHubInterface(InterfaceBase):
@@ -17,14 +18,8 @@ class GitHubInterface(InterfaceBase):
         else:
             self.gh = github3.GitHubEnterprise(url, token=token)
         self.pull_request = self.gh.pull_request(owner, repo, pr)
-        self.sha = subprocess.check_output(
-            ['git', 'rev-parse', 'HEAD']
-        ).strip().decode('utf-8')
-        # diff with rename recognition
-        # TODO: support PRs to branches other than master
-        self.diff = subprocess.check_output(
-            ['git', 'diff', '-M', 'master..' + self.sha]
-        ).strip().decode('utf-8')
+        self.sha = git.current_sha()
+        self.diff = git.diff(git.parent_sha(self.sha), self.sha)
 
     def post_messages(self, messages):
         for msg in messages:
