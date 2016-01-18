@@ -24,11 +24,13 @@ class GitHubInterface(InterfaceBase):
         self.diff = git.diff(self.parent_sha, self.last_sha)
 
     def post_messages(self, messages):
+        messages_to_post = 0
         for msg in messages:
             if not msg.content:
                 continue
             msg_position = self.position(msg)
             if msg_position:
+                messages_to_post += 1
                 if not self.is_duplicate(msg, msg_position):
                     self.pull_request.create_review_comment(
                         msg.content,
@@ -36,6 +38,7 @@ class GitHubInterface(InterfaceBase):
                         msg.path,
                         msg_position
                     )
+        return messages_to_post
 
     def is_duplicate(self, message, position):
         for comment in self.pull_request.review_comments():
