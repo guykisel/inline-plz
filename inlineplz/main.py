@@ -24,6 +24,27 @@ def main():
     parser.add_argument('--zero-exit', action='store_true')
     args = parser.parse_args()
 
+    return inline(args)
+
+
+def inline(args):
+    """
+    Parse input file with the specified parser and post messages based on lint output
+
+    :param args: Contains the following
+        filename: Linter output
+        parser: Use a different parser based on the lint tool
+        interface: How are we going to post comments?
+        owner: Username of repo owner
+        repo: Repository name
+        pr: Pull request ID
+        token: Authentication for repository
+        url: Root URL of repository (not your project) Default: https://github.com
+        dryrun: Prints instead of posting comments.
+        zero_exit: If true: always return a 0 exit code.
+    :return: Exit code. 1 if there are any comments, 0 if there are none.
+    """
+
     if args.repo_slug:
         owner = args.repo_slug.split('/')[0]
         repo = args.repo_slug.split('/')[1]
@@ -31,46 +52,16 @@ def main():
         owner = args.owner
         repo = args.repo
 
-    return inline(
-        args.filename,
-        args.parser,
-        args.interface,
-        owner,
-        repo,
-        args.pr,
-        args.token,
-        args.url,
-        args.dryrun,
-        args.zero_exit
-    )
-
-
-def inline(filename, parser, interface, owner, repo, pr, token, url, dryrun, zero_exit):
-    """
-    Parse input file with the specified parser and post messages based on lint output
-
-    :param filename:
-    :param parser:
-    :param interface:
-    :param owner:
-    :param repo:
-    :param pr:
-    :param token:
-    :param url:
-    :param dryrun:
-    :param zero_exit: If true: always return a 0 exit code. Useful for CI environments
-    :return: Exit code. 1 if there are any comments, 0 if there are none.
-    """
-    with open(filename) as inputfile:
-        my_parser = parsers.PARSERS[parser]()
+    with open(args.filename) as inputfile:
+        my_parser = parsers.PARSERS[args.parser]()
         messages = my_parser.parse(inputfile.read())
     # TODO: implement dryrun as an interface instead of a special case here
-    if dryrun:
+    if args.dryrun:
         for msg in messages:
             print(str(msg))
         return 0
-    my_interface = interfaces.INTERFACES[interface](owner, repo, pr, token, url)
-    if my_interface.post_messages(messages) and not zero_exit:
+    my_interface = interfaces.INTERFACES[args.interface](owner, repo, args.pr, args.token, args.url)
+    if my_interface.post_messages(messages) and not args.zero_exit:
         return 1
     return 0
 
