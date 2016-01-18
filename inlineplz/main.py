@@ -44,7 +44,6 @@ def inline(args):
         zero_exit: If true: always return a 0 exit code.
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
-
     if args.repo_slug:
         owner = args.repo_slug.split('/')[0]
         repo = args.repo_slug.split('/')[1]
