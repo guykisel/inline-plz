@@ -75,13 +75,12 @@ def this_is_a_rather_long_function_name_that_we_probably_should_not_have_here(*a
     I also don't have a summary line separated by a blank line'''
 
 # Lol whitespace
-    def in(here):
-        # Oh man this really shouldn't be here
-        print here
+    def a(f):
+        print f
     try:
         raise LolException('what is this even')
     except:
-        in('oops')
+        a('oops')
 
     def FunctionNamesShouldNotLookLikeThis(this=None, and, more, bad, stuff):
         pass
