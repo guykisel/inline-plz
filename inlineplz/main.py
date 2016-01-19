@@ -82,7 +82,7 @@ def this_is_a_rather_long_function_name_that_we_probably_should_not_have_here(*a
     except:
         a('oops')
 
-    def FunctionNamesShouldNotLookLikeThis(this=None, and, more, bad, stuff):
+    def FunctionNamesShouldNotLookLikeThis(this=None,more, bad, stuff):
         pass
         f = 'foo'
         b='bar'
