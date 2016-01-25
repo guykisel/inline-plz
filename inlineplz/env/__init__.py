@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+"""Set up args based on envvars."""
+
 from __future__ import absolute_import
 
 import os
