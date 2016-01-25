@@ -21,8 +21,8 @@ install:
 # command to run tests, e.g. python setup.py test
 script:
   - tox
-  - prospector --zero-exit --strictness veryhigh > lint.txt
-  - inline-plz --repo-slug=$TRAVIS_REPO_SLUG --token=$GITHUB_TOKEN --pull-request=$TRAVIS_PULL_REQUEST --parser=prospector --interface=github --filename=lint.txt
+  - prospector --zero-exit > lint.txt
+  - inline-plz --parser=prospector --filename=lint.txt
 
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup
