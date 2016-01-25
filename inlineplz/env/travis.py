@@ -17,4 +17,3 @@ class Travis(EnvBase):
         self.commit_range = os.environ.get('TRAVIS_COMMIT_RANGE')
         self.interface = 'github'
         self.token = os.environ.get('GITHUB_TOKEN')
-
