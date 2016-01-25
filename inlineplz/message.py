@@ -18,4 +18,8 @@ Message:
 
     @property
     def content(self):
-        return '```\n' + '\n'.join(self.comments) + '\n```'
+        if not self.comments:
+            return ''
+        if len(self.comments) > 1:
+            return '```\n' + '\n'.join(self.comments) + '\n```'
+        return '`{0}`'.format(self.comments[0].strip())

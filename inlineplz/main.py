@@ -8,6 +8,7 @@ import argparse
 from inlineplz import interfaces
 from inlineplz import parsers
 from inlineplz import env
+from inlineplz import linters
 
 
 def main():
@@ -17,8 +18,6 @@ def main():
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--token', type=str)
-    parser.add_argument('--filename', type=str, required=True)
-    parser.add_argument('--parser', type=str, required=True, choices=parsers.PARSERS)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
     parser.add_argument('--dryrun', action='store_true')
@@ -34,8 +33,6 @@ def inline(args):
     Parse input file with the specified parser and post messages based on lint output
 
     :param args: Contains the following
-        filename: Linter output
-        parser: Use a different parser based on the lint tool
         interface: How are we going to post comments?
         owner: Username of repo owner
         repo: Repository name
@@ -53,9 +50,8 @@ def inline(args):
         owner = args.owner
         repo = args.repo
 
-    with open(args.filename) as inputfile:
-        my_parser = parsers.PARSERS[args.parser]()
-        messages = my_parser.parse(inputfile.read())
+    messages = linters.lint()
+
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
         for msg in messages:
