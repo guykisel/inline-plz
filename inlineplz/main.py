@@ -12,7 +12,7 @@ from inlineplz import env
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pr', type=int)
+    parser.add_argument('--pull-request', type=int)
     parser.add_argument('--owner', type=str)
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
@@ -61,7 +61,7 @@ def inline(args):
         for msg in messages:
             print(str(msg))
         return 0
-    my_interface = interfaces.INTERFACES[args.interface](owner, repo, args.pr, args.token, args.url)
+    my_interface = interfaces.INTERFACES[args.interface](owner, repo, args.pull_request, args.token, args.url)
     if my_interface.post_messages(messages) and not args.zero_exit:
         return 1
     return 0

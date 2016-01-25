@@ -12,7 +12,7 @@ from inlineplz.env.base import EnvBase
 class Jenkins(EnvBase):
     def __init__(self):
         if os.environ.get('ghprbActualCommit'):
-            self.pr = os.environ.get('ghprbPullId')
+            self.pull_request = os.environ.get('ghprbPullId')
             self.repo_slug = '/'.join(os.environ.get('GIT_URL').split('/')[-2:])
             self.commit = os.environ.get('ghprbActualCommit')
             self.interface = 'github'
