@@ -28,6 +28,7 @@ travis_pypi_setup.py
     pylint: bare-except / No exception type(s) specified
   Line: 113
     pylint: misplaced-comparison-constant / Comparison should be __name__ == '__main__' (col 3)
+    pylint: pretend this is a real message
   Line: 114
     pylint: wrong-import-position / Import "import argparse" should be placed at the top of the module (col 4)
 
