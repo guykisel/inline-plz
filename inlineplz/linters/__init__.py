@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+
+"""Linter configurations."""
+
 from __future__ import absolute_import
 
 import os
@@ -17,7 +20,7 @@ LINTERS = {
 
 def lint():
     messages = []
-    for linter, config in LINTERS.items():
+    for config in LINTERS.values():
         if config.get('dotfile') in os.listdir(os.getcwd()):
             output = subprocess.check_output(config.get('run')).decode('utf-8')
             messages.extend(config.get('parser')().parse(output))
