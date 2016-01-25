@@ -7,6 +7,7 @@ import argparse
 
 from inlineplz import interfaces
 from inlineplz import parsers
+from inlineplz import env
 
 
 def main():
@@ -23,6 +24,7 @@ def main():
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     args = parser.parse_args()
+    args = env.update_args(args)
 
     return inline(args)
 
