@@ -60,3 +60,6 @@ target/
 
 # Intellij
 .idea/
+
+# Node
+node_modules
