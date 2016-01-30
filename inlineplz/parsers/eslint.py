@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 
 import json
-import os.path
 
 from inlineplz.parsers.base import ParserBase
 from inlineplz.message import Message
