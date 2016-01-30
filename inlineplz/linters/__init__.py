@@ -19,7 +19,7 @@ LINTERS = {
     },
     'eslint': {
         'install': ['npm', 'install', '-g', 'eslint'],
-        'run': ['eslint'],
+        'run': ['eslint', '.', '-f', 'json'],
         'dotfiles': [
             '.eslintrc.yml',
             '.eslintignore',
