@@ -20,7 +20,12 @@ LINTERS = {
     'eslint': {
         'install': ['npm', 'install', '-g', 'eslint'],
         'run': ['eslint'],
-        'dotfiles': ['.eslintrc.yml'],
+        'dotfiles': [
+            '.eslintrc.yml',
+            '.eslintignore',
+            '.eslintrc',
+            'eslintrc.yml'
+        ],
         'parser': parsers.ESLintParser
     },
     'jshint': {
