@@ -21,7 +21,7 @@ install:
 # command to run tests, e.g. python setup.py test
 script:
   - tox
-  - inline-plz
+  - inline-plz --install
 
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup

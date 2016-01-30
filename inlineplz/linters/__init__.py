@@ -49,12 +49,14 @@ LINTERS = {
 }
 
 
-def lint():
+def lint(install=False):
     messages = []
     for config in LINTERS.values():
         if any(dotfile in os.listdir(os.getcwd())
                for dotfile in config.get('dotfiles')):
             try:
+                if install and config.get('install'):
+                    subprocess.check_call(config.get('install'))
                 output = subprocess.check_output(config.get('run')).decode('utf-8')
                 messages.extend(config.get('parser')().parse(output))
             except subprocess.CalledProcessError:
