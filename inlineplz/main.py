@@ -22,6 +22,7 @@ def main():
     parser.add_argument('--url', type=str)
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
+    parser.add_argument('--install', action='store_true')
     args = parser.parse_args()
     args = env.update_args(args)
 
@@ -41,6 +42,7 @@ def inline(args):
         url: Root URL of repository (not your project) Default: https://github.com
         dryrun: Prints instead of posting comments.
         zero_exit: If true: always return a 0 exit code.
+        install: If true: install linters.
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
     if args.repo_slug:
@@ -50,7 +52,7 @@ def inline(args):
         owner = args.owner
         repo = args.repo
 
-    messages = linters.lint()
+    messages = linters.lint(args.install)
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:

@@ -15,13 +15,14 @@ env:
 # command to install dependencies, e.g. pip install -r requirements.txt --use-mirrors
 install:
   - pip install -U pip
+  - pip install https://github.com/matiasb/python-unidiff/zipball/a7e46e0
   - pip install -r requirements_dev.txt
   - python setup.py develop
 
 # command to run tests, e.g. python setup.py test
 script:
   - tox
-  - inline-plz
+  - inline-plz --install
 
 # After you create the Github repo and add it to Travis, run the
 # travis_pypi_setup.py script to finish PyPI deployment setup
