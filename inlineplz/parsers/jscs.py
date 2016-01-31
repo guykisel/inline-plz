@@ -5,7 +5,6 @@ from collections import OrderedDict
 import json
 
 from inlineplz.parsers.base import ParserBase
-from inlineplz.message import Message
 
 
 class JSCSParser(ParserBase):

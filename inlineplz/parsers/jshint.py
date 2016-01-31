@@ -4,7 +4,6 @@ from __future__ import absolute_import
 import xmltodict
 
 from inlineplz.parsers.base import ParserBase
-from inlineplz.message import Message
 
 
 class JSHintParser(ParserBase):
