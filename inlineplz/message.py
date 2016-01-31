@@ -13,6 +13,13 @@ class Messages(object):
             self.messages[(path, line)] = Message(path, line)
         self.messages[(path, line)].append(message)
 
+    def add_messages(self, messages):
+        for message in messages:
+            self.add_message(*message)
+
+    def get_messages(self):
+        return self.messages.values()
+
 
 class Message(object):
 

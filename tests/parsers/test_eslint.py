@@ -15,7 +15,7 @@ eslint_path = os.path.join(
 
 def test_eslint():
     with open(eslint_path) as inputfile:
-        messages = eslint.ESLintParser().parse(inputfile.read())
-        assert messages[0].content == '`Parsing error: Illegal return statement`'
-        assert messages[0].line_number == 17
-        assert messages[0].path == '../jshint/tests/unit/fixtures/asi.js'
+        messages = sorted(list(eslint.ESLintParser().parse(inputfile.read())))
+        assert messages[0][2] == 'Parsing error: Illegal return statement'
+        assert messages[0][1] == 17
+        assert messages[0][0] == 'C:\\Users\\Guy\\Documents\\jshint\\tests\\unit\\fixtures\\asi.js'

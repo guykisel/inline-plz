@@ -15,7 +15,7 @@ jscs_path = os.path.join(
 
 def test_jscs():
     with open(jscs_path) as inputfile:
-        messages = jscs.JSCSParser().parse(inputfile.read())
-        assert messages[0].content == '`maximumLineLength: Line must be at most 100 characters`'
-        assert messages[0].line_number == 1
-        assert messages[0].path == 'data/non-ascii-identifier-part-only.js'
+        messages = sorted(list(jscs.JSCSParser().parse(inputfile.read())))
+        assert messages[0][2] == 'maximumLineLength: Line must be at most 100 characters'
+        assert messages[0][1] == 1
+        assert messages[0][0] == './data/non-ascii-identifier-part-only.js'

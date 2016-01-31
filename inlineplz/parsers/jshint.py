@@ -11,17 +11,15 @@ class JSHintParser(ParserBase):
     """Parse json jshint output."""
 
     def parse(self, lint_data):
-        messages = []
+        messages = set()
         obj = xmltodict.parse(lint_data)
         for filedata in obj['checkstyle']['file']:
             for errordata in filedata['error']:
                 try:
-                    msg = Message(
-                        filedata.get('@name'),
-                        int(errordata.get('@line'))
-                    )
-                    msg.append(errordata.get('@message'))
-                    messages.append(msg)
-                except AttributeError:
+                    path = filedata['@name']
+                    line = int(errordata['@line'])
+                    msgbody = errordata['@message']
+                    messages.add((path, line, msgbody))
+                except (AttributeError, TypeError):
                     pass
         return messages

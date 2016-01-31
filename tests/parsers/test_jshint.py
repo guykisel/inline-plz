@@ -15,7 +15,7 @@ jshint_path = os.path.join(
 
 def test_jshint():
     with open(jshint_path) as inputfile:
-        messages = jshint.JSHintParser().parse(inputfile.read())
-        assert messages[0].content == '`Use the function form of "use strict". (W097)`'
-        assert messages[0].line_number == 8
-        assert messages[0].path == 'conf/cli-options.js'
+        messages = sorted(list(jshint.JSHintParser().parse(inputfile.read())))
+        assert messages[0][2] == 'Use the function form of "use strict". (W097)'
+        assert messages[0][1] == 7
+        assert messages[0][0] == 'Makefile.js'

@@ -12,20 +12,17 @@ class ProspectorParser(ParserBase):
     """Parse json prospector output."""
 
     def parse(self, lint_data):
-        messages = []
+        messages = set()
         for msgdata in json.loads(
             lint_data,
             object_pairs_hook=OrderedDict
         ).get('messages'):
-            msg = Message(
-                msgdata['location']['path'],
-                msgdata['location']['line']
-            )
+            path = msgdata['location']['path']
+            line = msgdata['location']['line']
             msgbody = '{0}: {1} ({2})'.format(
                 msgdata['source'],
                 msgdata['message'],
                 msgdata['code']
             )
-            msg.append(msgbody)
-            messages.append(msg)
+            messages.add((path, line, msgbody))
         return messages
