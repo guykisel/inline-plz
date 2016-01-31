@@ -18,4 +18,4 @@ def test_eslint():
         messages = eslint.ESLintParser().parse(inputfile.read())
         assert messages[0].content == '`Parsing error: Illegal return statement`'
         assert messages[0].line_number == 17
-        assert messages[0].path == 'C:/Users/Guy/Documents/jshint/tests/unit/fixtures/asi.js'
+        assert messages[0].path == '../jshint/tests/unit/fixtures/asi.js'

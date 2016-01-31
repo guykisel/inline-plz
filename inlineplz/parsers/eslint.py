@@ -23,6 +23,6 @@ class ESLintParser(ParserBase):
                         filedata.get('filePath'),
                         msgdata.get('line')
                     )
-                    msg.comments.append(msgdata.get('message'))
+                    msg.append(msgdata.get('message'))
                     messages.append(msg)
         return messages

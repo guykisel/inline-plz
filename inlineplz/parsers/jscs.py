@@ -23,6 +23,6 @@ class JSCSParser(ParserBase):
                         filename,
                         msgdata.get('line')
                     )
-                    msg.comments.append(msgdata.get('message'))
+                    msg.append(msgdata.get('message'))
                     messages.append(msg)
         return messages

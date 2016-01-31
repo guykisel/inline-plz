@@ -26,6 +26,6 @@ class ProspectorParser(ParserBase):
                 msgdata['message'],
                 msgdata['code']
             )
-            msg.comments.append(msgbody)
+            msg.append(msgbody)
             messages.append(msg)
         return messages

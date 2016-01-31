@@ -20,7 +20,7 @@ class JSHintParser(ParserBase):
                         filedata.get('@name'),
                         int(errordata.get('@line'))
                     )
-                    msg.comments.append(errordata.get('@message'))
+                    msg.append(errordata.get('@message'))
                     messages.append(msg)
                 except AttributeError:
                     pass
