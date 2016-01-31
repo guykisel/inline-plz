@@ -42,8 +42,8 @@ LINTERS = {
     },
     'jscs': {
         'install': ['npm', 'install', '-g', 'jscs'],
-        'run': ['jscs'],
-        'dotfiles': ['.jscsrc'],
+        'run': ['jscs', '.', '-r', 'json', '-m', '-1', '-v'],
+        'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser
     }
 }
