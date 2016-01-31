@@ -17,7 +17,6 @@ prospector_path = os.path.join(
 def test_prospector():
     with open(prospector_path) as inputfile:
         messages = prospector.ProspectorParser().parse(inputfile.read())
-        #print([msg.content for msg in messages])
         assert messages[0].content == '`pep257: Missing docstring in public package (D104)`'
         assert messages[0].line_number == 1
         assert messages[0].path == 'inlineplz/util/__init__.py'
