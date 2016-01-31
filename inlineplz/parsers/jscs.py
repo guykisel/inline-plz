@@ -18,11 +18,11 @@ class JSCSParser(ParserBase):
             object_pairs_hook=OrderedDict
         ).items():
             if msgs:
-                for m in msgs:
+                for msgdata in msgs:
                     msg = Message(
                         filename,
-                        m.get('line')
+                        msgdata.get('line')
                     )
-                    msg.comments.append(m.get('message'))
+                    msg.comments.append(msgdata.get('message'))
                     messages.append(msg)
         return messages
