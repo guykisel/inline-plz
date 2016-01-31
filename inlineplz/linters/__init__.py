@@ -13,7 +13,7 @@ from inlineplz import parsers
 LINTERS = {
     'prospector': {
         'install': ['pip', 'install', 'prospector'],
-        'run': ['prospector', '--zero-exit'],
+        'run': ['prospector', '--zero-exit', '-o', 'json'],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser
     },

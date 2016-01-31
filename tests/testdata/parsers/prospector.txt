@@ -1,48 +1,407 @@
-Messages
-========
-
-docs\conf.py
-  Line: 34
-    pylint: syntax-error / invalid syntax
-
-inline-plz\parsers\base.py
-  Line: 4
-    pylint: unused-import / Unused Message imported from message
-  Line: 9
-    pylint: redefined-builtin / Redefining built-in 'input' (col 20)
-
-inline-plz\parsers\prospector.py
-  Line: 5
-    pylint: unused-import / Unused Message imported from message
-  Line: 8
-    pylint: redefined-builtin / Redefining built-in 'input' (col 20)
-  Line: 17
-    pylint: undefined-variable / Undefined variable 'message' (col 32)
-  Line: 24
-    pylint: undefined-variable / Undefined variable 'message' (col 32)
-  Line: 25
-    pylint: redefined-variable-type / Redefinition of current_line type from str to int (col 16)
-
-travis_pypi_setup.py
-  Line: 20
-    pylint: bare-except / No exception type(s) specified
-  Line: 113
-    pylint: misplaced-comparison-constant / Comparison should be __name__ == '__main__' (col 3)
-    pylint: pretend this is a real message
-  Line: 114
-    pylint: wrong-import-position / Import "import argparse" should be placed at the top of the module (col 4)
-
-
-
-Check Information
-=================
-         Started: 2016-01-09 12:50:17.649090
-        Finished: 2016-01-09 12:50:19.027461
-      Time Taken: 1.38 seconds
-       Formatter: grouped
-        Profiles: default, no_doc_warnings, no_test_warnings, strictness_medium, strictness_high, strictness_veryhigh, no_member_warnings
-      Strictness: None
-  Libraries Used:
-       Tools Run: dodgy, mccabe, pep8, profile-validator, pyflakes, pylint
-  Messages Found: 11
-
+{
+  "messages": [
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 1,
+        "path": "inlineplz\\util\\__init__.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D104",
+      "message": "Missing docstring in public package"
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 1,
+        "path": "inlineplz\\parsers\\__init__.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D104",
+      "message": "Missing docstring in public package"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 0,
+        "line": 9,
+        "path": "inlineplz\\main.py",
+        "module": "inlineplz.main",
+        "function": null
+      },
+      "code": "unused-import",
+      "message": "Unused parsers imported from inlineplz"
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 11,
+        "path": "inlineplz\\message.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D105",
+      "message": "Missing docstring in magic method"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 8,
+        "path": "setup.py",
+        "module": "setup",
+        "function": null
+      },
+      "code": "import-error",
+      "message": "Unable to import 'distutils.core'"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 0,
+        "line": 17,
+        "path": "setup.py",
+        "module": "setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"requirements\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 0,
+        "line": 23,
+        "path": "setup.py",
+        "module": "setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"test_requirements\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 12,
+        "path": "setup.py",
+        "module": "setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"readme\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 15,
+        "path": "setup.py",
+        "module": "setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"history\""
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 1,
+        "path": "travis_pypi_setup.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D200",
+      "message": "One-line docstring should fit on one line with quotes (found 2)"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 115,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"parser\""
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 69,
+        "path": "travis_pypi_setup.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D200",
+      "message": "One-line docstring should fit on one line with quotes (found 2)"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 27,
+        "line": 72,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": "prepend_line"
+      },
+      "code": "invalid-name",
+      "message": "Invalid variable name \"f\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 9,
+        "line": 106,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": "main"
+      },
+      "code": "redefined-outer-name",
+      "message": "Redefining name 'args' from outer scope (line 121)"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 32,
+        "line": 77,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": "prepend_line"
+      },
+      "code": "invalid-name",
+      "message": "Invalid variable name \"f\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 3,
+        "line": 113,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "misplaced-comparison-constant",
+      "message": "Comparison should be __name__ == '__main__'"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 27,
+        "line": 82,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": "load_yaml_config"
+      },
+      "code": "invalid-name",
+      "message": "Invalid variable name \"f\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 19,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "wrong-import-order",
+      "message": "standard import \"from urllib import urlopen\" comes before \"import yaml\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 0,
+        "line": 20,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "bare-except",
+      "message": "No exception type(s) specified"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 21,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "wrong-import-order",
+      "message": "standard import \"from urllib.request import urlopen\" comes before \"import yaml\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 32,
+        "line": 87,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": "save_yaml_config"
+      },
+      "code": "invalid-name",
+      "message": "Invalid variable name \"f\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 121,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "invalid-name",
+      "message": "Invalid constant name \"args\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 114,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "wrong-import-order",
+      "message": "standard import \"import argparse\" comes before \"import yaml\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 114,
+        "path": "travis_pypi_setup.py",
+        "module": "travis_pypi_setup",
+        "function": null
+      },
+      "code": "wrong-import-position",
+      "message": "Import \"import argparse\" should be placed at the top of the module"
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 1,
+        "path": "inlineplz\\interfaces\\__init__.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D104",
+      "message": "Missing docstring in public package"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 16,
+        "line": 36,
+        "path": "inlineplz\\parsers\\prospector.py",
+        "module": "inlineplz.parsers.prospector",
+        "function": "ProspectorParser.parse"
+      },
+      "code": "redefined-variable-type",
+      "message": "Redefinition of current_line type from str to int"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 12,
+        "line": 16,
+        "path": "inlineplz\\interfaces\\github.py",
+        "module": "inlineplz.interfaces.github",
+        "function": "GitHubInterface.__init__"
+      },
+      "code": "invalid-name",
+      "message": "Invalid attribute name \"gh\""
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 12,
+        "line": 18,
+        "path": "inlineplz\\interfaces\\github.py",
+        "module": "inlineplz.interfaces.github",
+        "function": "GitHubInterface.__init__"
+      },
+      "code": "redefined-variable-type",
+      "message": "Redefinition of self.gh type from github3.github.GitHub to github3.github.GitHubEnterprise"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 0,
+        "line": 4,
+        "path": "inlineplz\\interfaces\\github.py",
+        "module": "inlineplz.interfaces.github",
+        "function": null
+      },
+      "code": "unused-import",
+      "message": "Unused import os.path"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 20,
+        "line": 58,
+        "path": "inlineplz\\interfaces\\github.py",
+        "module": "inlineplz.interfaces.github",
+        "function": "GitHubInterface.position"
+      },
+      "code": "unused-variable",
+      "message": "Unused variable 'hunk_no'"
+    },
+    {
+      "source": "pylint",
+      "location": {
+        "character": 4,
+        "line": 14,
+        "path": "inlineplz\\interfaces\\github.py",
+        "module": "inlineplz.interfaces.github",
+        "function": "GitHubInterface.__init__"
+      },
+      "code": "too-many-arguments",
+      "message": "Too many arguments (6/5)"
+    },
+    {
+      "source": "pep257",
+      "location": {
+        "character": 0,
+        "line": 1,
+        "path": "inlineplz\\__init__.py",
+        "module": null,
+        "function": null
+      },
+      "code": "D104",
+      "message": "Missing docstring in public package"
+    }
+  ],
+  "summary": {
+    "strictness": "from profile",
+    "tools": [
+      "dodgy",
+      "mccabe",
+      "pep257",
+      "pep8",
+      "profile-validator",
+      "pyflakes",
+      "pylint"
+    ],
+    "formatter": "json",
+    "started": "2016-01-31 14:43:39.317922",
+    "profiles": ".prospector.yaml, full_pep8, doc_warnings, no_test_warnings, strictness_veryhigh, no_member_warnings",
+    "time_taken": "3.94",
+    "completed": "2016-01-31 14:43:43.256803",
+    "libraries": [],
+    "message_count": 32
+  }
+}
