@@ -34,12 +34,6 @@ LINTERS = {
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser
     },
-    'jslint': {
-        'install': ['npm', 'install', '-g', 'jslint'],
-        'run': ['jslint'],
-        'dotfiles': ['.jslintrc'],
-        'parser': parsers.JSLintParser
-    },
     'jscs': {
         'install': ['npm', 'install', '-g', 'jscs'],
         'run': ['jscs', '.', '-r', 'json', '-m', '-1', '-v'],
