@@ -16,7 +16,8 @@ with open('HISTORY.rst') as history_file:
 
 requirements = [
     'unidiff',
-    'github3.py'
+    'github3.py',
+    'xmltodict'
 ]
 
 test_requirements = [
