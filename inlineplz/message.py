@@ -41,7 +41,11 @@ Message:
         if not self.comments:
             return ''
         if len(self.comments) > 1:
-            return '```\n' + '\n'.join(self.comments) + '\n```'
+            return (
+                '```\n' +
+                '\n'.join(sorted(list(self.comments))) +
+                '\n```'
+            )
         return '`{0}`'.format(list(self.comments)[0].strip())
 
     def append(self, message):
