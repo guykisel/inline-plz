@@ -36,17 +36,5 @@ Message:
     Content: {2}
         """.format(self.path, self.line_number, self.content).strip()
 
-    @property
-    def content(self):
-        if not self.comments:
-            return ''
-        if len(self.comments) > 1:
-            return (
-                '```\n' +
-                '\n'.join(sorted(list(self.comments))) +
-                '\n```'
-            )
-        return '`{0}`'.format(list(self.comments)[0].strip())
-
     def append(self, message):
         self.comments.add(message)

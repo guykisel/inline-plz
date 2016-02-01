@@ -26,14 +26,14 @@ class GitHubInterface(InterfaceBase):
     def post_messages(self, messages):
         messages_to_post = 0
         for msg in messages:
-            if not msg.content:
+            if not msg.comments:
                 continue
             msg_position = self.position(msg)
             if msg_position:
                 messages_to_post += 1
                 if not self.is_duplicate(msg, msg_position):
                     self.pull_request.create_review_comment(
-                        msg.content,
+                        self.format_message(msg),
                         self.last_sha,
                         msg.path,
                         msg_position
@@ -44,9 +44,21 @@ class GitHubInterface(InterfaceBase):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
                     comment.path == message.path and
-                    comment.body.strip() == message.content.strip()):
+                    comment.body.strip() == self.format_message(message).strip()):
                 return True
         return False
+
+    @staticmethod
+    def format_message(message):
+        if not message.comments:
+            return ''
+        if len(message.comments) > 1:
+            return (
+                '```\n' +
+                '\n'.join(sorted(list(message.comments))) +
+                '\n```'
+            )
+        return '`{0}`'.format(list(message.comments)[0].strip())
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
