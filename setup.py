@@ -2,10 +2,7 @@
 # -*- coding: utf-8 -*-
 
 
-try:
-    from setuptools import setup
-except ImportError:
-    from distutils.core import setup
+from setuptools import setup, find_packages
 
 
 with open('README.rst') as readme_file:
@@ -32,9 +29,7 @@ setup(
     author="Guy Kisel",
     author_email='guy.kisel@gmail.com',
     url='https://github.com/guykisel/inline-plz',
-    packages=[
-        'inlineplz',
-    ],
+    packages=find_packages('.', exclude=('tests*', 'testing*')),
     package_dir={'inlineplz':
                  'inlineplz'},
     include_package_data=True,
