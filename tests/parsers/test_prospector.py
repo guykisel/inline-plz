@@ -16,13 +16,15 @@ prospector_path = os.path.join(
 
 def test_prospector():
     with open(prospector_path) as inputfile:
-        messages = prospector.ProspectorParser().parse(inputfile.read())
-        assert messages[0].content == '`pep257: Missing docstring in public package (D104)`'
-        assert messages[0].line_number == 1
-        assert messages[0].path == 'inlineplz/util/__init__.py'
-        assert messages[1].content == '`pep257: Missing docstring in public package (D104)`'
-        assert messages[1].line_number == 1
-        assert messages[1].path == 'inlineplz/parsers/__init__.py'
-        assert messages[9].content == ('`pep257: One-line docstring should fit on one line with quotes (found 2) (D200)`')
-        assert messages[9].line_number == 1
+        messages = sorted(list(prospector.ProspectorParser().parse(inputfile.read())))
+        assert messages[0][2] == 'pep257: Missing docstring in public package (D104)'
+        assert messages[0][1] == 1
+        assert messages[0][0] == 'inlineplz\__init__.py'
+
+        assert messages[1][2] == 'pep257: Missing docstring in public package (D104)'
+        assert messages[1][1] == 1
+        assert messages[1][0] == 'inlineplz\interfaces\__init__.py'
+
+        assert messages[9][2] == 'pep257: Missing docstring in public package (D104)'
+        assert messages[9][1] == 1
         assert len(messages) == 32
