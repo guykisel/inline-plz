@@ -47,7 +47,7 @@ LINTERS = {
 
 def lint(install=False):
     messages = message.Messages()
-    for config in LINTERS.values():
+    for linter, config in LINTERS.items():
         if any(dotfile in os.listdir(os.getcwd())
                for dotfile in config.get('dotfiles')):
             try:
@@ -59,7 +59,11 @@ def lint(install=False):
                 output = err.output
             try:
                 if output.strip():
-                    messages.add_messages(config.get('parser')().parse(output))
+                    linter_messages = config.get('parser')().parse(output)
+                    # prepend linter name to message content
+                    for msg in linter_messages:
+                        msg[2] = '{0}: {1}'.format(linter, msg[2])
+                    messages.add_messages(linter_messages)
             except ValueError:
                 traceback.print_exc()
                 print(output)
