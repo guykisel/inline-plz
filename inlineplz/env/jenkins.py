@@ -2,6 +2,11 @@
 from __future__ import absolute_import
 
 import os
+try:
+    import urllib.parse as urlparse
+except ImportError:
+    # pylint: disable=F0401
+    import urlparse
 
 from inlineplz.env.base import EnvBase
 
@@ -18,3 +23,6 @@ class Jenkins(EnvBase):
             self.commit = os.environ.get('ghprbActualCommit')
             self.interface = 'github'
             self.token = os.environ.get('GITHUB_TOKEN')
+            spliturl = urlparse.urlsplit(os.environ.get('ghprbPullLink'))
+            if spliturl.netloc != 'github.com':
+                self.url = '{0}://{1}'.format(spliturl.scheme, spliturl.netloc)
