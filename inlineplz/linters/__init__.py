@@ -3,6 +3,7 @@
 """Linter configurations."""
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import os
 import subprocess
@@ -53,7 +54,12 @@ def lint(install=False):
                 if install and config.get('install'):
                     subprocess.check_call(config.get('install'))
                 output = subprocess.check_output(config.get('run')).decode('utf-8')
-                messages.add_messages(config.get('parser')().parse(output))
+                if output.strip():
+                    try:
+                        messages.add_messages(config.get('parser')().parse(output))
+                    except ValueError:
+                        traceback.print_exc()
+                        print(output)
             except subprocess.CalledProcessError:
                 traceback.print_exc()
     return messages.get_messages()
