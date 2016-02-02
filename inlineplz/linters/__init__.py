@@ -19,8 +19,8 @@ LINTERS = {
         'parser': parsers.ProspectorParser
     },
     'eslint': {
-        'install': ['npm', 'install', '-g', 'eslint'],
-        'run': ['eslint', '.', '-f', 'json'],
+        'install': ['npm', 'install', 'eslint'],
+        'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'dotfiles': [
             '.eslintrc.yml',
             '.eslintignore',
@@ -30,14 +30,14 @@ LINTERS = {
         'parser': parsers.ESLintParser
     },
     'jshint': {
-        'install': ['npm', 'install', '-g', 'jshint'],
-        'run': ['jshint'],
+        'install': ['npm', 'install', 'jshint'],
+        'run': [os.path.normpath('./node_modules/.bin/jshint')],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser
     },
     'jscs': {
-        'install': ['npm', 'install', '-g', 'jscs'],
-        'run': ['jscs', '.', '-r', 'json', '-m', '-1', '-v'],
+        'install': ['npm', 'install', 'jscs'],
+        'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser
     }
