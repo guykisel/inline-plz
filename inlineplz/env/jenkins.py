@@ -2,7 +2,10 @@
 from __future__ import absolute_import
 
 import os
-import urlparse
+try:
+    import urllib.parse as urlparse
+except ImportError:
+    import urlparse
 
 from inlineplz.env.base import EnvBase
 
