@@ -13,7 +13,8 @@ class Jenkins(EnvBase):
     def __init__(self):
         if os.environ.get('ghprbActualCommit'):
             self.pull_request = os.environ.get('ghprbPullId')
-            self.repo_slug = '/'.join(os.environ.get('GIT_URL').split('/')[-2:])
+            self.owner = os.environ.get('GITHUB_REPO_OWNER')
+            self.repo = os.environ.get('GITHUB_REPO_NAME')
             self.commit = os.environ.get('ghprbActualCommit')
             self.interface = 'github'
             self.token = os.environ.get('GITHUB_TOKEN')
