@@ -5,6 +5,7 @@ import os
 try:
     import urllib.parse as urlparse
 except ImportError:
+    # pylint: disable=F0401
     import urlparse
 
 from inlineplz.env.base import EnvBase
