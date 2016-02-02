@@ -17,7 +17,11 @@ class GitHubInterface(InterfaceBase):
         else:
             self.gh = github3.GitHubEnterprise(url, token=token)
         self.pull_request = self.gh.pull_request(owner, repo, pr)
-        self.commits = [c for c in self.pull_request.commits()]
+        # github3 has naming/compatibility issues
+        try:
+            self.commits = [c for c in self.pull_request.commits()]
+        except (AttributeError, TypeError):
+            self.commits = [c for c in self.pull_request.iter_commits()]
         self.last_sha = self.commits[-1].sha
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
