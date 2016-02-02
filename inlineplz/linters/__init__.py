@@ -3,6 +3,7 @@
 """Linter configurations."""
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import os
 import subprocess
@@ -56,7 +57,7 @@ def lint(install=False):
                 if output.strip():
                     try:
                         messages.add_messages(config.get('parser')().parse(output))
-                    except Exception as e:
+                    except ValueError:
                         traceback.print_exc()
                         print(output)
             except subprocess.CalledProcessError:
