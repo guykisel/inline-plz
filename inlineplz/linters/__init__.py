@@ -53,7 +53,12 @@ def lint(install=False):
                 if install and config.get('install'):
                     subprocess.check_call(config.get('install'))
                 output = subprocess.check_output(config.get('run')).decode('utf-8')
-                messages.add_messages(config.get('parser')().parse(output))
+                if output.strip():
+                    try:
+                        messages.add_messages(config.get('parser')().parse(output))
+                    except Exception as e:
+                        traceback.print_exc()
+                        print(output)
             except subprocess.CalledProcessError:
                 traceback.print_exc()
     return messages.get_messages()
