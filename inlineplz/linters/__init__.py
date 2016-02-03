@@ -32,7 +32,7 @@ LINTERS = {
     },
     'jshint': {
         'install': ['npm', 'install', 'jshint'],
-        'run': [os.path.normpath('./node_modules/.bin/jshint')],
+        'run': [os.path.normpath('./node_modules/.bin/jshint'), '--reporter', 'checkstyle'],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser
     },
