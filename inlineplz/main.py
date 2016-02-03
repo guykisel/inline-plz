@@ -65,5 +65,32 @@ def inline(args):
     return 0
 
 
+
+
+
+
+
+def this_is_a_rather_long_function_name_that_we_probably_should_not_have_here(*args):
+    '''Sometimes I like to use single quotes even though that's a bad thing to do
+    I also don't have a summary line separated by a blank line'''
+
+# Lol whitespace
+    def a(f):
+        print f
+    try:
+        raise LolException('what is this even')
+    except:
+        a('oops')
+
+    def FunctionNamesShouldNotLookLikeThis(thisIsBad,more, bad, stuff):
+        pass
+        f = 'foo'
+        b='bar'
+        print 'lol this never happens'
+
+
+
+
+
 if __name__ == "__main__":
     exit(main())
