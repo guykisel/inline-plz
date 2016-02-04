@@ -17,7 +17,7 @@ class JSHintParser(ParserBase):
             try:
                 path = obj['checkstyle']['file']['@name']
                 for errordata in obj['checkstyle']['file']['error']:
-                    self.create_message_from_error(messages, path, errordata)
+                    create_message_from_error(messages, path, errordata)
             # handle many files
             except TypeError:
                 for filedata in obj['checkstyle']['file']:
@@ -29,7 +29,8 @@ class JSHintParser(ParserBase):
                             pass
         return messages
 
-    def create_message_from_error(self, messages, path, errordata):
-        line = int(errordata['@line'])
-        msgbody = errordata['@message']
-        messages.add((path, line, msgbody))
+
+def create_message_from_error(messages, path, errordata):
+    line = int(errordata['@line'])
+    msgbody = errordata['@message']
+    messages.add((path, line, msgbody))
