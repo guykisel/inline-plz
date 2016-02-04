@@ -24,7 +24,7 @@ class JSHintParser(ParserBase):
                     for errordata in filedata['error']:
                         try:
                             path = filedata['@name']
-                            self.create_message_from_error(messages, path, errordata)
+                            create_message_from_error(messages, path, errordata)
                         except (AttributeError, TypeError):
                             pass
         return messages
