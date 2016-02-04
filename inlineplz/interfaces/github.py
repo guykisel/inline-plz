@@ -12,11 +12,17 @@ from inlineplz.util import git
 
 class GitHubInterface(InterfaceBase):
     def __init__(self, owner, repo, pr, token, url=None):
+        self.github = None
+        # TODO: support non-PR runs
+        try:
+            pr = int(pr)
+        except ValueError:
+            return
         if not url:
-            self.gh = github3.GitHub(token=token)
+            self.github = github3.GitHub(token=token)
         else:
-            self.gh = github3.GitHubEnterprise(url, token=token)
-        self.pull_request = self.gh.pull_request(owner, repo, pr)
+            self.github = github3.GitHubEnterprise(url, token=token)
+        self.pull_request = self.github.pull_request(owner, repo, pr)
         # github3 has naming/compatibility issues
         try:
             self.commits = [c for c in self.pull_request.commits()]
@@ -28,6 +34,9 @@ class GitHubInterface(InterfaceBase):
         self.diff = git.diff(self.parent_sha, self.last_sha)
 
     def post_messages(self, messages):
+        # TODO: support non-PR runs
+        if not self.github:
+            return
         messages_to_post = 0
         for msg in messages:
             if not msg.comments:

@@ -14,6 +14,7 @@ pylint:
     - too-few-public-methods
     - missing-docstring
     - star-args
+    - redefined-variable-type
 
 pep8:
   full: true
