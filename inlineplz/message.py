@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import os
+import traceback
 
 
 class Messages(object):
@@ -10,7 +11,10 @@ class Messages(object):
 
     def add_message(self, path, line, message):
         if (path, line) not in self.messages:
-            self.messages[(path, line)] = Message(path, line)
+            try:
+                self.messages[(path, line)] = Message(path, line)
+            except TypeError:
+                traceback.print_exc()
         self.messages[(path, line)].append(message)
 
     def add_messages(self, messages):
@@ -25,7 +29,7 @@ class Message(object):
 
     def __init__(self, path, line_number):
         self.path = os.path.relpath(path).replace('\\', '/')
-        self.line_number = line_number
+        self.line_number = int(line_number)
         self.comments = set()
 
     def __str__(self):

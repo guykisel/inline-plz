@@ -13,13 +13,24 @@ class JSHintParser(ParserBase):
         messages = set()
         obj = xmltodict.parse(lint_data)
         if 'file' in obj['checkstyle']:
-            for filedata in obj['checkstyle']['file']:
-                for errordata in filedata['error']:
-                    try:
-                        path = filedata['@name']
-                        line = int(errordata['@line'])
-                        msgbody = errordata['@message']
-                        messages.add((path, line, msgbody))
-                    except (AttributeError, TypeError):
-                        pass
+            # handle single file
+            try:
+                path = obj['checkstyle']['file']['@name']
+                for errordata in obj['checkstyle']['file']['error']:
+                    create_message_from_error(messages, path, errordata)
+            # handle many files
+            except TypeError:
+                for filedata in obj['checkstyle']['file']:
+                    for errordata in filedata['error']:
+                        try:
+                            path = filedata['@name']
+                            create_message_from_error(messages, path, errordata)
+                        except (AttributeError, TypeError):
+                            pass
         return messages
+
+
+def create_message_from_error(messages, path, errordata):
+    line = int(errordata['@line'])
+    msgbody = errordata['@message']
+    messages.add((path, line, msgbody))
