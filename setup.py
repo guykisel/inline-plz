@@ -12,9 +12,9 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'unidiff',
-    'github3.py',
-    'xmltodict'
+    'unidiff==0.5.2',
+    'github3.py==0.9.4',
+    'xmltodict==0.9.2'
 ]
 
 test_requirements = [
