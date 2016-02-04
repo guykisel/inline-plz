@@ -13,7 +13,9 @@ from inlineplz.util import git
 class GitHubInterface(InterfaceBase):
     def __init__(self, owner, repo, pr, token, url=None):
         # TODO: support non-PR runs
-        if not pr:
+        try:
+            pr = int(pr)
+        except ValueError:
             return
         if not url:
             self.gh = github3.GitHub(token=token)
