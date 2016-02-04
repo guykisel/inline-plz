@@ -33,6 +33,9 @@ class GitHubInterface(InterfaceBase):
         self.diff = git.diff(self.parent_sha, self.last_sha)
 
     def post_messages(self, messages):
+        # TODO: support non-PR runs
+        if not self.gh:
+            return
         messages_to_post = 0
         for msg in messages:
             if not msg.comments:
