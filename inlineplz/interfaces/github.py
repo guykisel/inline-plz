@@ -1,8 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-import os.path
-
 import github3
 import unidiff
 
@@ -33,11 +31,12 @@ class GitHubInterface(InterfaceBase):
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
 
-    def post_messages(self, messages):
+    def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
         if not self.github:
             return
         messages_to_post = 0
+        messages_posted = 0
         for msg in messages:
             if not msg.comments:
                 continue
@@ -51,6 +50,9 @@ class GitHubInterface(InterfaceBase):
                         msg.path,
                         msg_position
                     )
+                    messages_posted += 1
+                    if max_comments >= 0 and messages_posted > max_comments:
+                        break
         return messages_to_post
 
     def is_duplicate(self, message, position):
