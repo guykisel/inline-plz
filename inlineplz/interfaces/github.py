@@ -12,6 +12,7 @@ from inlineplz.util import git
 
 class GitHubInterface(InterfaceBase):
     def __init__(self, owner, repo, pr, token, url=None):
+        self.gh = None
         # TODO: support non-PR runs
         try:
             pr = int(pr)
