@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+# pylint: disable=W0703
 
 """Linter configurations."""
 
@@ -20,7 +21,7 @@ LINTERS = {
         'parser': parsers.ProspectorParser
     },
     'eslint': {
-        'install': ['npm', 'install', 'eslint'],
+        'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'dotfiles': [
             '.eslintrc.yml',
@@ -31,13 +32,13 @@ LINTERS = {
         'parser': parsers.ESLintParser
     },
     'jshint': {
-        'install': ['npm', 'install', 'jshint'],
+        'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser
     },
     'jscs': {
-        'install': ['npm', 'install', 'jscs'],
+        'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser
@@ -60,7 +61,7 @@ def lint(install=False):
             try:
                 if output.strip():
                     messages.add_messages(config.get('parser')().parse(output))
-            except ValueError:
+            except Exception:
                 traceback.print_exc()
                 print(output)
     return messages.get_messages()
