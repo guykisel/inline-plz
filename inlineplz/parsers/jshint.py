@@ -16,17 +16,25 @@ class JSHintParser(ParserBase):
             # handle single file
             try:
                 path = obj['checkstyle']['file']['@name']
-                for errordata in obj['checkstyle']['file']['error']:
-                    create_message_from_error(messages, path, errordata)
+                # handle single error
+                try:
+                    create_message_from_error(messages, path, obj['checkstyle']['file']['error'])
+                except TypeError:
+                    for errordata in obj['checkstyle']['file']['error']:
+                        create_message_from_error(messages, path, errordata)
             # handle many files
             except TypeError:
                 for filedata in obj['checkstyle']['file']:
-                    for errordata in filedata['error']:
-                        try:
-                            path = filedata['@name']
-                            create_message_from_error(messages, path, errordata)
-                        except (AttributeError, TypeError):
-                            pass
+                    path = filedata['@name']
+                    # handle single error
+                    try:
+                        create_message_from_error(messages, path, filedata['error'])
+                    except TypeError:
+                        for errordata in filedata['error']:
+                            try:
+                                create_message_from_error(messages, path, errordata)
+                            except (AttributeError, TypeError):
+                                pass
         return messages
 
 
