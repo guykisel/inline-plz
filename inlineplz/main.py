@@ -6,7 +6,6 @@ from __future__ import absolute_import
 import argparse
 
 from inlineplz import interfaces
-from inlineplz import parsers
 from inlineplz import env
 from inlineplz import linters
 
@@ -23,6 +22,7 @@ def main():
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
+    parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
     args = parser.parse_args()
     args = env.update_args(args)
 
@@ -43,6 +43,7 @@ def inline(args):
         dryrun: Prints instead of posting comments.
         zero_exit: If true: always return a 0 exit code.
         install: If true: install linters.
+        max_comments: Maximum comments to write
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
     if args.repo_slug:
@@ -59,8 +60,14 @@ def inline(args):
         for msg in messages:
             print(str(msg))
         return 0
-    my_interface = interfaces.INTERFACES[args.interface](owner, repo, args.pull_request, args.token, args.url)
-    if my_interface.post_messages(messages) and not args.zero_exit:
+    my_interface = interfaces.INTERFACES[args.interface](
+        owner,
+        repo,
+        args.pull_request,
+        args.token,
+        args.url
+    )
+    if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
         return 1
     return 0
 

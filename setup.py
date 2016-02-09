@@ -12,9 +12,9 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'unidiff',
-    'github3.py',
-    'xmltodict'
+    'unidiff==0.5.2',
+    'github3.py==0.9.4',
+    'xmltodict==0.9.2'
 ]
 
 test_requirements = [
@@ -23,7 +23,7 @@ test_requirements = [
 
 setup(
     name='inlineplz',
-    version='0.1.0',
+    version='0.3.2',
     description="Inline your lint messages",
     long_description=readme + '\n\n' + history,
     author="Guy Kisel",
