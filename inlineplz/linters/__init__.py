@@ -77,7 +77,7 @@ def recursive_glob(pattern, path=None):
     path = path or os.getcwd()
     # http://stackoverflow.com/a/2186565
     matches = []
-    for root, dirnames, filenames in os.walk(path):
+    for root, _, filenames in os.walk(path):
         for filename in fnmatch.filter(filenames, pattern):
             matches.append(os.path.join(root, filename))
     return matches
