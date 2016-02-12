@@ -85,6 +85,7 @@ def install_linter(config):
     for install_cmd in config.get('install'):
         if not installed(config):
             try:
+                print(install_cmd)
                 subprocess.check_call(install_cmd)
             except subprocess.CalledProcessError:
                 pass
@@ -94,15 +95,18 @@ def install_linter(config):
 
 def installed(config):
     try:
-        subprocess.check_call(config.get('help'), stdout=open(os.devnull, 'wb'), stderr=open(os.devnull, 'wb'))
+        with open(os.devnull, 'wb') as devnull:
+            subprocess.check_call(config.get('help'), stdout=devnull, stderr=devnull)
         return True
-    except subprocess.CalledProcessError:
+    except (subprocess.CalledProcessError, OSError):
         return False
 
 
 def lint(install=False, autorun=False):
     messages = message.Messages()
     for linter, config in LINTERS.items():
+        print('Running linter: {0}'.format(linter))
+        output = None
         if dotfiles_exist(config) or (autorun and should_autorun(config)):
             try:
                 if (install or autorun) and config.get('install'):
