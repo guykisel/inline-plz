@@ -20,7 +20,8 @@ HERE = os.path.dirname(__file__)
 
 LINTERS = {
     'prospector': {
-        'install': ['pip', 'install', 'prospector'],
+        'install': [['pip', 'install', 'prospector']],
+        'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
         'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
                        os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
@@ -30,7 +31,8 @@ LINTERS = {
         'autorun': True
     },
     'eslint': {
-        'install': ['npm', 'install'],
+        'install': [['npm', 'install'], ['npm', 'install', 'eslint']],
+        'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
                        os.path.abspath(os.path.join(HERE, 'config', '.eslintrc'))],
@@ -45,7 +47,8 @@ LINTERS = {
         'autorun': True
     },
     'jshint': {
-        'install': ['npm', 'install'],
+        'install': [['npm', 'install'], ['npm', 'install', 'jshint']],
+        'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
         'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
                        os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
@@ -55,7 +58,8 @@ LINTERS = {
         'autorun': False
     },
     'jscs': {
-        'install': ['npm', 'install'],
+        'install': [['npm', 'install'], ['npm', 'install', 'jscs']],
+        'help': [os.path.normpath('./node_modules/.bin/jscs'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
         'rundefault': [
             os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v', '-c',
@@ -77,13 +81,32 @@ def dotfiles_exist(config):
     return any(dotfile in os.listdir(os.getcwd()) for dotfile in config.get('dotfiles'))
 
 
+def install_linter(config):
+    for install_cmd in config.get('install'):
+        if not installed(config):
+            try:
+                subprocess.check_call(install_cmd)
+            except subprocess.CalledProcessError:
+                pass
+        else:
+            return
+
+
+def installed(config):
+    try:
+        subprocess.check_call(config.get('help'))
+        return True
+    except subprocess.CalledProcessError:
+        return False
+
+
 def lint(install=False, autorun=False):
     messages = message.Messages()
     for linter, config in LINTERS.items():
         if dotfiles_exist(config) or (autorun and should_autorun(config)):
             try:
                 if (install or autorun) and config.get('install'):
-                    subprocess.check_call(config.get('install'))
+                    install_linter(config)
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
                 output = subprocess.check_output(run_cmd).decode('utf-8')
