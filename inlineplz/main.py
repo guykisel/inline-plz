@@ -23,6 +23,8 @@ def main():
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
+    parser.add_argument('--autorun', action='store_true',
+                        help='automatically run linters with reasonable defaults')
     args = parser.parse_args()
     args = env.update_args(args)
 
@@ -53,7 +55,7 @@ def inline(args):
         owner = args.owner
         repo = args.repo
 
-    messages = linters.lint(args.install)
+    messages = linters.lint(args.install, args.autorun)
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
