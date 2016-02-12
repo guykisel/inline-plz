@@ -44,12 +44,15 @@ class GitHubInterface(InterfaceBase):
             if msg_position:
                 messages_to_post += 1
                 if not self.is_duplicate(msg, msg_position):
-                    self.pull_request.create_review_comment(
-                        self.format_message(msg),
-                        self.last_sha,
-                        msg.path,
-                        msg_position
-                    )
+                    try:
+                        self.pull_request.create_review_comment(
+                            self.format_message(msg),
+                            self.last_sha,
+                            msg.path,
+                            msg_position
+                        )
+                    except github3.GitHubError:
+                        pass
                     messages_posted += 1
                     if max_comments >= 0 and messages_posted > max_comments:
                         break
