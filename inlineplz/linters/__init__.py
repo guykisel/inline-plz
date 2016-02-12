@@ -94,7 +94,7 @@ def install_linter(config):
 
 def installed(config):
     try:
-        subprocess.check_call(config.get('help'))
+        subprocess.check_call(config.get('help'), stdout=open(os.devnull, 'wb'), stderr=open(os.devnull, 'wb'))
         return True
     except subprocess.CalledProcessError:
         return False
