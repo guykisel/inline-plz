@@ -30,4 +30,4 @@ python:
 - '2.7'
 script:
 - tox
-- inline-plz --install
+- inline-plz --install --autorun
