@@ -7,7 +7,7 @@ addons:
     - deadsnakes
 deploy:
   true:
-    condition: $TOXENV == py27
+    condition: $TRAVIS_PYTHON_VERSION == 2.7
     repo: guykisel/inline-plz
     tags: true
   distributions: sdist bdist_wheel
