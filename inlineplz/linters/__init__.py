@@ -15,10 +15,15 @@ from inlineplz import parsers
 from inlineplz import message
 
 
+HERE = os.path.dirname(__file__)
+
+
 LINTERS = {
     'prospector': {
         'install': ['pip', 'install', 'prospector'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
+        'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
+                       os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
         'glob': ['*.py', '**/*.py'],
@@ -27,6 +32,8 @@ LINTERS = {
     'eslint': {
         'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
+                       os.path.abspath(os.path.join(HERE, 'config', '.eslintrc'))],
         'dotfiles': [
             '.eslintrc.yml',
             '.eslintignore',
@@ -40,6 +47,8 @@ LINTERS = {
     'jshint': {
         'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
+                       os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
         'glob': ['*.js', '**/*.js'],
@@ -48,6 +57,10 @@ LINTERS = {
     'jscs': {
         'install': ['npm', 'install'],
         'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v', '-c',
+            os.path.abspath(os.path.join(HERE, 'config', '.jscsrc'))
+        ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
         'glob': ['*.js', '**/*.js'],
@@ -71,8 +84,9 @@ def lint(install=False, autorun=False):
             try:
                 if (install or autorun) and config.get('install'):
                     subprocess.check_call(config.get('install'))
-                print(config.get('run'))
-                output = subprocess.check_output(config.get('run')).decode('utf-8')
+                run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+                print(run_cmd)
+                output = subprocess.check_output(run_cmd).decode('utf-8')
             except subprocess.CalledProcessError as err:
                 traceback.print_exc()
                 output = err.output
