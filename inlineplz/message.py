@@ -10,6 +10,7 @@ class Messages(object):
         self.messages = {}
 
     def add_message(self, path, line, message):
+        path = os.path.relpath(path).replace('\\', '/')
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)
@@ -38,7 +39,7 @@ Message:
     Path: {0}
     Line number: {1}
     Content: {2}
-        """.format(self.path, self.line_number, self.content).strip()
+        """.format(self.path, self.line_number, self.comments).strip()
 
     def append(self, message):
         self.comments.add(message)
