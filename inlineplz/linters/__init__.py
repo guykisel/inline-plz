@@ -6,7 +6,7 @@
 from __future__ import absolute_import
 from __future__ import print_function
 
-import glob
+import fnmatch
 import os
 import subprocess
 import traceback
@@ -27,7 +27,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
-        'glob': ['*.py', '**/*.py'],
+        'glob': ['*.py'],
         'autorun': True
     },
     'eslint': {
@@ -43,7 +43,7 @@ LINTERS = {
             'eslintrc.yml'
         ],
         'parser': parsers.ESLintParser,
-        'glob': ['*.js', '**/*.js'],
+        'glob': ['*.js'],
         'autorun': True
     },
     'jshint': {
@@ -54,7 +54,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
-        'glob': ['*.js', '**/*.js'],
+        'glob': ['*.js'],
         'autorun': False
     },
     'jscs': {
@@ -67,14 +67,24 @@ LINTERS = {
         ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
-        'glob': ['*.js', '**/*.js'],
+        'glob': ['*.js'],
         'autorun': True
     }
 }
 
 
+def recursive_glob(pattern, path=None):
+    path = path or os.getcwd()
+    # http://stackoverflow.com/a/2186565
+    matches = []
+    for root, _, filenames in os.walk(path):
+        for filename in fnmatch.filter(filenames, pattern):
+            matches.append(os.path.join(root, filename))
+    return matches
+
+
 def should_autorun(config):
-    return config.get('autorun') and any(glob.glob(pattern) for pattern in config.get('glob'))
+    return config.get('autorun') and any(recursive_glob(pattern) for pattern in config.get('glob'))
 
 
 def dotfiles_exist(config):
