@@ -18,6 +18,12 @@ from inlineplz import message
 HERE = os.path.dirname(__file__)
 
 
+PATTERNS = {
+    'python': ['*.py'],
+    'javascript': ['*.js']
+}
+
+
 LINTERS = {
     'prospector': {
         'install': [['pip', 'install', 'prospector']],
@@ -27,7 +33,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
-        'glob': ['*.py'],
+        'language': 'python',
         'autorun': True
     },
     'eslint': {
@@ -43,7 +49,7 @@ LINTERS = {
             'eslintrc.yml'
         ],
         'parser': parsers.ESLintParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': True
     },
     'jshint': {
@@ -54,7 +60,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': False
     },
     'jscs': {
@@ -67,10 +73,28 @@ LINTERS = {
         ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': True
     }
 }
+
+
+def linters_to_run(install=False, autorun=False):
+    linters = set()
+    if not autorun:
+        for linter, config in LINTERS.items():
+            if (installed(config) or install) and dotfiles_exist(config):
+                linters.add(linter)
+    else:
+        dotfilefound = {}
+        for linter, config in LINTERS.items():
+            if dotfiles_exist(config):
+                dotfilefound[config.get('language')] = True
+                linters.add(linter)
+        for linter, config in LINTERS.items():
+            if not dotfilefound.get(config.get('language')) and should_autorun(config):
+                linters.add(linter)
+    return linters
 
 
 def recursive_glob(pattern, path=None):
@@ -84,7 +108,8 @@ def recursive_glob(pattern, path=None):
 
 
 def should_autorun(config):
-    return config.get('autorun') and any(recursive_glob(pattern) for pattern in config.get('glob'))
+    patterns = PATTERNS.get(config.get('language'))
+    return config.get('autorun') and any(recursive_glob(pattern) for pattern in patterns)
 
 
 def dotfiles_exist(config):
@@ -114,31 +139,31 @@ def installed(config):
 
 def lint(install=False, autorun=False):
     messages = message.Messages()
-    for linter, config in LINTERS.items():
+    for linter in linters_to_run(install, autorun):
         print('Running linter: {0}'.format(linter))
         output = None
-        if dotfiles_exist(config) or (autorun and should_autorun(config)):
-            try:
-                if (install or autorun) and config.get('install'):
-                    install_linter(config)
-                run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
-                print(run_cmd)
-                output = subprocess.check_output(run_cmd).decode('utf-8')
-            except subprocess.CalledProcessError as err:
-                traceback.print_exc()
-                output = err.output
-            except Exception:
-                traceback.print_exc()
-                print(output)
-            try:
-                if output.strip():
-                    linter_messages = config.get('parser')().parse(output)
-                    # prepend linter name to message content
-                    linter_messages = {
-                        (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2])) for msg in linter_messages
-                    }
-                    messages.add_messages(linter_messages)
-            except Exception:
-                traceback.print_exc()
-                print(output)
+        config = LINTERS.get(linter)
+        try:
+            if (install or autorun) and config.get('install'):
+                install_linter(config)
+            run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+            print(run_cmd)
+            output = subprocess.check_output(run_cmd).decode('utf-8')
+        except subprocess.CalledProcessError as err:
+            traceback.print_exc()
+            output = err.output
+        except Exception:
+            traceback.print_exc()
+            print(output)
+        try:
+            if output.strip():
+                linter_messages = config.get('parser')().parse(output)
+                # prepend linter name to message content
+                linter_messages = {
+                    (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2])) for msg in linter_messages
+                }
+                messages.add_messages(linter_messages)
+        except Exception:
+            traceback.print_exc()
+            print(output)
     return messages.get_messages()
