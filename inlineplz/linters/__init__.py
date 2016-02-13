@@ -18,6 +18,12 @@ from inlineplz import message
 HERE = os.path.dirname(__file__)
 
 
+PATTERNS = {
+    'python': ['*.py'],
+    'javascript': ['*.js']
+}
+
+
 LINTERS = {
     'prospector': {
         'install': [['pip', 'install', 'prospector']],
@@ -27,7 +33,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
-        'glob': ['*.py'],
+        'language': 'python',
         'autorun': True
     },
     'eslint': {
@@ -43,7 +49,7 @@ LINTERS = {
             'eslintrc.yml'
         ],
         'parser': parsers.ESLintParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': True
     },
     'jshint': {
@@ -54,7 +60,7 @@ LINTERS = {
                        os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': False
     },
     'jscs': {
@@ -67,10 +73,29 @@ LINTERS = {
         ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
-        'glob': ['*.js'],
+        'language': 'javascript',
         'autorun': True
     }
 }
+
+
+def linters_to_run(install=False, autorun=False):
+    linters = set()
+    if not autorun:
+        for linter, config in LINTERS.items():
+            if (installed(config) or install) and dotfiles_exist(config):
+                linters.add(linter)
+    else:
+        dotfilefound = {}
+        for linter, config in LINTERS.items():
+            if dotfiles_exist(config):
+                dotfilefound[config.get('language')] = True
+                linters.add(linter)
+        for linter, config in LINTERS.items():
+            if dotfilefound.get(config.get('language')):
+                continue
+            linters.add(linter)
+    return linters
 
 
 def recursive_glob(pattern, path=None):
@@ -84,7 +109,8 @@ def recursive_glob(pattern, path=None):
 
 
 def should_autorun(config):
-    return config.get('autorun') and any(recursive_glob(pattern) for pattern in config.get('glob'))
+    patterns = PATTERNS.get(config.get('language'))
+    return config.get('autorun') and any(recursive_glob(pattern) for pattern in patterns)
 
 
 def dotfiles_exist(config):
@@ -114,9 +140,10 @@ def installed(config):
 
 def lint(install=False, autorun=False):
     messages = message.Messages()
-    for linter, config in LINTERS.items():
+    for linter in linters_to_run(install, autorun):
         print('Running linter: {0}'.format(linter))
         output = None
+        config = LINTERS.get(linter)
         if dotfiles_exist(config) or (autorun and should_autorun(config)):
             try:
                 if (install or autorun) and config.get('install'):
