@@ -94,7 +94,8 @@ def linters_to_run(install=False, autorun=False):
         for linter, config in LINTERS.items():
             if dotfilefound.get(config.get('language')):
                 continue
-            linters.add(linter)
+            if should_autorun(config):
+                linters.add(linter)
     return linters
 
 
@@ -144,28 +145,27 @@ def lint(install=False, autorun=False):
         print('Running linter: {0}'.format(linter))
         output = None
         config = LINTERS.get(linter)
-        if dotfiles_exist(config) or (autorun and should_autorun(config)):
-            try:
-                if (install or autorun) and config.get('install'):
-                    install_linter(config)
-                run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
-                print(run_cmd)
-                output = subprocess.check_output(run_cmd).decode('utf-8')
-            except subprocess.CalledProcessError as err:
-                traceback.print_exc()
-                output = err.output
-            except Exception:
-                traceback.print_exc()
-                print(output)
-            try:
-                if output.strip():
-                    linter_messages = config.get('parser')().parse(output)
-                    # prepend linter name to message content
-                    linter_messages = {
-                        (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2])) for msg in linter_messages
-                    }
-                    messages.add_messages(linter_messages)
-            except Exception:
-                traceback.print_exc()
-                print(output)
+        try:
+            if (install or autorun) and config.get('install'):
+                install_linter(config)
+            run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+            print(run_cmd)
+            output = subprocess.check_output(run_cmd).decode('utf-8')
+        except subprocess.CalledProcessError as err:
+            traceback.print_exc()
+            output = err.output
+        except Exception:
+            traceback.print_exc()
+            print(output)
+        try:
+            if output.strip():
+                linter_messages = config.get('parser')().parse(output)
+                # prepend linter name to message content
+                linter_messages = {
+                    (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2])) for msg in linter_messages
+                }
+                messages.add_messages(linter_messages)
+        except Exception:
+            traceback.print_exc()
+            print(output)
     return messages.get_messages()
