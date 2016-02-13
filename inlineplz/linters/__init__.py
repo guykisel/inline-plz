@@ -92,9 +92,7 @@ def linters_to_run(install=False, autorun=False):
                 dotfilefound[config.get('language')] = True
                 linters.add(linter)
         for linter, config in LINTERS.items():
-            if dotfilefound.get(config.get('language')):
-                continue
-            if should_autorun(config):
+            if not dotfilefound.get(config.get('language')) and should_autorun(config):
                 linters.add(linter)
     return linters
 
