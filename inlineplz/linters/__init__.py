@@ -21,7 +21,8 @@ HERE = os.path.dirname(__file__)
 PATTERNS = {
     'python': ['*.py'],
     'javascript': ['*.js'],
-    'json': ['*.json']
+    'json': ['*.json'],
+    'yaml': ['*.yaml', '*.yml']
 }
 
 
@@ -84,11 +85,22 @@ LINTERS = {
     'jsonlint': {
         'install': [['npm', 'install'], ['npm', 'install', 'jsonlint']],
         'help': [os.path.normpath('./node_modules/.bin/jsonlint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/jsonlint'), '.-c', '-q'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/jsonlint'), '.-c', '-q'],
+        'run': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
         'dotfiles': [],
         'parser': parsers.JSONLintParser,
         'language': 'json',
+        'autorun': True,
+        'run_per_file': True
+    },
+    'yaml-lint': {
+        'install': [['gem', 'install', 'yaml-lint']],
+        'help': ['yaml-lint', '-h'],
+        'run': ['yaml-lint', '-q'],
+        'rundefault': ['yaml-lint', '-q'],
+        'dotfiles': [],
+        'parser': parsers.YAMLLintParser,
+        'language': 'yaml',
         'autorun': True,
         'run_per_file': True
     }
