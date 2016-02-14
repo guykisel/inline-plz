@@ -206,7 +206,7 @@ def lint(install=False, autorun=False):
             traceback.print_exc()
             print(output)
         try:
-            if output and output.strip():
+            if output:
                 linter_messages = config.get('parser')().parse(output)
                 # prepend linter name to message content
                 linter_messages = {
