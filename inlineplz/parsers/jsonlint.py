@@ -9,8 +9,8 @@ class JSONLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for output in lint_data:
-            path = output.split(':')[0]
+        for file_path, output in lint_data:
+            path = file_path
             line = int(output.split(':')[1].split()[1].strip(', '))
             msgbody = output
             messages.add((path, line, msgbody))

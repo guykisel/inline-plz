@@ -104,7 +104,10 @@ def run_per_file(config, path=None):
         for pattern in patterns:
             for filename in fnmatch.filter(filenames, pattern):
                 try:
-                    output += subprocess.check_output(run_cmd.append(filename)).decode('utf-8')
+                    output += (
+                        os.path.join(root, filename),
+                        subprocess.check_output(run_cmd.append(filename)).decode('utf-8')
+                    )
                 except subprocess.CalledProcessError as err:
                     traceback.print_exc()
                     output = err.output
