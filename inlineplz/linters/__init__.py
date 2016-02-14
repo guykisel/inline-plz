@@ -20,7 +20,8 @@ HERE = os.path.dirname(__file__)
 
 PATTERNS = {
     'python': ['*.py'],
-    'javascript': ['*.js']
+    'javascript': ['*.js'],
+    'json': ['*.json']
 }
 
 
@@ -34,7 +35,8 @@ LINTERS = {
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
         'language': 'python',
-        'autorun': True
+        'autorun': True,
+        'run_per_file': False
     },
     'eslint': {
         'install': [['npm', 'install'], ['npm', 'install', 'eslint']],
@@ -50,7 +52,8 @@ LINTERS = {
         ],
         'parser': parsers.ESLintParser,
         'language': 'javascript',
-        'autorun': True
+        'autorun': True,
+        'run_per_file': False
     },
     'jshint': {
         'install': [['npm', 'install'], ['npm', 'install', 'jshint']],
@@ -61,7 +64,8 @@ LINTERS = {
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
         'language': 'javascript',
-        'autorun': False
+        'autorun': False,
+        'run_per_file': False
     },
     'jscs': {
         'install': [['npm', 'install'], ['npm', 'install', 'jscs']],
@@ -74,9 +78,40 @@ LINTERS = {
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
         'language': 'javascript',
-        'autorun': True
+        'autorun': True,
+        'run_per_file': False
+    },
+    'jsonlint': {
+        'install': [['npm', 'install'], ['npm', 'install', 'jsonlint']],
+        'help': [os.path.normpath('./node_modules/.bin/jsonlint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/jsonlint'), '.-c', '-q'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/jsonlint'), '.-c', '-q'],
+        'dotfiles': [],
+        'parser': parsers.JSONLintParser,
+        'language': 'json',
+        'autorun': True,
+        'run_per_file': True
     }
 }
+
+
+def run_per_file(config, path=None):
+    path = path or os.getcwd()
+    output = []
+    run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+    for root, _, filenames in os.walk(path):
+        patterns = PATTERNS.get(config.get('language'))
+        for pattern in patterns:
+            for filename in fnmatch.filter(filenames, pattern):
+                try:
+                    output += (
+                        os.path.join(root, filename),
+                        subprocess.check_output(run_cmd.append(filename)).decode('utf-8')
+                    )
+                except subprocess.CalledProcessError as err:
+                    traceback.print_exc()
+                    output = err.output
+    return output
 
 
 def linters_to_run(install=False, autorun=False):
@@ -146,9 +181,12 @@ def lint(install=False, autorun=False):
         try:
             if (install or autorun) and config.get('install'):
                 install_linter(config)
-            run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
-            print(run_cmd)
-            output = subprocess.check_output(run_cmd).decode('utf-8')
+            if config.get('run_per_file'):
+                output = run_per_file(config)
+            else:
+                run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+                print(run_cmd)
+                output = subprocess.check_output(run_cmd).decode('utf-8')
         except subprocess.CalledProcessError as err:
             traceback.print_exc()
             output = err.output
