@@ -121,9 +121,8 @@ def run_per_file(config, path=None):
                         os.path.join(root, filename),
                         subprocess.check_output(file_run).decode('utf-8')
                     ))
-                except subprocess.CalledProcessError as err:
-                    traceback.print_exc()
-                    output = err.output
+                except subprocess.CalledProcessError:
+                    pass
     return output
 
 
