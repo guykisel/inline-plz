@@ -117,10 +117,10 @@ def run_per_file(config, path=None):
             for filename in fnmatch.filter(filenames, pattern):
                 file_run = run_cmd + [os.path.join(root, filename)]
                 try:
-                    output += (
+                    output.append((
                         os.path.join(root, filename),
                         subprocess.check_output(file_run).decode('utf-8')
-                    )
+                    ))
                 except subprocess.CalledProcessError as err:
                     traceback.print_exc()
                     output = err.output
