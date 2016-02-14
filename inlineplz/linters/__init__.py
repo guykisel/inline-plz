@@ -115,14 +115,14 @@ def run_per_file(config, path=None):
         patterns = PATTERNS.get(config.get('language'))
         for pattern in patterns:
             for filename in fnmatch.filter(filenames, pattern):
+                file_run = run_cmd + [os.path.join(root, filename)]
                 try:
-                    output += (
+                    output.append((
                         os.path.join(root, filename),
-                        subprocess.check_output(run_cmd.append(filename)).decode('utf-8')
-                    )
-                except subprocess.CalledProcessError as err:
-                    traceback.print_exc()
-                    output = err.output
+                        subprocess.check_output(file_run).decode('utf-8')
+                    ))
+                except subprocess.CalledProcessError:
+                    pass
     return output
 
 
@@ -206,7 +206,7 @@ def lint(install=False, autorun=False):
             traceback.print_exc()
             print(output)
         try:
-            if output.strip():
+            if output:
                 linter_messages = config.get('parser')().parse(output)
                 # prepend linter name to message content
                 linter_messages = {
