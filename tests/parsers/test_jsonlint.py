@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
 
-import os.path
-
 import inlineplz.parsers.jsonlint as jsonlint
 
 
-def test_jscs():
+def test_jsonlint():
     input = [
         "21.json: line 1, col 25, found: ',' - expected: ':'.",
         "25.json: line 1, col 1, found: 'INVALID' - expected: 'STRING', 'NUMBER', 'NULL', 'TRUE', 'FALSE', '{', '[', ']'.",
