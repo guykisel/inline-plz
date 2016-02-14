@@ -5,7 +5,7 @@ from inlineplz.parsers.base import ParserBase
 
 
 class JSONLintParser(ParserBase):
-    """Parse json jsonlint output."""
+    """Parse jsonlint output."""
 
     def parse(self, lint_data):
         messages = set()
