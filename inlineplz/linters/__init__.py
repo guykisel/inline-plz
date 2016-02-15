@@ -23,7 +23,8 @@ PATTERNS = {
     'javascript': ['*.js'],
     'json': ['*.json'],
     'yaml': ['*.yaml', '*.yml'],
-    'rst': ['*.rst']
+    'rst': ['*.rst'],
+    'markdown': ['*.md']
 }
 
 
@@ -115,6 +116,17 @@ LINTERS = {
         'language': 'rst',
         'autorun': True,
         'run_per_file': True
+    },
+    'markdownlint': {
+        'install': [['gem', 'install', 'mdl']],
+        'help': ['mdl', '-h'],
+        'run': ['mdl', '.'],
+        'rundefault': ['mdl', '.'],
+        'dotfiles': [],
+        'parser': parsers.MarkdownLintParser,
+        'language': 'markdown',
+        'autorun': True,
+        'run_per_file': False
     }
 }
 
@@ -129,12 +141,13 @@ def run_per_file(config, path=None):
             for filename in fnmatch.filter(filenames, pattern):
                 file_run = run_cmd + [os.path.join(root, filename)]
                 try:
-                    output.append((
-                        os.path.join(root, filename),
-                        subprocess.check_output(file_run).decode('utf-8')
-                    ))
-                except subprocess.CalledProcessError:
-                    pass
+                    result = subprocess.check_output(file_run).decode('utf-8')
+                except subprocess.CalledProcessError as err:
+                    result = err.output.decode('utf-8')
+                output.append((
+                    os.path.join(root, filename),
+                    result
+                ))
     return output
 
 
@@ -213,7 +226,7 @@ def lint(install=False, autorun=False):
                 output = subprocess.check_output(run_cmd).decode('utf-8')
         except subprocess.CalledProcessError as err:
             traceback.print_exc()
-            output = err.output
+            output = err.output.decode('utf-8')
         except Exception:
             traceback.print_exc()
             print(output)
