@@ -22,7 +22,8 @@ PATTERNS = {
     'python': ['*.py'],
     'javascript': ['*.js'],
     'json': ['*.json'],
-    'yaml': ['*.yaml', '*.yml']
+    'yaml': ['*.yaml', '*.yml'],
+    'rst': ['*.rst']
 }
 
 
@@ -101,6 +102,17 @@ LINTERS = {
         'dotfiles': [],
         'parser': parsers.YAMLLintParser,
         'language': 'yaml',
+        'autorun': True,
+        'run_per_file': True
+    },
+    'rst-lint': {
+        'install': [['pip', 'install', 'restructuredtext_lint']],
+        'help': ['rst-lint', '-h'],
+        'run': ['rst-lint', '--format', 'json'],
+        'rundefault': ['rst-lint', '--format', 'json'],
+        'dotfiles': [],
+        'parser': parsers.RSTLintParser,
+        'language': 'rst',
         'autorun': True,
         'run_per_file': True
     }
