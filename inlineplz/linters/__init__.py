@@ -23,7 +23,8 @@ PATTERNS = {
     'javascript': ['*.js'],
     'json': ['*.json'],
     'yaml': ['*.yaml', '*.yml'],
-    'rst': ['*.rst']
+    'rst': ['*.rst'],
+    'markdown': ['*.md']
 }
 
 
@@ -115,6 +116,17 @@ LINTERS = {
         'language': 'rst',
         'autorun': True,
         'run_per_file': True
+    },
+    'markdownlint': {
+        'install': [['gem', 'install', 'mdl']],
+        'help': ['mdl', '-h'],
+        'run': ['mdl', '.'],
+        'rundefault': ['mdl', '.'],
+        'dotfiles': [],
+        'parser': parsers.MarkdownLintParser,
+        'language': 'markdown',
+        'autorun': True,
+        'run_per_file': False
     }
 }
 
