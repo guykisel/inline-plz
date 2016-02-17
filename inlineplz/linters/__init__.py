@@ -131,7 +131,7 @@ LINTERS = {
 }
 
 
-def run_command(command):
+def run_command(command, log_on_fail=False):
     shell = False
     if os.name == 'nt':
         shell = True
@@ -148,6 +148,8 @@ def run_command(command):
         stdout = stdout.decode('utf-8')
     if stderr:
         stderr = stderr.decode('utf-8')
+    if log_on_fail and proc.returncode != 0:
+        print((stdout or '') + (stderr or ''))
     return proc.returncode, (stdout or '') + (stderr or '')
 
 
@@ -229,7 +231,7 @@ def install_linter(config):
     for install_cmd in config.get('install'):
         if not installed(config):
             print(install_cmd)
-            run_command(install_cmd)
+            run_command(install_cmd, log_on_fail=True)
         else:
             return
 
