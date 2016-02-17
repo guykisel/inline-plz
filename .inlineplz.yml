@@ -1,2 +1,3 @@
-ignore-paths:
+ignore_paths:
     - node_modules
+    - .tox

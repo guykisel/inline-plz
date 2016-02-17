@@ -133,7 +133,11 @@ LINTERS = {
 
 def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
-        if path.startswith(ignore_path) or fnmatch.fnmatch(path, ignore_path):
+        if (
+            os.path.relpath(path).startswith(ignore_path) or
+            path.startswith(ignore_path) or
+            fnmatch.fnmatch(path, ignore_path)
+        ):
             return True
     return False
 
