@@ -167,7 +167,7 @@ def run_per_file(config, ignore_paths=None, path=None):
     return output
 
 
-def linters_to_run(install=False, autorun=False):
+def linters_to_run(install=False, autorun=False, ignore_paths=None):
     linters = set()
     if not autorun:
         for linter, config in LINTERS.items():
@@ -180,24 +180,28 @@ def linters_to_run(install=False, autorun=False):
                 dotfilefound[config.get('language')] = True
                 linters.add(linter)
         for linter, config in LINTERS.items():
-            if not dotfilefound.get(config.get('language')) and should_autorun(config):
+            if not dotfilefound.get(config.get('language')) and should_autorun(config, ignore_paths):
                 linters.add(linter)
     return linters
 
 
-def recursive_glob(pattern, path=None):
+def recursive_glob(pattern, ignore_paths=None, path=None):
     path = path or os.getcwd()
     # http://stackoverflow.com/a/2186565
     matches = []
     for root, _, filenames in os.walk(path):
+        if should_ignore_path(root, ignore_paths):
+            continue
         for filename in fnmatch.filter(filenames, pattern):
+            if should_ignore_path(filename, ignore_paths):
+                continue
             matches.append(os.path.join(root, filename))
     return matches
 
 
-def should_autorun(config):
+def should_autorun(config, ignore_paths=None):
     patterns = PATTERNS.get(config.get('language'))
-    return config.get('autorun') and any(recursive_glob(pattern) for pattern in patterns)
+    return config.get('autorun') and any(recursive_glob(pattern, ignore_paths) for pattern in patterns)
 
 
 def dotfiles_exist(config):
@@ -227,7 +231,7 @@ def installed(config):
 
 def lint(install=False, autorun=False, ignore_paths=None):
     messages = message.Messages()
-    for linter in linters_to_run(install, autorun):
+    for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
         output = None
         config = LINTERS.get(linter)
