@@ -131,6 +131,26 @@ LINTERS = {
 }
 
 
+def run_command(command):
+    shell = False
+    if os.name == 'nt':
+        shell = True
+    proc = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=shell,
+        env=os.environ
+    )
+    stdout, stderr = proc.communicate()
+    if stdout:
+        stdout = stdout.decode('utf-8')
+    if stderr:
+        stderr = stderr.decode('utf-8')
+    return proc.returncode, (stdout or '') + (stderr or '')
+
+
 def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
         if (
@@ -156,10 +176,7 @@ def run_per_file(config, ignore_paths=None, path=None):
                 if should_ignore_path(filename, ignore_paths):
                     continue
                 file_run = run_cmd + [os.path.join(root, filename)]
-                try:
-                    result = subprocess.check_output(file_run, env=os.environ, shell=True).decode('utf-8')
-                except subprocess.CalledProcessError as err:
-                    result = err.output.decode('utf-8')
+                returncode, result = run_command(file_run)
                 output.append((
                     os.path.join(root, filename),
                     result
@@ -211,20 +228,16 @@ def dotfiles_exist(config):
 def install_linter(config):
     for install_cmd in config.get('install'):
         if not installed(config):
-            try:
-                print(install_cmd)
-                subprocess.check_call(install_cmd, env=os.environ, shell=True)
-            except subprocess.CalledProcessError:
-                pass
+            print(install_cmd)
+            run_command(install_cmd)
         else:
             return
 
 
 def installed(config):
     try:
-        with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call(config.get('help'), stdout=devnull, stderr=devnull, env=os.environ, shell=True)
-        return True
+        returncode, output = run_command(config.get('help'))
+        return returncode == 0
     except (subprocess.CalledProcessError, OSError):
         return False
 
@@ -243,10 +256,7 @@ def lint(install=False, autorun=False, ignore_paths=None):
             else:
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
-                output = subprocess.check_output(run_cmd, env=os.environ, shell=True).decode('utf-8')
-        except subprocess.CalledProcessError as err:
-            traceback.print_exc()
-            output = err.output.decode('utf-8')
+                returncode, output = run_command(run_cmd)
         except Exception:
             traceback.print_exc()
             print(output)
