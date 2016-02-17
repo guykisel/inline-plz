@@ -131,19 +131,54 @@ LINTERS = {
 }
 
 
-def run_per_file(config, path=None):
+def run_command(command, log_on_fail=False):
+    shell = False
+    if os.name == 'nt':
+        shell = True
+    proc = subprocess.Popen(
+        command,
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        shell=shell,
+        env=os.environ
+    )
+    stdout, stderr = proc.communicate()
+    if stdout:
+        stdout = stdout.decode('utf-8')
+    if stderr:
+        stderr = stderr.decode('utf-8')
+    if log_on_fail and proc.returncode != 0:
+        print((stdout or '') + (stderr or ''))
+    return proc.returncode, (stdout or '') + (stderr or '')
+
+
+def should_ignore_path(path, ignore_paths):
+    for ignore_path in ignore_paths:
+        if (
+            os.path.relpath(path).startswith(ignore_path) or
+            path.startswith(ignore_path) or
+            fnmatch.fnmatch(path, ignore_path)
+        ):
+            return True
+    return False
+
+
+def run_per_file(config, ignore_paths=None, path=None):
+    ignore_paths = ignore_paths or []
     path = path or os.getcwd()
     output = []
     run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
     for root, _, filenames in os.walk(path):
+        if should_ignore_path(root, ignore_paths):
+            continue
         patterns = PATTERNS.get(config.get('language'))
         for pattern in patterns:
             for filename in fnmatch.filter(filenames, pattern):
+                if should_ignore_path(filename, ignore_paths):
+                    continue
                 file_run = run_cmd + [os.path.join(root, filename)]
-                try:
-                    result = subprocess.check_output(file_run).decode('utf-8')
-                except subprocess.CalledProcessError as err:
-                    result = err.output.decode('utf-8')
+                _, result = run_command(file_run)
                 output.append((
                     os.path.join(root, filename),
                     result
@@ -151,7 +186,7 @@ def run_per_file(config, path=None):
     return output
 
 
-def linters_to_run(install=False, autorun=False):
+def linters_to_run(install=False, autorun=False, ignore_paths=None):
     linters = set()
     if not autorun:
         for linter, config in LINTERS.items():
@@ -164,24 +199,28 @@ def linters_to_run(install=False, autorun=False):
                 dotfilefound[config.get('language')] = True
                 linters.add(linter)
         for linter, config in LINTERS.items():
-            if not dotfilefound.get(config.get('language')) and should_autorun(config):
+            if not dotfilefound.get(config.get('language')) and should_autorun(config, ignore_paths):
                 linters.add(linter)
     return linters
 
 
-def recursive_glob(pattern, path=None):
+def recursive_glob(pattern, ignore_paths=None, path=None):
     path = path or os.getcwd()
     # http://stackoverflow.com/a/2186565
     matches = []
     for root, _, filenames in os.walk(path):
+        if should_ignore_path(root, ignore_paths):
+            continue
         for filename in fnmatch.filter(filenames, pattern):
+            if should_ignore_path(filename, ignore_paths):
+                continue
             matches.append(os.path.join(root, filename))
     return matches
 
 
-def should_autorun(config):
+def should_autorun(config, ignore_paths=None):
     patterns = PATTERNS.get(config.get('language'))
-    return config.get('autorun') and any(recursive_glob(pattern) for pattern in patterns)
+    return config.get('autorun') and any(recursive_glob(pattern, ignore_paths) for pattern in patterns)
 
 
 def dotfiles_exist(config):
@@ -191,27 +230,23 @@ def dotfiles_exist(config):
 def install_linter(config):
     for install_cmd in config.get('install'):
         if not installed(config):
-            try:
-                print(install_cmd)
-                subprocess.check_call(install_cmd)
-            except subprocess.CalledProcessError:
-                pass
+            print(install_cmd)
+            run_command(install_cmd, log_on_fail=True)
         else:
             return
 
 
 def installed(config):
     try:
-        with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call(config.get('help'), stdout=devnull, stderr=devnull)
-        return True
+        returncode, _ = run_command(config.get('help'))
+        return returncode == 0
     except (subprocess.CalledProcessError, OSError):
         return False
 
 
-def lint(install=False, autorun=False):
+def lint(install=False, autorun=False, ignore_paths=None):
     messages = message.Messages()
-    for linter in linters_to_run(install, autorun):
+    for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
         output = None
         config = LINTERS.get(linter)
@@ -219,14 +254,11 @@ def lint(install=False, autorun=False):
             if (install or autorun) and config.get('install'):
                 install_linter(config)
             if config.get('run_per_file'):
-                output = run_per_file(config)
+                output = run_per_file(config, ignore_paths)
             else:
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
-                output = subprocess.check_output(run_cmd).decode('utf-8')
-        except subprocess.CalledProcessError as err:
-            traceback.print_exc()
-            output = err.output.decode('utf-8')
+                _, output = run_command(run_cmd)
         except Exception:
             traceback.print_exc()
             print(output)
