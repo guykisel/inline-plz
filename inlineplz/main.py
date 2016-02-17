@@ -43,11 +43,14 @@ def update_from_config(args, config):
 def load_config(args):
     """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
-    with open('.inlineplz.yml') as configfile:
-        try:
-            config = yaml.safe_load(configfile) or {}
-        except yaml.parser.ParserError:
-            pass
+    try:
+        with open('.inlineplz.yml') as configfile:
+            try:
+                config = yaml.safe_load(configfile) or {}
+            except yaml.parser.ParserError:
+                pass
+    except (IOError, OSError):
+        pass
     args = update_from_config(args, config)
     args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules']
     return args
