@@ -41,7 +41,7 @@ def update_from_config(args, config):
 
 
 def load_config(args):
-    """ Load inline-plz config from yaml config file with reasonable defaults. """
+    """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
     with open('.inlineplz.yml') as configfile:
         try:
