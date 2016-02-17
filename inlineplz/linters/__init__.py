@@ -157,7 +157,7 @@ def run_per_file(config, ignore_paths=None, path=None):
                     continue
                 file_run = run_cmd + [os.path.join(root, filename)]
                 try:
-                    result = subprocess.check_output(file_run).decode('utf-8')
+                    result = subprocess.check_output(file_run, env=os.environ, shell=True).decode('utf-8')
                 except subprocess.CalledProcessError as err:
                     result = err.output.decode('utf-8')
                 output.append((
@@ -213,7 +213,7 @@ def install_linter(config):
         if not installed(config):
             try:
                 print(install_cmd)
-                subprocess.check_call(install_cmd)
+                subprocess.check_call(install_cmd, env=os.environ, shell=True)
             except subprocess.CalledProcessError:
                 pass
         else:
@@ -223,7 +223,7 @@ def install_linter(config):
 def installed(config):
     try:
         with open(os.devnull, 'wb') as devnull:
-            subprocess.check_call(config.get('help'), stdout=devnull, stderr=devnull)
+            subprocess.check_call(config.get('help'), stdout=devnull, stderr=devnull, env=os.environ, shell=True)
         return True
     except (subprocess.CalledProcessError, OSError):
         return False
@@ -243,7 +243,7 @@ def lint(install=False, autorun=False, ignore_paths=None):
             else:
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
-                output = subprocess.check_output(run_cmd).decode('utf-8')
+                output = subprocess.check_output(run_cmd, env=os.environ, shell=True).decode('utf-8')
         except subprocess.CalledProcessError as err:
             traceback.print_exc()
             output = err.output.decode('utf-8')
