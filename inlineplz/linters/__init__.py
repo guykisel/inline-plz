@@ -178,7 +178,7 @@ def run_per_file(config, ignore_paths=None, path=None):
                 if should_ignore_path(filename, ignore_paths):
                     continue
                 file_run = run_cmd + [os.path.join(root, filename)]
-                returncode, result = run_command(file_run)
+                _, result = run_command(file_run)
                 output.append((
                     os.path.join(root, filename),
                     result
@@ -238,7 +238,7 @@ def install_linter(config):
 
 def installed(config):
     try:
-        returncode, output = run_command(config.get('help'))
+        returncode, _ = run_command(config.get('help'))
         return returncode == 0
     except (subprocess.CalledProcessError, OSError):
         return False
@@ -258,7 +258,7 @@ def lint(install=False, autorun=False, ignore_paths=None):
             else:
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
-                returncode, output = run_command(run_cmd)
+                _, output = run_command(run_cmd)
         except Exception:
             traceback.print_exc()
             print(output)
