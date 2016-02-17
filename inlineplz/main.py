@@ -49,7 +49,7 @@ def load_config(args):
         except yaml.parser.ParserError:
             pass
     args = update_from_config(args, config)
-    args.ignore_paths = args.ignore_paths or ['node_modules']
+    args.ignore_paths = args.getattr('ignore_paths') or ['node_modules']
     return args
 
 
