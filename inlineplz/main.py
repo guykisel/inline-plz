@@ -5,6 +5,8 @@ from __future__ import absolute_import
 
 import argparse
 
+import yaml
+
 from inlineplz import interfaces
 from inlineplz import env
 from inlineplz import linters
@@ -31,6 +33,26 @@ def main():
     return inline(args)
 
 
+def update_from_config(args, config):
+    for key, value in config.items():
+        if not key.startswith('_'):
+            args.__dict__[key] = args.__dict__.get(key) or value
+    return args
+
+
+def load_config(args):
+    """ Load inline-plz config from yaml config file with reasonable defaults. """
+    config = {}
+    with open('.inlineplz.yml') as configfile:
+        try:
+            config = yaml.safe_load(configfile) or {}
+        except yaml.parser.ParserError:
+            pass
+    args = update_from_config(args, config)
+    args.ignore_paths = args.ignore_paths or ['node_modules']
+    return args
+
+
 def inline(args):
     """
     Parse input file with the specified parser and post messages based on lint output
@@ -54,8 +76,8 @@ def inline(args):
     else:
         owner = args.owner
         repo = args.repo
-
-    messages = linters.lint(args.install, args.autorun)
+    args = load_config(args)
+    messages = linters.lint(args.install, args.autorun, args.ignore_paths)
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:

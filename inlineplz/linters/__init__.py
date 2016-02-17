@@ -131,14 +131,26 @@ LINTERS = {
 }
 
 
-def run_per_file(config, path=None):
+def should_ignore_path(path, ignore_paths):
+    for ignore_path in ignore_paths:
+        if path.startswith(ignore_path) or fnmatch.fnmatch(path, ignore_path):
+            return True
+    return False
+
+
+def run_per_file(config, ignore_paths=None, path=None):
+    ignore_paths = ignore_paths or []
     path = path or os.getcwd()
     output = []
     run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
     for root, _, filenames in os.walk(path):
+        if should_ignore_path(root, ignore_paths):
+            continue
         patterns = PATTERNS.get(config.get('language'))
         for pattern in patterns:
             for filename in fnmatch.filter(filenames, pattern):
+                if should_ignore_path(filename, ignore_paths):
+                    continue
                 file_run = run_cmd + [os.path.join(root, filename)]
                 try:
                     result = subprocess.check_output(file_run).decode('utf-8')
@@ -209,7 +221,7 @@ def installed(config):
         return False
 
 
-def lint(install=False, autorun=False):
+def lint(install=False, autorun=False, ignore_paths=None):
     messages = message.Messages()
     for linter in linters_to_run(install, autorun):
         print('Running linter: {0}'.format(linter))
@@ -219,7 +231,7 @@ def lint(install=False, autorun=False):
             if (install or autorun) and config.get('install'):
                 install_linter(config)
             if config.get('run_per_file'):
-                output = run_per_file(config)
+                output = run_per_file(config, ignore_paths)
             else:
                 run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
                 print(run_cmd)
