@@ -227,14 +227,14 @@ def dotfiles_exist(config):
     return any(dotfile in os.listdir(os.getcwd()) for dotfile in config.get('dotfiles'))
 
 
-previous_install_cmds = []
+PREVIOUS_INSTALL_COMMANDS = []
 
 
 def install_linter(config):
     for install_cmd in config.get('install'):
-        if install_cmd in previous_install_cmds:
+        if install_cmd in PREVIOUS_INSTALL_COMMANDS:
             continue
-        previous_install_cmds.append(install_cmd)
+        PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
         if not installed(config):
             print(install_cmd)
             run_command(install_cmd, log_on_fail=True)
