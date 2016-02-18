@@ -29,5 +29,5 @@ python:
 - '2.7'
 script:
 - tox
-- inline-plz --dryrun --autorun
-- inline-plz --autorun
+- inline-plz --dryrun --autorun --zero-exit
+- inline-plz --autorun --zero-exit
