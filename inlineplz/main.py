@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 from __future__ import absolute_import
+from __future__ import print_function
 
 import argparse
 
@@ -84,19 +85,30 @@ def inline(args):
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
+        print_messages(messages)
         for msg in messages:
             print(str(msg))
         return 0
-    my_interface = interfaces.INTERFACES[args.interface](
-        owner,
-        repo,
-        args.pull_request,
-        args.token,
-        args.url
-    )
-    if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
+    try:
+        my_interface = interfaces.INTERFACES[args.interface](
+            owner,
+            repo,
+            args.pull_request,
+            args.token,
+            args.url
+        )
+        if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
+            return 1
+    except KeyError:
+        print_messages(messages)
+    if messages and not args.zero_exit:
         return 1
     return 0
+
+
+def print_messages(messages):
+    for msg in sorted([str(msg) for msg in messages]):
+        print(msg)
 
 
 if __name__ == "__main__":
