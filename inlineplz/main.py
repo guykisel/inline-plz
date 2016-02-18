@@ -100,9 +100,7 @@ def inline(args):
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:
-        print_messages(messages)
-    if messages and not args.zero_exit:
-        return 1
+        pass
     return 0
 
 
