@@ -236,8 +236,10 @@ def install_linter(config):
             continue
         PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
         if not installed(config):
-            print(install_cmd)
-            run_command(install_cmd, log_on_fail=True)
+            try:
+                run_command(install_cmd, log_on_fail=True)
+            except OSError:
+                print('Install failed: {0}\n{1}'.format(install_cmd, traceback.format_exc()))
         else:
             return
 
