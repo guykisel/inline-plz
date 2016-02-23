@@ -81,6 +81,9 @@ def inline(args):
         owner = args.owner
         repo = args.repo
     args = load_config(args)
+    if not args.dryrun and args.interface not in interfaces.INTERFACES:
+        print('Valid inline-plz config not found')
+        return 1
     messages = linters.lint(args.install, args.autorun, args.ignore_paths)
 
     # TODO: implement dryrun as an interface instead of a special case here
