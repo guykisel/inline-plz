@@ -30,4 +30,5 @@ python:
 script:
 - tox
 - inline-plz --dryrun --autorun
+- inline-plz --dryrun --autorun --config-dir=./inlineplz/linters/config
 - inline-plz --autorun

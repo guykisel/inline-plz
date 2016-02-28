@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import argparse
+import os
 
 import yaml
 
@@ -26,10 +27,19 @@ def main():
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
-    parser.add_argument('--autorun', action='store_true',
-                        help='automatically run linters with reasonable defaults')
+    parser.add_argument(
+        '--autorun',
+        action='store_true',
+        help='automatically run linters with reasonable defaults'
+    )
+    parser.add_argument(
+        '--config-dir',
+        help='default directory to search for linter config files'
+    )
     args = parser.parse_args()
     args = env.update_args(args)
+    if args.config_dir:
+        args.config_dir = os.path.abspath(args.config_dir)
 
     return inline(args)
 
@@ -84,7 +94,7 @@ def inline(args):
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
-    messages = linters.lint(args.install, args.autorun, args.ignore_paths)
+    messages = linters.lint(args.install, args.autorun, args.ignore_paths, args.config_dir)
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
