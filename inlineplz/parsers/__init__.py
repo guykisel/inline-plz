@@ -10,6 +10,7 @@ from inlineplz.parsers.jsonlint import JSONLintParser
 from inlineplz.parsers.yamllint import YAMLLintParser
 from inlineplz.parsers.rstlint import RSTLintParser
 from inlineplz.parsers.markdownlint import MarkdownLintParser
+from inlineplz.parsers.stylint import StylintParser
 
 
 PARSERS = {
@@ -20,5 +21,6 @@ PARSERS = {
     'jsonlint': JSONLintParser,
     'yamllint': YAMLLintParser,
     'rstlint': RSTLintParser,
-    'markdownlint': MarkdownLintParser
+    'markdownlint': MarkdownLintParser,
+    'stylint': StylintParser
 }

@@ -24,7 +24,8 @@ PATTERNS = {
     'json': ['*.json'],
     'yaml': ['*.yaml', '*.yml'],
     'rst': ['*.rst'],
-    'markdown': ['*.md']
+    'markdown': ['*.md'],
+    'stylus': ['*.styl']
 }
 
 
@@ -128,7 +129,22 @@ LINTERS = {
         'language': 'markdown',
         'autorun': True,
         'run_per_file': False
-    }
+    },
+    'stylint': {
+        'install': [['npm', 'install'], ['npm', 'install', 'stylint']],
+        'help': [os.path.normpath('./node_modules/.bin/stylint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/stylint')],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/stylint'),
+            '-c',
+            '{config_dir}/.stylintrc'
+        ],
+        'dotfiles': ['.stylintrc '],
+        'parser': parsers.StylintParser,
+        'language': 'stylus',
+        'autorun': True,
+        'run_per_file': False
+    },
 }
 
 
