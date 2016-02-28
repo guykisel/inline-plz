@@ -263,7 +263,7 @@ def run_config(config, config_dir):
     return [
         os.path.normpath(item.format(config_dir=config_dir))
         for item in (config.get('rundefault') or config.get('run'))
-        ]
+    ]
 
 
 def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
