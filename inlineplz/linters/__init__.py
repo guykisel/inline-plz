@@ -34,7 +34,7 @@ LINTERS = {
         'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
         'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
-                       os.path.abspath(os.path.join(HERE, 'config', '.prospector.yaml'))],
+                       '{config_dir}/.prospector.yaml'],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
         'language': 'python',
@@ -46,7 +46,7 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
-                       os.path.abspath(os.path.join(HERE, 'config', '.eslintrc'))],
+                       '{config_dir}/.eslintrc'],
         'dotfiles': [
             '.eslintrc.yml',
             '.eslintignore',
@@ -63,7 +63,7 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
         'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
-                       os.path.abspath(os.path.join(HERE, 'config', '.jshintrc'))],
+                       '{config_dir}/.jshintrc'],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
         'language': 'javascript',
@@ -75,8 +75,9 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/jscs'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
         'rundefault': [
-            os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v', '-c',
-            os.path.abspath(os.path.join(HERE, 'config', '.jscsrc'))
+            os.path.normpath('./node_modules/.bin/jscs'),
+            '.', '-r', 'json', '-m', '-1', '-v', '-c',
+            '{config_dir}/.jscsrc'
         ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
@@ -164,11 +165,12 @@ def should_ignore_path(path, ignore_paths):
     return False
 
 
-def run_per_file(config, ignore_paths=None, path=None):
+def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     ignore_paths = ignore_paths or []
     path = path or os.getcwd()
     output = []
-    run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
+    cmd = run_config(config, config_dir)
+    print(cmd)
     for root, _, filenames in os.walk(path):
         if should_ignore_path(root, ignore_paths):
             continue
@@ -177,7 +179,7 @@ def run_per_file(config, ignore_paths=None, path=None):
             for filename in fnmatch.filter(filenames, pattern):
                 if should_ignore_path(filename, ignore_paths):
                     continue
-                file_run = run_cmd + [os.path.join(root, filename)]
+                file_run = cmd + [os.path.join(root, filename)]
                 _, result = run_command(file_run)
                 output.append((
                     os.path.join(root, filename),
@@ -223,8 +225,9 @@ def should_autorun(config, ignore_paths=None):
     return config.get('autorun') and any(recursive_glob(pattern, ignore_paths) for pattern in patterns)
 
 
-def dotfiles_exist(config):
-    return any(dotfile in os.listdir(os.getcwd()) for dotfile in config.get('dotfiles'))
+def dotfiles_exist(config, path=None):
+    path = path or os.getcwd()
+    return any(dotfile in os.listdir(path) for dotfile in config.get('dotfiles'))
 
 
 PREVIOUS_INSTALL_COMMANDS = []
@@ -252,7 +255,18 @@ def installed(config):
         return False
 
 
-def lint(install=False, autorun=False, ignore_paths=None):
+def run_config(config, config_dir):
+    if dotfiles_exist(config) and config.get('run'):
+        return config.get('run')
+    if not (config_dir and dotfiles_exist(config, config_dir)):
+        config_dir = os.path.abspath(os.path.join(HERE, 'config'))
+    return [
+        os.path.normpath(item.format(config_dir=config_dir))
+        for item in (config.get('rundefault') or config.get('run'))
+        ]
+
+
+def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     messages = message.Messages()
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
@@ -262,11 +276,11 @@ def lint(install=False, autorun=False, ignore_paths=None):
             if (install or autorun) and config.get('install'):
                 install_linter(config)
             if config.get('run_per_file'):
-                output = run_per_file(config, ignore_paths)
+                output = run_per_file(config, ignore_paths, config_dir)
             else:
-                run_cmd = config.get('run') if dotfiles_exist(config) else config.get('rundefault')
-                print(run_cmd)
-                _, output = run_command(run_cmd)
+                cmd = run_config(config, config_dir)
+                print(cmd)
+                _, output = run_command(cmd)
         except Exception:
             traceback.print_exc()
             print(output)
