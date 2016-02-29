@@ -123,7 +123,7 @@ LINTERS = {
         'install': [['gem', 'install', 'mdl']],
         'help': ['mdl', '-h'],
         'run': ['mdl', '.'],
-        'rundefault': ['mdl', '.', '{config_dir}/.mdlrc'],
+        'rundefault': ['mdl', '.', '-c', '{config_dir}/.mdlrc'],
         'dotfiles': ['.mdlrc'],
         'parser': parsers.MarkdownLintParser,
         'language': 'markdown',
