@@ -20,6 +20,7 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
+        self.user = self.github.me()
         self.pull_request = self.github.pull_request(owner, repo, pr)
         # github3 has naming/compatibility issues
         try:
@@ -92,3 +93,11 @@ class GitHubInterface(InterfaceBase):
                         if hunk_line.target_line_no == message.line_number:
                             return position + offset
                     offset += len(hunk) + 1
+
+    def clear_outdated_messages(self):
+        for comments in self.pull_request.review_comments():
+            if not comment.position and comment.user.id == self.user.id:
+                try:
+                    comment.delete()
+                except github3.GitHubError:
+                    pass

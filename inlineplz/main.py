@@ -112,6 +112,8 @@ def inline(args):
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
+
+        my_interface.clear_outdated_messages()
     except KeyError:
         pass
     return 0
