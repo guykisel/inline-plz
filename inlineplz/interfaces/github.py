@@ -9,7 +9,7 @@ from inlineplz.util import git
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, owner, repo, pr, token, url=None, prefix=None):
         self.github = None
         # TODO: support non-PR runs
         try:
@@ -20,7 +20,6 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
-        self.user = self.github.me()
         self.pull_request = self.github.pull_request(owner, repo, pr)
         # github3 has naming/compatibility issues
         try:
@@ -31,6 +30,7 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
+        self.prefix = prefix or "## Lint Error: "
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
@@ -68,12 +68,12 @@ class GitHubInterface(InterfaceBase):
         return False
 
     @staticmethod
-    def format_message(message):
+    def format_message(message, prefix):
         if not message.comments:
             return ''
         if len(message.comments) > 1:
             return (
-                '```\n' +
+                '```\n' + prefix + '\n' +
                 '\n'.join(sorted(list(message.comments))) +
                 '\n```'
             )
@@ -96,7 +96,7 @@ class GitHubInterface(InterfaceBase):
 
     def clear_outdated_messages(self):
         for comments in self.pull_request.review_comments():
-            if not comment.position and comment.user.id == self.user.id:
+            if not comment.position and self.prefix in comment.body:
                 try:
                     comment.delete()
                 except github3.GitHubError:
