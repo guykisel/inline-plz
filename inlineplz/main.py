@@ -28,6 +28,7 @@ def main():
     parser.add_argument('--install', action='store_true')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
     parser.add_argument('--prefix', type=str)
+    parser.add_argument('--delete-outdated', action='store_true')
     parser.add_argument(
         '--autorun',
         action='store_true',
@@ -83,7 +84,8 @@ def inline(args):
         zero_exit: If true: always return a 0 exit code.
         install: If true: install linters.
         max_comments: Maximum comments to write
-        prefix: Prefix to inline-plz comments. Default: "## Lint error: "
+        prefix: Prefix to inline-plz comments.
+        delete_outdated: If true: delete outdated review comments
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
     if args.repo_slug:
@@ -116,7 +118,11 @@ def inline(args):
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
 
-        my_interface.clear_outdated_messages()
+        if args.delete_outdated and args.prefix:
+            my_interface.clear_outdated_messages()
+
+        if args.delete_outdated and not args.prefix
+            print('delete-outdated flag passed without prefix flag. To remove outdated comments, use a prefix')
     except KeyError:
         pass
     return 0

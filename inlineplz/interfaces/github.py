@@ -30,7 +30,7 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
-        self.prefix = prefix or "## Lint Error: "
+        self.prefix = prefix
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
@@ -72,11 +72,10 @@ class GitHubInterface(InterfaceBase):
         if not message.comments:
             return ''
         if len(message.comments) > 1:
-            return (
-                '```\n' + prefix + '\n' +
-                '\n'.join(sorted(list(message.comments))) +
-                '\n```'
-            )
+            comment_output = '\n'.join(sorted(list(message.comments)))
+            if prefix:
+                comment_output = prefix + '\n' + comment_output
+            return '```\n' + comment_output + '\n```'
         return '`{0}`'.format(list(message.comments)[0].strip())
 
     def position(self, message):
@@ -95,7 +94,7 @@ class GitHubInterface(InterfaceBase):
                     offset += len(hunk) + 1
 
     def clear_outdated_messages(self):
-        for comments in self.pull_request.review_comments():
+        for comment in self.pull_request.review_comments():
             if not comment.position and self.prefix in comment.body:
                 try:
                     comment.delete()
