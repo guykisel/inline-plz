@@ -75,8 +75,12 @@ class GitHubInterface(InterfaceBase):
             comment_output = '\n'.join(sorted(list(message.comments)))
             if prefix:
                 comment_output = prefix + '\n' + comment_output
-            return '```\n' + comment_output + '\n```'
-        return '`{0}`'.format(list(message.comments)[0].strip())
+            return '```\n {0} \n ```'.format(comment_output)
+
+        comment_output = list(message.comments)[0].strip()
+        if prefix:
+            comment_output = prefix + '\n' + comment_output
+        return '`{0}`'.format(comment_output)
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""

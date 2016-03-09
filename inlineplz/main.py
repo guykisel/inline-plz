@@ -121,7 +121,7 @@ def inline(args):
         if args.delete_outdated and args.prefix:
             my_interface.clear_outdated_messages()
 
-        if args.delete_outdated and not args.prefix
+        if args.delete_outdated and not args.prefix:
             print('delete-outdated flag passed without prefix flag. To remove outdated comments, use a prefix')
     except KeyError:
         pass
