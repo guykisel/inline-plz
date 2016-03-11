@@ -99,7 +99,7 @@ LINTERS = {
     },
     'yaml-lint': {
         'install': [['gem', 'install', 'yaml-lint']],
-        'help': ['yaml-lint', '-h'],
+        'help': ['yaml-lint'],
         'run': ['yaml-lint', '-q'],
         'rundefault': ['yaml-lint', '-q'],
         'dotfiles': [],
