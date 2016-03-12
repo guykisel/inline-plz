@@ -139,7 +139,7 @@ LINTERS = {
             '-c',
             '{config_dir}/.stylintrc'
         ],
-        'dotfiles': ['.stylintrc '],
+        'dotfiles': ['.stylintrc'],
         'parser': parsers.StylintParser,
         'language': 'stylus',
         'autorun': True,
@@ -243,7 +243,7 @@ def should_autorun(config, ignore_paths=None):
 
 def dotfiles_exist(config, path=None):
     path = path or os.getcwd()
-    return any(dotfile in os.listdir(path) for dotfile in config.get('dotfiles'))
+    return any(dotfile.strip() in os.listdir(path) for dotfile in config.get('dotfiles'))
 
 
 PREVIOUS_INSTALL_COMMANDS = []
