@@ -47,7 +47,7 @@ class GitHubInterface(InterfaceBase):
                 if not self.is_duplicate(msg, msg_position):
                     try:
                         self.pull_request.create_review_comment(
-                            self.format_message(msg),
+                            self.format_message(msg, self.prefix),
                             self.last_sha,
                             msg.path,
                             msg_position
@@ -63,7 +63,7 @@ class GitHubInterface(InterfaceBase):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
                     comment.path == message.path and
-                    comment.body.strip() == self.format_message(message).strip()):
+                    comment.body.strip() == self.format_message(message, self.prefix).strip()):
                 return True
         return False
 
