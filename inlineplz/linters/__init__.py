@@ -9,6 +9,7 @@ from __future__ import print_function
 import fnmatch
 import os
 import subprocess
+import time
 import traceback
 
 from inlineplz import parsers
@@ -286,6 +287,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     messages = message.Messages()
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
+        start = time.clock()
         output = None
         config = LINTERS.get(linter)
         try:
@@ -300,6 +302,8 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
         except Exception:
             traceback.print_exc()
             print(output)
+        print('Installation of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+        start = time.clock()
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
@@ -311,4 +315,5 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
         except Exception:
             traceback.print_exc()
             print(output)
+        print('Linting with {0} took {1} seconds'.format(linter, int(time.clock() - start)))
     return messages.get_messages()
