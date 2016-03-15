@@ -2,8 +2,8 @@
 inline-plz
 ===============================
 
-.. image:: https://img.shields.io/pypi/v/inline-plz.svg
-        :target: https://pypi.python.org/pypi/inline-plz
+.. image:: https://img.shields.io/pypi/v/inlineplz.svg
+        :target: https://pypi.python.org/pypi/inlineplz
 
 .. image:: https://img.shields.io/travis/guykisel/inline-plz.svg
         :target: https://travis-ci.org/guykisel/inline-plz
