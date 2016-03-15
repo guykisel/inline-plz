@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-# pylint: disable=W0703
+# pylint: disable=W0703,C0412
 
 """Linter configurations."""
 
