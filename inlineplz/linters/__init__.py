@@ -8,7 +8,7 @@ from __future__ import print_function
 
 import fnmatch
 from multiprocessing.pool import ThreadPool as Pool
-import os
+import os.path
 import subprocess
 import time
 import traceback
@@ -18,7 +18,7 @@ import traceback
 try:
     from os import scandir, walk
 except ImportError:
-    from scandir import scandir, walk
+    from scandir import scandir, walk # noqa
 
 from inlineplz import parsers
 from inlineplz import message
