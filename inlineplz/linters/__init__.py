@@ -7,10 +7,18 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 import fnmatch
+from multiprocessing.pool import ThreadPool as Pool
 import os
 import subprocess
 import time
 import traceback
+
+# Use the built-in version of scandir/walk if possible, otherwise
+# use the scandir module version
+try:
+    from os import scandir, walk
+except ImportError:
+    from scandir import scandir, walk
 
 from inlineplz import parsers
 from inlineplz import message
@@ -185,23 +193,21 @@ def should_ignore_path(path, ignore_paths):
 def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     ignore_paths = ignore_paths or []
     path = path or os.getcwd()
-    output = []
     cmd = run_config(config, config_dir)
     print(cmd)
-    for root, _, filenames in os.walk(path):
-        if should_ignore_path(root, ignore_paths):
-            continue
-        patterns = PATTERNS.get(config.get('language'))
-        for pattern in patterns:
-            for filename in fnmatch.filter(filenames, pattern):
-                if should_ignore_path(filename, ignore_paths):
-                    continue
-                file_run = cmd + [os.path.join(root, filename)]
-                _, result = run_command(file_run)
-                output.append((
-                    os.path.join(root, filename),
-                    result
-                ))
+    run_cmds = []
+    patterns = PATTERNS.get(config.get('language'))
+    paths = all_filenames_in_dir(path=path, ignore_paths=ignore_paths)
+    for pattern in patterns:
+        for filepath in fnmatch.filter(paths, pattern):
+            run_cmds.append(cmd + [filepath])
+    pool = Pool()
+
+    def result(run_cmd):
+        _, out = run_command(run_cmd)
+        return run_cmd[-1], out
+
+    output = pool.map(result, run_cmds)
     return output
 
 
@@ -217,29 +223,37 @@ def linters_to_run(install=False, autorun=False, ignore_paths=None):
             if dotfiles_exist(config):
                 dotfilefound[config.get('language')] = True
                 linters.add(linter)
+        filenames = all_filenames_in_dir(path=os.getcwd(), ignore_paths=ignore_paths)
         for linter, config in LINTERS.items():
-            if not dotfilefound.get(config.get('language')) and should_autorun(config, ignore_paths):
+            if not dotfilefound.get(config.get('language')) and should_autorun(config, filenames):
                 linters.add(linter)
     return linters
 
 
-def recursive_glob(pattern, ignore_paths=None, path=None):
+def all_filenames_in_dir(path=None, ignore_paths=None):
     path = path or os.getcwd()
     # http://stackoverflow.com/a/2186565
-    matches = []
-    for root, _, filenames in os.walk(path):
+    paths = set()
+    for root, dirnames, filenames in os.walk(path, topdown=True):
+        try:
+            for ignore in ignore_paths:
+                dirnames.remove(ignore)
+        except ValueError:
+            pass
         if should_ignore_path(root, ignore_paths):
             continue
-        for filename in fnmatch.filter(filenames, pattern):
-            if should_ignore_path(filename, ignore_paths):
-                continue
-            matches.append(os.path.join(root, filename))
-    return matches
+        for filename in filenames:
+            paths.add(os.path.join(root, filename))
+    return paths
 
 
-def should_autorun(config, ignore_paths=None):
+def should_autorun(config, filenames):
     patterns = PATTERNS.get(config.get('language'))
-    return config.get('autorun') and any(recursive_glob(pattern, ignore_paths) for pattern in patterns)
+    if config.get('autorun'):
+        for pattern in patterns:
+            if fnmatch.filter(filenames, pattern):
+                return True
+    return False
 
 
 def dotfiles_exist(config, path=None):
@@ -302,7 +316,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
         except Exception:
             traceback.print_exc()
             print(output)
-        print('Installation of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+        print('Installation and running of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
         start = time.clock()
         try:
             if output:
@@ -315,5 +329,5 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
         except Exception:
             traceback.print_exc()
             print(output)
-        print('Linting with {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+        print('Parsing of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
     return messages.get_messages()
