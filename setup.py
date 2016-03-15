@@ -15,7 +15,8 @@ requirements = [
     'unidiff',
     'github3.py',
     'xmltodict',
-    'pyyaml'
+    'pyyaml',
+    'scandir'
 ]
 
 test_requirements = [
