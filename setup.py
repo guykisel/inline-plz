@@ -36,7 +36,7 @@ setup(
     include_package_data=True,
     install_requires=requirements,
     dependency_links=[  # TODO: Remove dependency_links once stashy is updated on PyPI
-        'git+ssh://git@github.com/RisingOak/stashy.git#egg=stashy-0.3.0'
+        'git+https://github.com/RisingOak/stashy.git#egg=stashy-0.3.0'
     ],
     license="ISCL",
     zip_safe=False,
