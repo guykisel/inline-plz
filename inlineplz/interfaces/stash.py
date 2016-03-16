@@ -9,7 +9,10 @@ from inlineplz.util import git
 
 
 class StashInterface(InterfaceBase):
-    def __init__(self, project, repo, pr, username, password, url=None):
+    def __init__(self, project, repo, pr, auth, url=None):
+        self.stash = None
+        username = auth.get('username')
+        password = auth.get('password')
         # TODO: support non-PR runs
         try:
             pr = int(pr)

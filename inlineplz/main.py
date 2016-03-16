@@ -105,23 +105,13 @@ def inline(args):
             print(str(msg))
         return 0
     try:
-        if args.token:
-            my_interface = interfaces.INTERFACES[args.interface](
-                owner,
-                repo,
-                args.pull_request,
-                args.token,
-                args.url
-            )
-        else:
-            my_interface = interfaces.INTERFACES[args.interface](
-                owner,
-                repo,
-                args.pull_request,
-                args.user,
-                args.password,
-                args.url
-            )
+        my_interface = interfaces.INTERFACES[args.interface](
+            owner,
+            repo,
+            args.pull_request,
+            dict(token=args.token, username=args.user, password=args.password),
+            args.url
+        )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:
