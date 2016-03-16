@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 
 import stashy
+import unidiff
 
 from inlineplz.interfaces.base import InterfaceBase
 from inlineplz.util import git
@@ -34,7 +35,7 @@ class StashInterface(InterfaceBase):
         for msg in messages:
             if not msg.comments:
                 continue
-            msg_position = msg.line_number
+            msg_position = self.position(msg)
             if msg_position:
                 messages_to_post += 1
                 if not self.is_duplicate(msg, msg_position):
@@ -70,3 +71,20 @@ class StashInterface(InterfaceBase):
                 '\n```'
             )
         return '`{0}`'.format(list(message.comments)[0].strip())
+
+    def position(self, message):
+        """
+        Determine where the comment should go
+
+        Skips messages outside of the scope of changes we're looking at
+        """
+        patch = unidiff.PatchSet(self.diff.split('\n'))
+        for patched_file in patch:
+            target = patched_file.target_file.lstrip('b/')
+            if target == message.path:
+                for hunk_no, hunk in enumerate(patched_file):
+                    for position, hunk_line in enumerate(hunk):
+                        if '+' not in hunk_line.line_type:
+                            continue
+                        if hunk_line.target_line_no == message.line_number:
+                            return hunk_line.target_line_no
