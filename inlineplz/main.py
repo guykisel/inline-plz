@@ -79,7 +79,7 @@ def inline(args):
         repo: Repository name
         pr: Pull request ID
         token: Authentication for repository
-        username: (If not using token) username for repository
+        user: (If not using token) username for repository
         password: (If not using token) password for repository
         url: Root URL of repository (not your project) Default: https://github.com
         dryrun: Prints instead of posting comments.
