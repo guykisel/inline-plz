@@ -14,6 +14,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'unidiff',
     'github3.py',
+    'stashy',
     'xmltodict',
     'pyyaml'
 ]
