@@ -21,6 +21,8 @@ def main():
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--token', type=str)
+    parser.add_argument('--user', type=str)
+    parser.add_argument('--password', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
     parser.add_argument('--dryrun', action='store_true')
@@ -103,13 +105,23 @@ def inline(args):
             print(str(msg))
         return 0
     try:
-        my_interface = interfaces.INTERFACES[args.interface](
-            owner,
-            repo,
-            args.pull_request,
-            args.token,
-            args.url
-        )
+        if args.token:
+            my_interface = interfaces.INTERFACES[args.interface](
+                owner,
+                repo,
+                args.pull_request,
+                args.token,
+                args.url
+            )
+        else:
+            my_interface = interfaces.INTERFACES[args.interface](
+                owner,
+                repo,
+                args.pull_request,
+                args.user,
+                args.password,
+                args.url
+            )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:
