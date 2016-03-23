@@ -90,4 +90,4 @@ class StashInterface(InterfaceBase):
                         if '+' not in hunk_line.line_type:
                             continue
                         if hunk_line.target_line_no == message.line_number:
-                            return hunk_line.target_line_no
+                            return hunk_line.target_line_no - 1
