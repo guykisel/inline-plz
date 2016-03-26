@@ -34,7 +34,8 @@ PATTERNS = {
     'yaml': ['*.yaml', '*.yml'],
     'rst': ['*.rst'],
     'markdown': ['*.md'],
-    'stylus': ['*.styl']
+    'stylus': ['*.styl'],
+    'robotframework': ['*.robot'],
 }
 
 
@@ -151,6 +152,17 @@ LINTERS = {
         'dotfiles': ['.stylintrc'],
         'parser': parsers.StylintParser,
         'language': 'stylus',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'rflint': {
+        'install': [['pip', 'install', 'robotframework-lint']],
+        'help': ['rflint', '--help'],
+        'run': ['rflint', '.'],
+        'rundefault': ['rflint', '-A', '{config_dir}/.rflint', '.'],
+        'dotfiles': [],
+        'parser': parsers.RobotFrameworkLintParser,
+        'language': 'robotframework',
         'autorun': True,
         'run_per_file': False
     },
