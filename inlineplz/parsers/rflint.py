@@ -16,7 +16,7 @@ class RobotFrameworkLintParser(ParserBase):
                     current_file = line.split(' ')[1]
                     continue
                 else:
-                    severity, position, message = line.split(':')
+                    _, position, message = line.split(':')
                     line_number, _ = position.split(',')
                     messages.add((current_file, int(line_number), message.strip()))
             except ValueError:
