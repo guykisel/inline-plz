@@ -12,7 +12,7 @@ def current_sha():
 def diff(start, end):
     return subprocess.check_output(
         ['git', 'diff', '-M', start + '..' + end]
-    ).strip().decode('utf-8')
+    ).strip().decode('utf-8', errors='replace')
 
 
 def parent_sha(sha):
