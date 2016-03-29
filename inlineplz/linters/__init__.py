@@ -160,7 +160,7 @@ LINTERS = {
         'help': ['rflint', '--help'],
         'run': ['rflint', '.'],
         'rundefault': ['rflint', '-A', '{config_dir}/.rflint', '.'],
-        'dotfiles': [],
+        'dotfiles': ['.rflint'],
         'parser': parsers.RobotFrameworkLintParser,
         'language': 'robotframework',
         'autorun': True,
