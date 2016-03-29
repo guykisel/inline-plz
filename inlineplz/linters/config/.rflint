@@ -1,0 +1,4 @@
+--configure LineTooLong:250
+--configure TooFewKeywordSteps:1
+--ignore RequireTestDocumentation
+--ignore RequireKeywordDocumentation
