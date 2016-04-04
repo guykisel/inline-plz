@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 
+"""Wrap linter messages in a generic Message class that can do some internal cleanup."""
+
+from __future__ import print_function
+
 import os
 import traceback
 
@@ -11,11 +15,16 @@ class Messages(object):
 
     def add_message(self, path, line, message):
         path = os.path.relpath(path).replace('\\', '/')
+        # some linters return line=null for file comments
+        if not line:
+            line = 0
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)
             except TypeError:
+                print('{0} {1} {2}'.format(path, line, message))
                 traceback.print_exc()
+                return
         self.messages[(path, line)].append(message)
 
     def add_messages(self, messages):
