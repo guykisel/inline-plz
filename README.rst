@@ -32,6 +32,7 @@ How to use
 You probably want to run the above in a CI job, not in your regular development environment. 
 
 You'll also need to provide the following either in the command line or via environment variables:
+
 * owner: the repo organization/owner
 * repo: the repo name
 * token: your auth token (encrypt this, don't put this in plaintext in any public configurations!)
@@ -39,6 +40,7 @@ You'll also need to provide the following either in the command line or via envi
 * interface: the type of scm host (such as github)
 
 Dependencies:
+
 * node.js / npm
 * ruby / gem
 * python / pip
