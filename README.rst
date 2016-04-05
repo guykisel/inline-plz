@@ -21,12 +21,13 @@ Features
 * Easy to add new linter configurations
 
 How to use
---------
+----------
 
-```
-pip install inlineplz
-inline-plz --install --autorun
-```
+::
+
+  pip install inlineplz
+  inline-plz --install --autorun
+
 
 You probably want to run the above in a CI job, not in your regular development environment. 
 
@@ -43,7 +44,7 @@ Dependencies:
 * python / pip
 
 Known issues
----------
+------------
 
 * Currently for Travis-CI usage, inline-plz only works for PRs within the original repo, not PRs from forks. This is because encrypted creds in Travis-CI configs are encrypted per repo, and cannot be decrypted in PRs from forks.
 * Currently the inline-plz console output can print out some misleading stack traces
