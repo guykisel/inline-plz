@@ -17,7 +17,7 @@ class Messages(object):
         path = os.path.relpath(path).replace('\\', '/')
         # some linters return line=null for file comments
         if not line:
-            line = 0
+            line = 1
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)
