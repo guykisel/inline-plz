@@ -15,8 +15,9 @@ class Messages(object):
 
     def add_message(self, path, line, message):
         path = os.path.relpath(path).replace('\\', '/')
-        # some linters return line=null for file comments
-        if not line:
+        try:
+            line = int(line)
+        except (ValueError, TypeError):
             line = 0
         if (path, line) not in self.messages:
             try:
