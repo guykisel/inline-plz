@@ -80,6 +80,8 @@ class GitHubInterface(InterfaceBase):
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
+        if not message.line_number:
+            message.line_number = 1
         patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
             target = patched_file.target_file.lstrip('b/')
