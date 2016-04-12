@@ -169,7 +169,7 @@ LINTERS = {
 }
 
 
-def run_command(command, log_on_fail=False):
+def run_command(command, log_on_fail=False, log_all=False):
     shell = False
     if os.name == 'nt':
         shell = True
@@ -186,7 +186,7 @@ def run_command(command, log_on_fail=False):
         stdout = stdout.decode('utf-8')
     if stderr:
         stderr = stderr.decode('utf-8')
-    if log_on_fail and proc.returncode != 0:
+    if (log_on_fail and proc.returncode) or log_all:
         print((stdout or '') + (stderr or ''))
     return proc.returncode, (stdout or '') + (stderr or '')
 
@@ -283,7 +283,7 @@ def install_linter(config):
         PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
         if not installed(config):
             try:
-                run_command(install_cmd, log_on_fail=True)
+                run_command(install_cmd, log_all=True)
             except OSError:
                 print('Install failed: {0}\n{1}'.format(install_cmd, traceback.format_exc()))
         else:
