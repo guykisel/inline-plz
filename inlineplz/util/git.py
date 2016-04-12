@@ -6,7 +6,7 @@ import subprocess
 def current_sha():
     return subprocess.check_output(
         ['git', 'rev-parse', 'HEAD']
-    ).strip().decode('utf-8')
+    ).strip().decode('utf-8', errors='replace')
 
 
 def diff(start, end):
@@ -18,4 +18,4 @@ def diff(start, end):
 def parent_sha(sha):
     return subprocess.check_output(
         ['git', 'rev-list', '--parents', '-n', '1', sha]
-    ).strip().decode('utf-8').split()[1]
+    ).strip().decode('utf-8', errors='replace').split()[1]

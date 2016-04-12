@@ -5,6 +5,7 @@
 
 from __future__ import absolute_import
 from __future__ import print_function
+from __future__ import unicode_literals
 
 import fnmatch
 from multiprocessing.pool import ThreadPool as Pool
@@ -183,9 +184,9 @@ def run_command(command, log_on_fail=False, log_all=False):
     )
     stdout, stderr = proc.communicate()
     if stdout:
-        stdout = stdout.decode('utf-8')
+        stdout = stdout.decode('utf-8', errors='replace')
     if stderr:
-        stderr = stderr.decode('utf-8')
+        stderr = stderr.decode('utf-8', errors='replace')
     if (log_on_fail and proc.returncode) or log_all:
         print((stdout or '') + (stderr or ''))
     return proc.returncode, (stdout or '') + (stderr or '')
