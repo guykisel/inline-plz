@@ -43,6 +43,7 @@ class GitHubInterface(InterfaceBase):
         paths = dict()
 
         # randomize message order to more evenly distribute messages across different files
+        messages = list(messages)
         random.shuffle(messages)
         for msg in messages:
             if not msg.comments:
