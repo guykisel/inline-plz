@@ -184,9 +184,9 @@ def run_command(command, log_on_fail=False, log_all=False):
     )
     stdout, stderr = proc.communicate()
     if stdout:
-        stdout = stdout.decode('utf-8', errors='replace')
+        stdout = stdout
     if stderr:
-        stderr = stderr.decode('utf-8', errors='replace')
+        stderr = stderr
     if (log_on_fail and proc.returncode) or log_all:
         print((stdout or '') + (stderr or ''))
     return proc.returncode, (stdout or '') + (stderr or '')
