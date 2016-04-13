@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 import os
 
@@ -16,7 +17,7 @@ stylint_path = os.path.join(
 
 def test_stylint():
     with open(stylint_path) as inputfile:
-        messages = sorted(list(stylint.StylintParser().parse(inputfile.read())))
+        messages = sorted(list(stylint.StylintParser().parse(inputfile.read().decode('utf-8', errors='replace'))))
         assert messages[0][2] == "Warning: preferred quote style is single quotes"
         assert messages[0][1] == 11
         assert messages[0][0] == './test-styl/_ads.styl'
