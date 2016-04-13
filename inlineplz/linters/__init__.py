@@ -324,7 +324,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
         start = time.clock()
-        output = None
+        output = ''
         config = LINTERS.get(linter)
         try:
             if (install or autorun) and config.get('install'):
