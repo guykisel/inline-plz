@@ -191,6 +191,15 @@ def run_command(command, log_on_fail=False, log_all=False):
     return proc.returncode, output
 
 
+def performance_hacks():
+    # https://github.com/npm/npm/issues/11283
+    # npm's progress bar makes npm installs much slower
+    try:
+        run_command(['npm', 'set', 'progress=false'])
+    except Exception:
+        pass
+
+
 def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
         if (
@@ -311,6 +320,7 @@ def run_config(config, config_dir):
 
 def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     messages = message.Messages()
+    performance_hacks()
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
         start = time.clock()
