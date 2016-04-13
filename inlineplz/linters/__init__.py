@@ -183,13 +183,12 @@ def run_command(command, log_on_fail=False, log_all=False):
         env=os.environ
     )
     stdout, stderr = proc.communicate()
-    if stdout:
-        stdout = stdout.decode('utf-8', errors='replace')
-    if stderr:
-        stderr = stderr.decode('utf-8', errors='replace')
+    stdout = stdout.decode('utf-8', errors='replace')
+    stderr = stderr.decode('utf-8', errors='replace')
+    output = '{}\n{}'.format(stdout, stderr)
     if (log_on_fail and proc.returncode) or log_all:
-        print((stdout or '') + (stderr or ''))
-    return proc.returncode, (stdout or '') + (stderr or '')
+        print(output)
+    return proc.returncode, output
 
 
 def should_ignore_path(path, ignore_paths):

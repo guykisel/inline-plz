@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import unicode_literals
 
 from inlineplz.parsers.base import ParserBase
 
@@ -13,7 +14,7 @@ class RobotFrameworkLintParser(ParserBase):
         for line in lint_data.split('\n'):
             try:
                 if line.startswith('+'):
-                    current_file = line.split(' ')[1]
+                    current_file = line.split(' ')[1].strip()
                     continue
                 else:
                     _, position, message = line.split(':')
