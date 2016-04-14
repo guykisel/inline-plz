@@ -11,6 +11,7 @@ import fnmatch
 from multiprocessing.pool import ThreadPool as Pool
 import os.path
 import subprocess
+import sys
 import time
 import traceback
 
@@ -185,9 +186,10 @@ def run_command(command, log_on_fail=False, log_all=False):
     stdout, stderr = proc.communicate()
     stdout = stdout.decode('utf-8', errors='replace')
     stderr = stderr.decode('utf-8', errors='replace')
-    output = '{}\n{}'.format(stdout, stderr)
+    output = '{}\n{}'.format(stdout, stderr).strip()
     if (log_on_fail and proc.returncode) or log_all:
         print(output.encode('ascii', errors='replace'))
+        sys.stdout.flush()
     return proc.returncode, output
 
 
@@ -323,6 +325,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     performance_hacks()
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
+        sys.stdout.flush()
         start = time.clock()
         output = ''
         config = LINTERS.get(linter)
@@ -339,6 +342,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
             traceback.print_exc()
             print(output.encode('ascii', errors='replace'))
         print('Installation and running of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+        sys.stdout.flush()
         start = time.clock()
         try:
             if output:
