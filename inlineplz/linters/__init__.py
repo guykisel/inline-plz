@@ -181,7 +181,7 @@ LINTERS = {
         'parser': parsers.RobotFrameworkLintParser,
         'language': 'robotframework',
         'autorun': True,
-        'run_per_file': False
+        'run_per_file': True
     },
 }
 
