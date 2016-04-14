@@ -37,6 +37,7 @@ PATTERNS = {
     'markdown': ['*.md'],
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
+    'gherkin': ['*.feature']
 }
 
 
@@ -67,6 +68,20 @@ LINTERS = {
         ],
         'parser': parsers.ESLintParser,
         'language': 'javascript',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'gherkin-lint': {
+        'install': [['npm', 'install'], ['npm', 'install', 'gherkin-lint']],
+        'help': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '--help'],
+        'run': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json', '-c',
+                       '{config_dir}/.gherkin-lintrc'],
+        'dotfiles': [
+            '.gherkin-lintrc'
+        ],
+        'parser': parsers.GherkinLintParser,
+        'language': 'gherkin',
         'autorun': True,
         'run_per_file': False
     },
