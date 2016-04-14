@@ -7,12 +7,14 @@ from __future__ import unicode_literals
 
 import argparse
 import os
+import time
 
 import yaml
 
 from inlineplz import interfaces
 from inlineplz import env
 from inlineplz import linters
+from inlineplz import __version__
 
 
 def main():
@@ -41,8 +43,11 @@ def main():
     args = env.update_args(args)
     if args.config_dir:
         args.config_dir = os.path.abspath(args.config_dir)
-
-    return inline(args)
+    print('inline-plz version: {}'.format(__version__))
+    start = time.clock()
+    result = inline(args)
+    print('inline-plz ran for {} seconds'.format(int(time.clock() - start)))
+    return result
 
 
 def update_from_config(args, config):
@@ -96,12 +101,11 @@ def inline(args):
         print('Valid inline-plz config not found')
         return 1
     messages = linters.lint(args.install, args.autorun, args.ignore_paths, args.config_dir)
+    print('{} lint messages found'.format(len(messages)))
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
         print_messages(messages)
-        for msg in messages:
-            print(str(msg))
         return 0
     try:
         my_interface = interfaces.INTERFACES[args.interface](
