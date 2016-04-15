@@ -175,8 +175,8 @@ LINTERS = {
     'rflint': {
         'install': [['pip', 'install', 'robotframework-lint']],
         'help': ['rflint', '--help'],
-        'run': ['rflint', '.'],
-        'rundefault': ['rflint', '-A', '{config_dir}/.rflint', '.'],
+        'run': ['rflint'],
+        'rundefault': ['rflint', '-A', '{config_dir}/.rflint'],
         'dotfiles': ['.rflint'],
         'parser': parsers.RobotFrameworkLintParser,
         'language': 'robotframework',
