@@ -5,18 +5,18 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.gherkinlint as gherkin_lint
+import inlineplz.parsers.gherkinlint as gherkinlint
 
-gherkin_lint_path = os.path.join(
+gherkinlint_path = os.path.join(
     'tests',
     'testdata',
     'parsers',
     'gherkin-lint.txt'
 )
 
-def test_eslint():
-    with codecs.open(gherkin_lint_path, encoding='utf-8', errors='replace') as inputfile:
-        messages = sorted(list(gherkin_lint.GherkinLintParser().parse(inputfile.read())))
+def test_gherkinlint():
+    with codecs.open(gherkinlint_path, encoding='utf-8', errors='replace') as inputfile:
+        messages = sorted(list(gherkinlint.GherkinLintParser().parse(inputfile.read())))
         print (messages)
         assert messages[0][2] == 'Feature name is already used in: features/fake.feature'
         assert messages[0][1] == 1
