@@ -13,7 +13,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'unidiff',
     'github3.py',
-    'stashy>=0.3',
+    #'stashy>=0.3',  #TODO: Use this instead of dependency_links for stashy
     'xmltodict',
     'pyyaml',
     'scandir'
