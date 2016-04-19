@@ -63,9 +63,11 @@ LINTERS = {
                        '{config_dir}/.eslintrc'],
         'dotfiles': [
             '.eslintrc.yml',
+            '.eslintrc.yaml',
             '.eslintignore',
             '.eslintrc',
-            'eslintrc.yml'
+            '.eslintrc.js',
+            '.eslintrc.json'
         ],
         'parser': parsers.ESLintParser,
         'language': 'javascript',
