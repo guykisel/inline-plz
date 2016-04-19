@@ -110,7 +110,7 @@ LINTERS = {
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
         'language': 'javascript',
-        'autorun': True,
+        'autorun': False,
         'run_per_file': False
     },
     'jsonlint': {
