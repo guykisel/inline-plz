@@ -60,7 +60,7 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
-                       '{config_dir}/.eslintrc'],
+                       '{config_dir}/.eslintrc.js'],
         'dotfiles': [
             '.eslintrc.yml',
             '.eslintrc.yaml',
