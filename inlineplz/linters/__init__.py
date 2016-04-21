@@ -357,7 +357,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
                 _, output = run_command(cmd)
         except Exception:
             traceback.print_exc()
-            print(output.encode('ascii', errors='replace'))
+            print(str(output).encode('ascii', errors='replace'))
         print('Installation and running of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
         sys.stdout.flush()
         start = time.clock()
@@ -371,6 +371,6 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
                 messages.add_messages(linter_messages)
         except Exception:
             traceback.print_exc()
-            print(output.encode('ascii', errors='replace'))
+            print(str(output).encode('ascii', errors='replace'))
         print('Parsing of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
     return messages.get_messages()
