@@ -1,26 +1,24 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=W0703,C0412
-
 """Linter configurations."""
-
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
 import fnmatch
-from multiprocessing.pool import ThreadPool as Pool
 import os.path
 import subprocess
 import sys
 import time
 import traceback
+from multiprocessing.pool import ThreadPool as Pool
 
 # Use the built-in version of scandir/walk if possible, otherwise
 # use the scandir module version
 try:
     from os import scandir, walk
 except ImportError:
-    from scandir import scandir, walk # noqa
+    from scandir import scandir, walk  # noqa
 
 from inlineplz import parsers
 from inlineplz import message
@@ -274,7 +272,7 @@ def all_filenames_in_dir(path=None, ignore_paths=None):
     path = path or os.getcwd()
     # http://stackoverflow.com/a/2186565
     paths = set()
-    for root, dirnames, filenames in os.walk(path, topdown=True):
+    for root, dirnames, filenames in walk(path, topdown=True):
         try:
             for ignore in ignore_paths:
                 dirnames.remove(ignore)

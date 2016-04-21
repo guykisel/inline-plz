@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
 from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
@@ -11,10 +10,10 @@ import time
 
 import yaml
 
-from inlineplz import interfaces
-from inlineplz import env
-from inlineplz import linters
 from inlineplz import __version__
+from inlineplz import env
+from inlineplz import interfaces
+from inlineplz import linters
 
 
 def main():
@@ -127,5 +126,5 @@ def print_messages(messages):
         print(msg)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     exit(main())

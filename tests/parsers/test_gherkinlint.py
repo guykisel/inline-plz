@@ -14,6 +14,7 @@ gherkinlint_path = os.path.join(
     'gherkin-lint.txt'
 )
 
+
 def test_gherkinlint():
     with codecs.open(gherkinlint_path, encoding='utf-8', errors='replace') as inputfile:
         messages = sorted(list(gherkinlint.GherkinLintParser().parse(inputfile.read())))

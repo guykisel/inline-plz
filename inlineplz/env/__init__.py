@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
-
 """Set up args based on envvars."""
-
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
 import os
 
-from inlineplz.env import jenkins, local, travis
+from inlineplz.env import jenkins
+from inlineplz.env import local
+from inlineplz.env import travis
 
 
 def current_env():
