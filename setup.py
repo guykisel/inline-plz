@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
-
-from setuptools import setup, find_packages
+from setuptools import find_packages
+from setuptools import setup
 
 
 with open('README.rst') as readme_file:
@@ -25,15 +25,15 @@ test_requirements = [
 setup(
     name='inlineplz',
     version='0.13.0',
-    description="Inline your lint messages",
+    description='Inline your lint messages',
     long_description=readme + '\n\n' + history,
-    author="Guy Kisel",
+    author='Guy Kisel',
     author_email='guy.kisel@gmail.com',
     url='https://github.com/guykisel/inline-plz',
     packages=find_packages('.', exclude=('tests*', 'testing*')),
     include_package_data=True,
     install_requires=requirements,
-    license="ISCL",
+    license='ISCL',
     zip_safe=False,
     keywords='inlineplz',
     classifiers=[
@@ -41,7 +41,7 @@ setup(
         'Intended Audience :: Developers',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Natural Language :: English',
-        "Programming Language :: Python :: 2",
+        'Programming Language :: Python :: 2',
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',

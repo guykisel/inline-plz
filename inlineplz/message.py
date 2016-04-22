@@ -1,7 +1,5 @@
 # -*- coding: utf-8 -*-
-
 """Wrap linter messages in a generic Message class that can do some internal cleanup."""
-
 from __future__ import print_function
 from __future__ import unicode_literals
 

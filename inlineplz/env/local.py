@@ -4,8 +4,8 @@ from __future__ import unicode_literals
 
 import os
 
-from inlineplz.env.base import EnvBase
 import inlineplz.util.git as git
+from inlineplz.env.base import EnvBase
 
 
 class Local(EnvBase):
