@@ -43,9 +43,9 @@ def main():
     if args.config_dir:
         args.config_dir = os.path.abspath(args.config_dir)
     print('inline-plz version: {}'.format(__version__))
-    start = time.clock()
+    start = time.time()
     result = inline(args)
-    print('inline-plz ran for {} seconds'.format(int(time.clock() - start)))
+    print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
     return result
 
 
