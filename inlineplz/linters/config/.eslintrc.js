@@ -1,27 +1,35 @@
-{
+module.exports = {
   // Prevent parent eslintrc from interfering
   "root": true,
+
+  // Begin with the recommended rules from eslint itself
+  "extends": "eslint:recommended",
 
   // Globals
   "env": {
     "browser": true,
     "node": true,
-    "es6": true,
+    "es6": true
   },
 
   // ES6
+  "parserOptions": {
+    "ecmaVersion": 6,
+    "sourceType": "module"
+  },
+
   "ecmaFeatures": {
-    "modules": true,
     "arrowFunctions": true,
     "blockBindings": true,
-    "destructuring": true,
     "classes": true,
-    "templateStrings": true,
-    "spread": true,
-    "generators": true,
-    "forOf": true,
     "defaultParams": true,
-    "objectLiteralShorthandMethods": true
+    "destructuring": true,
+    "forOf": true,
+    "generators": true,
+    "modules": true,
+    "objectLiteralShorthandMethods": true,
+    "spread": true,
+    "templateStrings": true
   },
 
   "rules": {
@@ -184,8 +192,8 @@
     // if, else, for, while, do, switch, try, catch, finally, and with.
     //
     // Reasons: readability, stylistic
-    // See http://eslint.org/docs/rules/space-after-keywords
-    "space-after-keywords": [2, "always"],
+    // See http://eslint.org/docs/rules/keyword-spacing
+    "keyword-spacing": [2],
 
     // Require spaces around operators
     //
@@ -215,7 +223,64 @@
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/consistent-this
-    "consistent-this": [2, "self"]
+    "consistent-this": [2, "self"],
+
+    // Require no space between function and open parenthsis
+    //
+    // Reasons: readability, stylistic
+    // See http://eslint.org/docs/rules/space-before-function-paren
+    "space-before-function-paren": [2, "never"],
+
+    // Braces should start on the same line as the corresponidng
+    // statement or decleration.
+    //
+    // Reason: readability, stylistic
+    // See http://eslint.org/docs/rules/brace-style
+    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+
+    // Require space before blocks
+    //
+    // Reason: readability, stylistic
+    // See: http://eslint.org/docs/rules/space-before-blocks
+    "space-before-blocks": [2, { "functions": "always", "keywords": "always", "classes": "always" }],
+
+    // Disallow spaces directly after '(' and before ')'
+    //
+    // Reason: readability, stylistic
+    // See http://eslint.org/docs/rules/space-in-parens
+    "space-in-parens": [2, "never"],
+
+    // Disallow spaces inside of curly braces in objects
+    //
+    // Reason: stylistic
+    // See http://eslint.org/docs/rules/object-curly-spacing
+    "object-curly-spacing": [2, "never"],
+
+    // Disallow spaces inside of computed properties
+    //
+    // Reason: stylistic
+    // See http://eslint.org/docs/rules/computed-property-spacing
+    "computed-property-spacing": [2, "never"],
+
+    // Disallow spaces inside of brackets
+    //
+    // Reason: stylistic
+    // See http://eslint.org/docs/rules/array-bracket-spacing
+    "array-bracket-spacing": [2, "never"],
+
+    // Disallow space before comma and require space after comma
+    //
+    // Reason: readability, stylistic
+    // See http://eslint.org/docs/rules/comma-spacing
+    "comma-spacing": [2, {"before": false, "after": true}],
+
+    // Disallow space before semicolon and require space after semicolon
+    //
+    // Reason: readability, stylistic
+    // http://eslint.org/docs/rules/semi-spacing
+     "semi-spacing": [2, {"before": false, "after": true}],
+
+     "no-console": "warn"
   }
 
 }
