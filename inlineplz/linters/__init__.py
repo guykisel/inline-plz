@@ -343,7 +343,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
     for linter in linters_to_run(install, autorun, ignore_paths):
         print('Running linter: {0}'.format(linter))
         sys.stdout.flush()
-        start = time.clock()
+        start = time.time()
         output = ''
         config = LINTERS.get(linter)
         try:
@@ -357,10 +357,10 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
                 _, output = run_command(cmd)
         except Exception:
             traceback.print_exc()
-            print(output.encode('ascii', errors='replace'))
-        print('Installation and running of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+            print(str(output).encode('ascii', errors='replace'))
+        print('Installation and running of {0} took {1} seconds'.format(linter, int(time.time() - start)))
         sys.stdout.flush()
-        start = time.clock()
+        start = time.time()
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
@@ -371,6 +371,6 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
                 messages.add_messages(linter_messages)
         except Exception:
             traceback.print_exc()
-            print(output.encode('ascii', errors='replace'))
-        print('Parsing of {0} took {1} seconds'.format(linter, int(time.clock() - start)))
+            print(str(output).encode('ascii', errors='replace'))
+        print('Parsing of {0} took {1} seconds'.format(linter, int(time.time() - start)))
     return messages.get_messages()
