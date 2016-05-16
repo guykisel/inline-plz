@@ -18,9 +18,9 @@ class GitHubInterface(InterfaceBase):
         # TODO: support non-PR runs
         try:
             pr = int(pr)
-        except ValueError:
+        except (ValueError, TypeError):
             return
-        if not url:
+        if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
