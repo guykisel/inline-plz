@@ -46,7 +46,10 @@ PATTERNS = {
 
 LINTERS = {
     'prospector': {
-        'install': [['pip', 'install', 'prospector']],
+        'install': [
+            ['pip', 'install', 'prospector[with_everything]'],
+            ['pip', 'install', 'prospector']
+        ],
         'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
         'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
