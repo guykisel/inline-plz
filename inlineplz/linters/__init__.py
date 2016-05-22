@@ -220,6 +220,18 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
+    'bandit': {
+        'install': [['pip', 'install', 'bandit']],
+        'help': ['bandit', '-h'],
+        'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
+        'rundefault': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
+                       '{config_dir}/bandit.yaml'],
+        'dotfiles': ['bandit.yaml'],
+        'parser': parsers.BanditParser,
+        'language': 'python',
+        'autorun': True,
+        'run_per_file': False
+    }
 }
 
 

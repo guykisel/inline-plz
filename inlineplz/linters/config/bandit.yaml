@@ -1,0 +1,17 @@
+exclude_dirs:
+    - '/node_modules/'
+    - '/test/'
+    - '/tests/'
+    - '/.git/'
+    - '/.tox/'
+    - '\node_modules\'
+    - '\test\'
+    - '\tests\'
+    - '\.git\'
+    - '\.tox\'
+
+plugin_name_pattern: '*.py'
+
+include:
+    - '*.py'
+    - '*.pyw'
