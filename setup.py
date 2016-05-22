@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-
 from setuptools import setup, find_packages
 
 
@@ -15,7 +14,8 @@ requirements = [
     'unidiff',
     'github3.py',
     'xmltodict',
-    'pyyaml'
+    'pyyaml',
+    'scandir'
 ]
 
 test_requirements = [
@@ -24,7 +24,7 @@ test_requirements = [
 
 setup(
     name='inlineplz',
-    version='0.8.0',
+    version='0.14.0',
     description="Inline your lint messages",
     long_description=readme + '\n\n' + history,
     author="Guy Kisel",

@@ -64,5 +64,6 @@
     "escape": true,
     "mark": "'"
   },
-  "validateIndentation": 2
+  "validateIndentation": 2,
+  "excludeFiles": ["node_modules/**", ".git/**"]
 }

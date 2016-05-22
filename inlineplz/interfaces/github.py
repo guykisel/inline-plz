@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 from __future__ import absolute_import
+from __future__ import division
+from __future__ import unicode_literals
+
+import random
 
 import github3
 import unidiff
@@ -14,9 +18,9 @@ class GitHubInterface(InterfaceBase):
         # TODO: support non-PR runs
         try:
             pr = int(pr)
-        except ValueError:
+        except (ValueError, TypeError):
             return
-        if not url:
+        if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
@@ -38,6 +42,11 @@ class GitHubInterface(InterfaceBase):
             return
         messages_to_post = 0
         messages_posted = 0
+        paths = dict()
+
+        # randomize message order to more evenly distribute messages across different files
+        messages = list(messages)
+        random.shuffle(messages)
         for msg in messages:
             if not msg.comments:
                 continue
@@ -45,6 +54,10 @@ class GitHubInterface(InterfaceBase):
             if msg_position:
                 messages_to_post += 1
                 if not self.is_duplicate(msg, msg_position):
+                    # skip this message if we already have too many comments on this file
+                    # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
+                    if paths.setdefault(msg.path, 0) > max_comments // 5:
+                        continue
                     try:
                         self.pull_request.create_review_comment(
                             self.format_message(msg, self.prefix),
@@ -54,6 +67,7 @@ class GitHubInterface(InterfaceBase):
                         )
                     except github3.GitHubError:
                         pass
+                    paths[msg.path] += 1
                     messages_posted += 1
                     if max_comments >= 0 and messages_posted > max_comments:
                         break
@@ -84,6 +98,8 @@ class GitHubInterface(InterfaceBase):
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
+        if not message.line_number:
+            message.line_number = 1
         patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
             target = patched_file.target_file.lstrip('b/')

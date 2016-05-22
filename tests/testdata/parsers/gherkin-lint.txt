@@ -1,0 +1,20 @@
+[
+  {
+    "filePath": "D:\\Git\\vsiakka\\features\\test1.feature",
+    "errors": []
+  },
+  {
+    "filePath": "D:\\Git\\vsiakka\\features\\test2.feature",
+    "errors": []
+  },
+  {
+    "filePath": "D:\\Git\\vsiakka\\features\\test3.feature",
+    "errors": [
+      {
+        "message": "Feature name is already used in: features/fake.feature",
+        "rule": "no-dupe-feature-names",
+        "line": 1
+      }
+    ]
+  }
+]
