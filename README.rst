@@ -13,6 +13,11 @@ Tired of reading through CI console logs to find your lint errors? Inline your l
 
 * Free software: ISC license
 
+Github webhook bot
+------------------
+
+* https://github.com/guykisel/inline-plz-bot
+
 Features
 --------
 
@@ -44,14 +49,22 @@ Dependencies:
 * node.js / npm
 * ruby / gem
 * python / pip
+* haskell / cabal
 
 Known issues
 ------------
 
-* Currently for Travis-CI usage, inline-plz only works for PRs within the original repo, not PRs from forks. This is because encrypted creds in Travis-CI configs are encrypted per repo, and cannot be decrypted in PRs from forks.
+* Currently for Travis-CI usage, inline-plz only works for PRs within the original repo, not PRs from forks. This is because encrypted creds in Travis-CI configs are encrypted per repo, and cannot be decrypted in PRs from forks. You can work around this using the webhook bot at https://github.com/guykisel/inline-plz-bot
 * Currently the inline-plz console output can print out some misleading stack traces
 * Currently dependencies get installed globally unless you pre-create a virtualenv
-* Commits directly to master are not currently supported
+* Commits directly to master are not currently supported - only PRs get linted
+
+Contribute
+----------
+
+* Report bugs/suggest features
+* Add/update docs
+* Add support for more linters
 
 Credits
 ---------
