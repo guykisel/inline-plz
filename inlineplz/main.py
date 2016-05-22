@@ -71,7 +71,7 @@ def load_config(args):
     except (IOError, OSError):
         pass
     args = update_from_config(args, config)
-    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git']
+    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git', '.tox']
     return args
 
 

@@ -16,3 +16,4 @@ from inlineplz.parsers.stylint import StylintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
 from inlineplz.parsers.shellcheck import ShellcheckParser
+from inlineplz.parsers.bandit import BanditParser
