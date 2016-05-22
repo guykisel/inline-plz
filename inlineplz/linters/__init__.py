@@ -40,7 +40,7 @@ PATTERNS = {
     'robotframework': ['*.robot'],
     'gherkin': ['*.feature'],
     'docker': ['*Dockerfile'],
-    'shell': ['*.sh']
+    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash']
 }
 
 
