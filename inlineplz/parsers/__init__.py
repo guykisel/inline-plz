@@ -15,6 +15,7 @@ from inlineplz.parsers.markdownlint import MarkdownLintParser
 from inlineplz.parsers.stylint import StylintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
+from inlineplz.parsers.shellcheck import ShellcheckParser
 
 
 PARSERS = {
@@ -29,5 +30,6 @@ PARSERS = {
     'markdownlint': MarkdownLintParser,
     'stylint': StylintParser,
     'rflint': RobotFrameworkLintParser,
-    'dockerfilelint': DockerfileLintParser
+    'dockerfilelint': DockerfileLintParser,
+    'shellcheck': ShellcheckParser
 }
