@@ -38,7 +38,8 @@ PATTERNS = {
     'markdown': ['*.md'],
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
-    'gherkin': ['*.feature']
+    'gherkin': ['*.feature'],
+    'docker': ['*Dockerfile']
 }
 
 
@@ -182,6 +183,17 @@ LINTERS = {
         'dotfiles': ['.rflint'],
         'parser': parsers.RobotFrameworkLintParser,
         'language': 'robotframework',
+        'autorun': True,
+        'run_per_file': True
+    },
+    'dockerfile_lint': {
+        'install': [['npm', 'install'], ['npm', 'install', 'dockerfile_lint']],
+        'help': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'dotfiles': [],
+        'parser': parsers.DockerfileLintParser,
+        'language': 'docker',
         'autorun': True,
         'run_per_file': True
     },

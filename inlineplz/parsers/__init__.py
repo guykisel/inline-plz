@@ -14,6 +14,7 @@ from inlineplz.parsers.rstlint import RSTLintParser
 from inlineplz.parsers.markdownlint import MarkdownLintParser
 from inlineplz.parsers.stylint import StylintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
+from inlineplz.parsers.dockerfilelint import DockerfileLintParser
 
 
 PARSERS = {
@@ -27,5 +28,6 @@ PARSERS = {
     'rstlint': RSTLintParser,
     'markdownlint': MarkdownLintParser,
     'stylint': StylintParser,
-    'rflint': RobotFrameworkLintParser
+    'rflint': RobotFrameworkLintParser,
+    'dockerfilelint': DockerfileLintParser
 }
