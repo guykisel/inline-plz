@@ -16,20 +16,3 @@ from inlineplz.parsers.stylint import StylintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
 from inlineplz.parsers.shellcheck import ShellcheckParser
-
-
-PARSERS = {
-    'prospector': ProspectorParser,
-    'eslint': ESLintParser,
-    'gherkin-lint': GherkinLintParser,
-    'jshint': JSHintParser,
-    'jscs': JSCSParser,
-    'jsonlint': JSONLintParser,
-    'yamllint': YAMLLintParser,
-    'rstlint': RSTLintParser,
-    'markdownlint': MarkdownLintParser,
-    'stylint': StylintParser,
-    'rflint': RobotFrameworkLintParser,
-    'dockerfilelint': DockerfileLintParser,
-    'shellcheck': ShellcheckParser
-}
