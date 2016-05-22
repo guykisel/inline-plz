@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import argparse
 import os
+import sys
 import time
 
 import yaml
@@ -44,6 +45,7 @@ def main():
     if args.config_dir:
         args.config_dir = os.path.abspath(args.config_dir)
     print('inline-plz version: {}'.format(__version__))
+    print('Python version: {}'.format(sys.version))
     start = time.time()
     result = inline(args)
     print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
