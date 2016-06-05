@@ -132,7 +132,7 @@ LINTERS = {
         'run_per_file': True
     },
     'yaml-lint': {
-        'install': [['gem', 'install', 'yaml-lint']],
+        'install': [['bundle', 'install'], ['gem', 'install', 'yaml-lint']],
         'help': ['yaml-lint'],
         'run': ['yaml-lint', '-q'],
         'rundefault': ['yaml-lint', '-q'],
@@ -154,7 +154,7 @@ LINTERS = {
         'run_per_file': True
     },
     'markdownlint': {
-        'install': [['gem', 'install', 'mdl']],
+        'install': [['bundle', 'install'], ['gem', 'install', 'mdl']],
         'help': ['mdl', '-h'],
         'run': ['mdl', '.'],
         'rundefault': ['mdl', '.', '-c', '{config_dir}/.mdlrc'],
