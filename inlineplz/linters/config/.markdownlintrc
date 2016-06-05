@@ -1,0 +1,19 @@
+{
+  "comment": "Really relaxed rules based on https://github.com/DavidAnson/markdownlint/blob/master/style/relaxed.json",
+
+  "default": true,
+  "whitespace": false,
+  "line_length": false,
+  "ul-start-left": false,
+  "ul-indent": false,
+  "no-inline-html": false,
+  "no-bare-urls": false,
+  "fenced-code-language": false,
+  "first-line-h1": false,
+  "blanks-around-headers": false,
+  "no-duplicate-header": false,
+  "blanks-around-lists": false,
+  "blanks-around-fences": false,
+  "header-increment": false,
+  "ol-prefix": false
+}
