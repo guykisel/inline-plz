@@ -1,5 +1,5 @@
 {
-  "comment": "Really relaxed rules",
+  "comment": "Really relaxed rules based on https://github.com/DavidAnson/markdownlint/blob/master/style/relaxed.json",
 
   "default": true,
   "whitespace": false,
