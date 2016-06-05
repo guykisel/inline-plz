@@ -154,11 +154,11 @@ LINTERS = {
         'run_per_file': True
     },
     'markdownlint': {
-        'install': [['bundle', 'install'], ['gem', 'install', 'mdl']],
-        'help': ['mdl', '-h'],
-        'run': ['mdl', '.'],
-        'rundefault': ['mdl', '.', '-c', '{config_dir}/.mdlrc'],
-        'dotfiles': ['.mdlrc'],
+        'install': [['npm', 'install'], ['npm', 'install', 'markdownlint-cli']],
+        'help': ['markdownlint', '-h'],
+        'run': ['markdownlint', '.'],
+        'rundefault': ['markdownlint', '.', '-c', '{config_dir}/.markdownlintrc'],
+        'dotfiles': ['.markdownlintrc', '.markdownlint.json'],
         'parser': parsers.MarkdownLintParser,
         'language': 'markdown',
         'autorun': True,

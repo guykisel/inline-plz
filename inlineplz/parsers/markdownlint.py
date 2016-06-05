@@ -14,8 +14,8 @@ class MarkdownLintParser(ParserBase):
             try:
                 parts = line.split(':')
                 if line.strip() and parts:
-                    path = parts[0]
-                    line = int(parts[1])
+                    path = parts[0].strip()
+                    line = int(parts[1].strip())
                     msgbody = parts[2].strip()
                     messages.add((path, line, msgbody))
             except ValueError:
