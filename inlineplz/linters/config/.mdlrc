@@ -1,0 +1,15 @@
+# based on https://github.com/mivok/markdownlint/blob/master/lib/mdl/styles/relaxed.rb
+# more info at https://github.com/mivok/markdownlint/blob/master/docs/RULES.md
+
+rules "~MD006","~MD007","~MD013","~MD022","~MD024","~MD033","~MD034","~MD040","~MD041"
+tags "~line_length", "~whitespace"
+
+# 'MD006' # Lists at beginning of line
+# 'MD007' # List indentation
+# 'MD013' # Line length
+# 'MD022' # Headers should be surrounded by blank lines
+# 'MD024' # Multiple headers with the same content
+# 'MD033' # Inline HTML
+# 'MD034' # Bare URL used
+# 'MD040' # Fenced code blocks should have a language specified
+# 'MD041' # First line in file should be a top level header
