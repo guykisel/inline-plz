@@ -1,6 +1,6 @@
-===============================
+==========
 inline-plz
-===============================
+==========
 
 .. image:: https://img.shields.io/pypi/v/inlineplz.svg
         :target: https://pypi.python.org/pypi/inlineplz
@@ -34,7 +34,7 @@ How to use
   inline-plz --install --autorun
 
 
-You probably want to run the above in a CI job, not in your regular development environment. 
+You probably want to run the above in a CI job, not in your regular development environment.
 
 You'll also need to provide the following either in the command line or via environment variables:
 
@@ -50,6 +50,27 @@ Dependencies:
 * ruby / gem
 * python / pip
 * haskell / cabal
+
+Configuration
+-------------
+
+Besides specifying options at the command line or in environment variables, you can also set them in a yaml file.
+You can create a file in the root of your repo named ``.inlineplz.yml``
+
+For example:
+
+::
+
+  ignore_paths:
+    - node_modules
+    - .tox
+    - .git
+  enabled_linters:
+    - prospector
+  disabled_linters:
+    - markdownlint
+    - gherkin-lint
+
 
 Known issues
 ------------
@@ -67,7 +88,7 @@ Contribute
 * Add support for more linters
 
 Credits
----------
+-------
 
 This package was created with Cookiecutter_ and the `audreyr/cookiecutter-pypackage`_ project template.
 
