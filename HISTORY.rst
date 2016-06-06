@@ -2,6 +2,13 @@
 History
 =======
 
+0.16.0 (2016-06-05)
+-------------------
+
+* Run 'bundle install' during ruby gem installs
+* Replace ruby markdownlint with node.js markdownlint
+* Enable or disable linters in yaml
+
 0.15.0 (2016-05-21)
 -------------------
 
