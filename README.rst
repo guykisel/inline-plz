@@ -55,7 +55,7 @@ Configuration
 -------------
 
 Besides specifying options at the command line or in environment variables, you can also set them in a yaml file.
-You can create a file in the root of your repo named `.inlineplz.yml`
+You can create a file in the root of your repo named ``.inlineplz.yml``
 
 For example:
 
