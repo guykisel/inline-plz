@@ -59,6 +59,7 @@ You can create a file in the root of your repo named .inlineplz.yml
 For example:
 
 ::
+
   ignore_paths:
     - node_modules
     - .tox
