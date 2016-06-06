@@ -298,22 +298,30 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     return output
 
 
-def linters_to_run(install=False, autorun=False, ignore_paths=None):
+def linters_to_run(install=False, autorun=False, ignore_paths=None, enabled_linters=None, disabled_linters=None):
     linters = set()
+    enabled_linters = enabled_linters or []
+    disabled_linters = disabled_linters or []
     if not autorun:
         for linter, config in LINTERS.items():
-            if (installed(config) or install) and dotfiles_exist(config):
-                linters.add(linter)
+            if (installed(config) or install or linter in enabled_linters) and dotfiles_exist(config):
+                if linter not in disabled_linters:
+                    linters.add(linter)
     else:
         dotfilefound = {}
         for linter, config in LINTERS.items():
             if dotfiles_exist(config):
                 dotfilefound[config.get('language')] = True
-                linters.add(linter)
+                if linter not in disabled_linters:
+                    linters.add(linter)
         filenames = all_filenames_in_dir(path=os.getcwd(), ignore_paths=ignore_paths)
         for linter, config in LINTERS.items():
-            if not dotfilefound.get(config.get('language')) and should_autorun(config, filenames):
-                linters.add(linter)
+            if linter in enabled_linters or (
+                not dotfilefound.get(config.get('language')) and
+                should_autorun(config, filenames)
+            ):
+                if linter not in disabled_linters:
+                    linters.add(linter)
     return linters
 
 
@@ -384,10 +392,10 @@ def run_config(config, config_dir):
     ]
 
 
-def lint(install=False, autorun=False, ignore_paths=None, config_dir=None):
+def lint(install=False, autorun=False, ignore_paths=None, config_dir=None, enabled_linters=None, disabled_linters=None):
     messages = message.Messages()
     performance_hacks()
-    for linter in linters_to_run(install, autorun, ignore_paths):
+    for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
         print('Running linter: {0}'.format(linter))
         sys.stdout.flush()
         start = time.time()

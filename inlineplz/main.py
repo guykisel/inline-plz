@@ -27,6 +27,8 @@ def main():
     parser.add_argument('--token', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
+    parser.add_argument('--enabled-linters', type=str, nargs='+')
+    parser.add_argument('--disabled-linters', type=str, nargs='+')
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
@@ -102,7 +104,14 @@ def inline(args):
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
-    messages = linters.lint(args.install, args.autorun, args.ignore_paths, args.config_dir)
+    messages = linters.lint(
+        args.install,
+        args.autorun,
+        args.ignore_paths,
+        args.config_dir,
+        args.enabled_linters,
+        args.disabled_linters
+    )
     print('{} lint messages found'.format(len(messages)))
 
     # TODO: implement dryrun as an interface instead of a special case here
