@@ -155,9 +155,14 @@ LINTERS = {
     },
     'markdownlint': {
         'install': [['npm', 'install'], ['npm', 'install', 'markdownlint-cli']],
-        'help': ['markdownlint', '-h'],
-        'run': ['markdownlint', '.'],
-        'rundefault': ['markdownlint', '.', '-c', '{config_dir}/.markdownlintrc'],
+        'help': [os.path.normpath('./node_modules/.bin/markdownlint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/markdownlint'), '.'],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/markdownlint'),
+            '.',
+            '-c',
+            '{config_dir}/.markdownlintrc'
+        ],
         'dotfiles': ['.markdownlintrc', '.markdownlint.json'],
         'parser': parsers.MarkdownLintParser,
         'language': 'markdown',
