@@ -32,6 +32,7 @@ def main():
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
+    parser.add_argument('--trusted', action='store_true', help='allow installing all local dependencies')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
     parser.add_argument(
         '--autorun',
@@ -100,6 +101,8 @@ def inline(args):
     else:
         owner = args.owner
         repo = args.repo
+    # don't load trusted value from config because we don't trust the config
+    trusted = args.trusted
     args = load_config(args)
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
@@ -110,7 +113,8 @@ def inline(args):
         args.ignore_paths,
         args.config_dir,
         args.enabled_linters,
-        args.disabled_linters
+        args.disabled_linters,
+        trusted
     )
     print('{} lint messages found'.format(len(messages)))
 
