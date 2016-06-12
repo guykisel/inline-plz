@@ -44,6 +44,16 @@ PATTERNS = {
 }
 
 
+TRUSTED_INSTALL = [
+    ['npm', 'install'],
+    ['bundle', 'install'],
+    ['pip', 'install', '-r', 'requirements.txt'],
+    ['pip', 'install', '-r', 'requirements_dev.txt'],
+    ['cabal', 'update'],
+    ['cabal', 'install']
+]
+
+
 LINTERS = {
     'prospector': {
         'install': [
@@ -61,7 +71,7 @@ LINTERS = {
         'run_per_file': False
     },
     'eslint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'eslint']],
+        'install': [['npm', 'install', 'eslint']],
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
@@ -80,7 +90,7 @@ LINTERS = {
         'run_per_file': False
     },
     'gherkin-lint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'gherkin-lint']],
+        'install': [['npm', 'install', 'gherkin-lint']],
         'help': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '--help'],
         'run': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json'],
         'rundefault': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json', '-c',
@@ -94,7 +104,7 @@ LINTERS = {
         'run_per_file': False
     },
     'jshint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'jshint']],
+        'install': [['npm', 'install', 'jshint']],
         'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
         'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
@@ -106,7 +116,7 @@ LINTERS = {
         'run_per_file': False
     },
     'jscs': {
-        'install': [['npm', 'install'], ['npm', 'install', 'jscs']],
+        'install': [['npm', 'install', 'jscs']],
         'help': [os.path.normpath('./node_modules/.bin/jscs'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
         'rundefault': [
@@ -121,7 +131,7 @@ LINTERS = {
         'run_per_file': False
     },
     'jsonlint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'jsonlint']],
+        'install': [['npm', 'install', 'jsonlint']],
         'help': [os.path.normpath('./node_modules/.bin/jsonlint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
         'rundefault': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
@@ -132,7 +142,7 @@ LINTERS = {
         'run_per_file': True
     },
     'yaml-lint': {
-        'install': [['bundle', 'install'], ['gem', 'install', 'yaml-lint']],
+        'install': [['gem', 'install', 'yaml-lint']],
         'help': ['yaml-lint'],
         'run': ['yaml-lint', '-q'],
         'rundefault': ['yaml-lint', '-q'],
@@ -154,7 +164,7 @@ LINTERS = {
         'run_per_file': True
     },
     'markdownlint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'markdownlint-cli']],
+        'install': [['npm', 'install', 'markdownlint-cli']],
         'help': [os.path.normpath('./node_modules/.bin/markdownlint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/markdownlint'), '.'],
         'rundefault': [
@@ -170,7 +180,7 @@ LINTERS = {
         'run_per_file': False
     },
     'stylint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'stylint']],
+        'install': [['npm', 'install', 'stylint']],
         'help': [os.path.normpath('./node_modules/.bin/stylint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/stylint')],
         'rundefault': [
@@ -196,7 +206,7 @@ LINTERS = {
         'run_per_file': True
     },
     'dockerfile_lint': {
-        'install': [['npm', 'install'], ['npm', 'install', 'dockerfile_lint']],
+        'install': [['npm', 'install', 'dockerfile_lint']],
         'help': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
         'rundefault': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
@@ -364,8 +374,11 @@ def dotfiles_exist(config, path=None):
 PREVIOUS_INSTALL_COMMANDS = []
 
 
-def install_linter(config):
-    for install_cmd in config.get('install'):
+def install_linter(config, trusted=False):
+    install_cmds = config.get('install')
+    if trusted:
+        install_cmds = TRUSTED_INSTALL + install_cmds
+    for install_cmd in install_cmds:
         if install_cmd in PREVIOUS_INSTALL_COMMANDS:
             continue
         PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
@@ -397,7 +410,15 @@ def run_config(config, config_dir):
     ]
 
 
-def lint(install=False, autorun=False, ignore_paths=None, config_dir=None, enabled_linters=None, disabled_linters=None):
+def lint(
+    install=False,
+    autorun=False,
+    ignore_paths=None,
+    config_dir=None,
+    enabled_linters=None,
+    disabled_linters=None,
+    trusted=False
+):
     messages = message.Messages()
     performance_hacks()
     for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
@@ -408,7 +429,7 @@ def lint(install=False, autorun=False, ignore_paths=None, config_dir=None, enabl
         config = LINTERS.get(linter)
         try:
             if (install or autorun) and config.get('install'):
-                install_linter(config)
+                install_linter(config, trusted)
             if config.get('run_per_file'):
                 output = run_per_file(config, ignore_paths, config_dir)
             else:
