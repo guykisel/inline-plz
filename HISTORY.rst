@@ -2,6 +2,17 @@
 History
 =======
 
+0.17.0 (2016-06-12)
+-------------------
+
+* Add --trusted flag for installs
+* Cleanup install dirs before run
+
+0.16.1 (2016-06-08)
+-------------------
+
+* Fix path to markdownlint
+
 0.16.0 (2016-06-05)
 -------------------
 
