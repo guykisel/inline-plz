@@ -41,7 +41,8 @@ PATTERNS = {
     'robotframework': ['*.robot'],
     'gherkin': ['*.feature'],
     'docker': ['*Dockerfile'],
-    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash']
+    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash'],
+    'go': ['*.go'],
 }
 
 
@@ -251,6 +252,17 @@ LINTERS = {
         'dotfiles': ['bandit.yaml'],
         'parser': parsers.BanditParser,
         'language': 'python',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'golint': {
+        'install': [['go', 'get', '-u', 'github.com/golang/lint/golint']],
+        'help': ['golint', '-h'],
+        'run': ['golint', '.'],
+        'rundefault': ['golint', '.'],
+        'dotfiles': [],
+        'parser': parsers.GolintParser,
+        'language': 'go',
         'autorun': True,
         'run_per_file': False
     }
