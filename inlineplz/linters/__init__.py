@@ -10,6 +10,7 @@ from __future__ import unicode_literals
 import fnmatch
 from multiprocessing.pool import ThreadPool as Pool
 import os.path
+import shutil
 import subprocess
 import sys
 import time
@@ -51,6 +52,12 @@ TRUSTED_INSTALL = [
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['cabal', 'update'],
     ['cabal', 'install']
+]
+
+
+INSTALL_DIRS = [
+    'node_modules',
+    '.bundle'
 ]
 
 
@@ -281,6 +288,16 @@ def performance_hacks():
         pass
 
 
+def cleanup():
+    """Delete standard installation directories."""
+    for install_dir in INSTALL_DIRS:
+        try:
+            shutil.rmtree(install_dir, ignore_errors=True)
+        except Exception:
+            traceback.print_exc()
+            print('Failed to delete {}'.format(install_dir))
+
+
 def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
         if (
@@ -420,6 +437,7 @@ def lint(
     trusted=False
 ):
     messages = message.Messages()
+    cleanup()
     performance_hacks()
     for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
         print('Running linter: {0}'.format(linter))
