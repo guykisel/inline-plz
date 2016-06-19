@@ -17,6 +17,6 @@ class YAMLLintParser(ParserBase):
                     line = int(output.split('at line')[1].split()[0].strip())
                     msgbody = output
                     messages.add((path, line, msgbody))
-            except ValueError:
+            except (ValueError, IndexError):
                 pass
         return messages
