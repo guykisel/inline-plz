@@ -52,7 +52,10 @@ TRUSTED_INSTALL = [
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['cabal', 'update'],
-    ['cabal', 'install']
+    ['cabal', 'install'],
+    ['godep', 'get'],
+    ['glide', 'install'],
+    ['go', 'get', '-t', '-v', ' ./...']
 ]
 
 
@@ -255,13 +258,13 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'golint': {
-        'install': [['go', 'get', '-u', 'github.com/golang/lint/golint']],
-        'help': ['golint', '-h'],
-        'run': ['golint', '.'],
-        'rundefault': ['golint', '.'],
+    'gometalinter': {
+        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
+        'help': ['gometalinter', '--install', '--update'],
+        'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'rundefault': ['gometalinter', '--json', '-s', 'node_modules', './...'],
         'dotfiles': [],
-        'parser': parsers.GolintParser,
+        'parser': parsers.GometalinterParser,
         'language': 'go',
         'autorun': True,
         'run_per_file': False
