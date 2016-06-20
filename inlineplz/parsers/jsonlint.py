@@ -17,6 +17,6 @@ class JSONLintParser(ParserBase):
                     line = int(output.split(':')[1].split()[1].strip(', '))
                     msgbody = output
                     messages.add((path, line, msgbody))
-            except ValueError:
+            except (ValueError, IndexError):
                 pass
         return messages

@@ -18,6 +18,6 @@ class MarkdownLintParser(ParserBase):
                     line = int(parts[1].strip())
                     msgbody = parts[2].strip()
                     messages.add((path, line, msgbody))
-            except ValueError:
+            except (ValueError, IndexError):
                 pass
         return messages

@@ -21,7 +21,7 @@ class RobotFrameworkLintParser(ParserBase):
                         _, position, message = line.split(':')
                         line_number, _ = position.split(',')
                         messages.add((current_file, int(line_number), message.strip()))
-                except ValueError:
+                except (ValueError, IndexError):
                     pass
 
         return messages
