@@ -2,6 +2,12 @@
 History
 =======
 
+0.18.0 (2016-06-19)
+-------------------
+
+* Add gometalinter support
+* Catch index errors in some parsers
+
 0.17.0 (2016-06-12)
 -------------------
 
