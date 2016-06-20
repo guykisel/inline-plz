@@ -41,7 +41,8 @@ PATTERNS = {
     'robotframework': ['*.robot'],
     'gherkin': ['*.feature'],
     'docker': ['*Dockerfile'],
-    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash']
+    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash'],
+    'go': ['*.go'],
 }
 
 
@@ -51,7 +52,10 @@ TRUSTED_INSTALL = [
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['cabal', 'update'],
-    ['cabal', 'install']
+    ['cabal', 'install'],
+    ['godep', 'get'],
+    ['glide', 'install'],
+    ['go', 'get', '-t', '-v', ' ./...']
 ]
 
 
@@ -251,6 +255,17 @@ LINTERS = {
         'dotfiles': ['bandit.yaml'],
         'parser': parsers.BanditParser,
         'language': 'python',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'gometalinter': {
+        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
+        'help': ['gometalinter', '--install', '--update'],
+        'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'rundefault': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'dotfiles': [],
+        'parser': parsers.GometalinterParser,
+        'language': 'go',
         'autorun': True,
         'run_per_file': False
     }
