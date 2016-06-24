@@ -31,31 +31,32 @@ HERE = os.path.dirname(__file__)
 
 
 PATTERNS = {
-    'python': ['*.py'],
+    'docker': ['*Dockerfile'],
+    'gherkin': ['*.feature'],
+    'go': ['*.go'],
     'javascript': ['*.js'],
     'json': ['*.json'],
-    'yaml': ['*.yaml', '*.yml'],
-    'rst': ['*.rst'],
     'markdown': ['*.md'],
+    'python': ['*.py'],
+    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash'],
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
-    'gherkin': ['*.feature'],
-    'docker': ['*Dockerfile'],
-    'shell': ['*.sh', '*.zsh', '*.ksh', '*.bsh', '*.csh', '*.bash'],
-    'go': ['*.go'],
+    'rst': ['*.rst'],
+    'yaml': ['*.yaml', '*.yml'],
 }
 
 
 TRUSTED_INSTALL = [
-    ['npm', 'install'],
     ['bundle', 'install'],
-    ['pip', 'install', '-r', 'requirements.txt'],
-    ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['cabal', 'update'],
     ['cabal', 'install'],
-    ['godep', 'get'],
     ['glide', 'install'],
-    ['go', 'get', '-t', '-v', ' ./...']
+    ['godep', 'get'],
+    ['go', 'get', '-t', '-v', ' ./...'],
+    ['npm', 'install'],
+    ['pip', 'install', '-r', 'requirements.txt'],
+    ['pip', 'install', '-r', 'requirements_dev.txt'],
+
 ]
 
 
@@ -66,20 +67,28 @@ INSTALL_DIRS = [
 
 
 LINTERS = {
-    'prospector': {
-        'install': [
-            ['pip', 'install', 'prospector[with_everything]'],
-            ['pip', 'install', 'prospector']
-        ],
-        'help': ['prospector', '-h'],
-        'run': ['prospector', '--zero-exit', '-o', 'json'],
-        'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
-                       '{config_dir}/.prospector.yaml'],
-        'dotfiles': ['.prospector.yaml'],
-        'parser': parsers.ProspectorParser,
+    'bandit': {
+        'install': [['pip', 'install', 'bandit']],
+        'help': ['bandit', '-h'],
+        'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
+        'rundefault': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
+                       '{config_dir}/bandit.yaml'],
+        'dotfiles': ['bandit.yaml'],
+        'parser': parsers.BanditParser,
         'language': 'python',
         'autorun': True,
         'run_per_file': False
+    },
+    'dockerfile_lint': {
+        'install': [['npm', 'install', 'dockerfile_lint']],
+        'help': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'dotfiles': [],
+        'parser': parsers.DockerfileLintParser,
+        'language': 'docker',
+        'autorun': True,
+        'run_per_file': True
     },
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
@@ -114,16 +123,15 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'jshint': {
-        'install': [['npm', 'install', 'jshint']],
-        'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
-                       '{config_dir}/.jshintrc'],
-        'dotfiles': ['.jshintrc'],
-        'parser': parsers.JSHintParser,
-        'language': 'javascript',
-        'autorun': False,
+    'gometalinter': {
+        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
+        'help': ['gometalinter', '--install', '--update'],
+        'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'rundefault': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'dotfiles': [],
+        'parser': parsers.GometalinterParser,
+        'language': 'go',
+        'autorun': True,
         'run_per_file': False
     },
     'jscs': {
@@ -141,6 +149,18 @@ LINTERS = {
         'autorun': False,
         'run_per_file': False
     },
+    'jshint': {
+        'install': [['npm', 'install', 'jshint']],
+        'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
+                       '{config_dir}/.jshintrc'],
+        'dotfiles': ['.jshintrc'],
+        'parser': parsers.JSHintParser,
+        'language': 'javascript',
+        'autorun': False,
+        'run_per_file': False
+    },
     'jsonlint': {
         'install': [['npm', 'install', 'jsonlint']],
         'help': [os.path.normpath('./node_modules/.bin/jsonlint'), '-h'],
@@ -149,28 +169,6 @@ LINTERS = {
         'dotfiles': [],
         'parser': parsers.JSONLintParser,
         'language': 'json',
-        'autorun': True,
-        'run_per_file': True
-    },
-    'yaml-lint': {
-        'install': [['gem', 'install', 'yaml-lint']],
-        'help': ['yaml-lint'],
-        'run': ['yaml-lint', '-q'],
-        'rundefault': ['yaml-lint', '-q'],
-        'dotfiles': [],
-        'parser': parsers.YAMLLintParser,
-        'language': 'yaml',
-        'autorun': True,
-        'run_per_file': True
-    },
-    'rst-lint': {
-        'install': [['pip', 'install', 'restructuredtext_lint']],
-        'help': ['rst-lint', '-h'],
-        'run': ['rst-lint', '--format', 'json'],
-        'rundefault': ['rst-lint', '--format', 'json'],
-        'dotfiles': [],
-        'parser': parsers.RSTLintParser,
-        'language': 'rst',
         'autorun': True,
         'run_per_file': True
     },
@@ -190,18 +188,18 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'stylint': {
-        'install': [['npm', 'install', 'stylint']],
-        'help': [os.path.normpath('./node_modules/.bin/stylint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/stylint')],
-        'rundefault': [
-            os.path.normpath('./node_modules/.bin/stylint'),
-            '-c',
-            '{config_dir}/.stylintrc'
+    'prospector': {
+        'install': [
+            ['pip', 'install', 'prospector[with_everything]'],
+            ['pip', 'install', 'prospector']
         ],
-        'dotfiles': ['.stylintrc'],
-        'parser': parsers.StylintParser,
-        'language': 'stylus',
+        'help': ['prospector', '-h'],
+        'run': ['prospector', '--zero-exit', '-o', 'json'],
+        'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
+                       '{config_dir}/.prospector.yaml'],
+        'dotfiles': ['.prospector.yaml'],
+        'parser': parsers.ProspectorParser,
+        'language': 'python',
         'autorun': True,
         'run_per_file': False
     },
@@ -216,14 +214,14 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
-    'dockerfile_lint': {
-        'install': [['npm', 'install', 'dockerfile_lint']],
-        'help': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+    'rst-lint': {
+        'install': [['pip', 'install', 'restructuredtext_lint']],
+        'help': ['rst-lint', '-h'],
+        'run': ['rst-lint', '--format', 'json'],
+        'rundefault': ['rst-lint', '--format', 'json'],
         'dotfiles': [],
-        'parser': parsers.DockerfileLintParser,
-        'language': 'docker',
+        'parser': parsers.RSTLintParser,
+        'language': 'rst',
         'autorun': True,
         'run_per_file': True
     },
@@ -246,29 +244,32 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
-    'bandit': {
-        'install': [['pip', 'install', 'bandit']],
-        'help': ['bandit', '-h'],
-        'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
-        'rundefault': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
-                       '{config_dir}/bandit.yaml'],
-        'dotfiles': ['bandit.yaml'],
-        'parser': parsers.BanditParser,
-        'language': 'python',
+    'stylint': {
+        'install': [['npm', 'install', 'stylint']],
+        'help': [os.path.normpath('./node_modules/.bin/stylint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/stylint')],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/stylint'),
+            '-c',
+            '{config_dir}/.stylintrc'
+        ],
+        'dotfiles': ['.stylintrc'],
+        'parser': parsers.StylintParser,
+        'language': 'stylus',
         'autorun': True,
         'run_per_file': False
     },
-    'gometalinter': {
-        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
-        'help': ['gometalinter', '--install', '--update'],
-        'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
-        'rundefault': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+    'yaml-lint': {
+        'install': [['gem', 'install', 'yaml-lint']],
+        'help': ['yaml-lint'],
+        'run': ['yaml-lint', '-q'],
+        'rundefault': ['yaml-lint', '-q'],
         'dotfiles': [],
-        'parser': parsers.GometalinterParser,
-        'language': 'go',
+        'parser': parsers.YAMLLintParser,
+        'language': 'yaml',
         'autorun': True,
-        'run_per_file': False
-    }
+        'run_per_file': True
+    },
 }
 
 
