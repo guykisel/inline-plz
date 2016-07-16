@@ -24,6 +24,9 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
+        self.owner = owner
+        self.repo = repo
+        self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         # github3 has naming/compatibility issues
         try:
@@ -34,6 +37,15 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
+
+    def out_of_date(self):
+        """Check if our local latest sha matches the remote latest sha"""
+        pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
+        try:
+            commits = [c for c in pull_request.commits()]
+        except (AttributeError, TypeError):
+            commits = [c for c in pull_request.iter_commits()]
+        return self.last_sha != commits[-1].sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
@@ -49,6 +61,8 @@ class GitHubInterface(InterfaceBase):
         for msg in messages:
             if not msg.comments:
                 continue
+            if self.out_of_date():
+                break
             msg_position = self.position(msg)
             if msg_position:
                 messages_to_post += 1
