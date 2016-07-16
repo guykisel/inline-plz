@@ -8,6 +8,15 @@ max-line-length: 120
 ignore-paths:
   - docs/
   - node_modules/
+  - node_modules\\\\
+  - node_modules\\
+  - node_modules\
+
+ignore-patterns:
+  - (^|/)docs(/|$)
+  - (^|/|\\|\\\\)node_modules(\\\\|\\|/|$)
+  - ^node_modules?/?
+  - /node_modules?(/|$)
 
 pylint:
   disable:

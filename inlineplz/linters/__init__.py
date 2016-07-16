@@ -68,7 +68,7 @@ INSTALL_DIRS = [
 
 LINTERS = {
     'bandit': {
-        'install': [['pip', 'install', 'bandit']],
+        'install': [['pip', 'install', '-U', 'bandit']],
         'help': ['bandit', '-h'],
         'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
         'rundefault': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
@@ -190,8 +190,8 @@ LINTERS = {
     },
     'prospector': {
         'install': [
-            ['pip', 'install', 'prospector[with_everything]'],
-            ['pip', 'install', 'prospector']
+            ['pip', 'install', '-U', 'prospector[with_everything]'],
+            ['pip', 'install', '-U', 'prospector']
         ],
         'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
@@ -204,7 +204,7 @@ LINTERS = {
         'run_per_file': False
     },
     'rflint': {
-        'install': [['pip', 'install', 'robotframework-lint']],
+        'install': [['pip', 'install', '-U', 'robotframework-lint']],
         'help': ['rflint', '--help'],
         'run': ['rflint'],
         'rundefault': ['rflint', '-A', '{config_dir}/.rflint'],
@@ -215,7 +215,7 @@ LINTERS = {
         'run_per_file': True
     },
     'rst-lint': {
-        'install': [['pip', 'install', 'restructuredtext_lint']],
+        'install': [['pip', 'install', '-U', 'restructuredtext_lint']],
         'help': ['rst-lint', '-h'],
         'run': ['rst-lint', '--format', 'json'],
         'rundefault': ['rst-lint', '--format', 'json'],
