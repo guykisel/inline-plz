@@ -54,8 +54,7 @@ def main():
     start = time.time()
     result = inline(args)
     print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
-    if result:
-        print('inline-plz returned exit code {}'.format(result))
+    print('inline-plz returned exit code {}'.format(result))
     return result
 
 
