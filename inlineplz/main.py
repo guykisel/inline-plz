@@ -47,34 +47,51 @@ def main():
     args = env.update_args(args)
     if args.config_dir:
         args.config_dir = os.path.abspath(args.config_dir)
+        if not os.path.exists(args.config_dir):
+            args.config_dir = None
     print('inline-plz version: {}'.format(__version__))
     print('Python version: {}'.format(sys.version))
     start = time.time()
     result = inline(args)
     print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
+    print('inline-plz returned exit code {}'.format(result))
     return result
 
 
 def update_from_config(args, config):
+    blacklist = [
+        'trusted', 'token', 'interface', 'owner', 'repo', 'config_dir'
+        'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url'
+    ]
     for key, value in config.items():
-        if not key.startswith('_'):
+        if not key.startswith('_') and key not in blacklist:
             args.__dict__[key] = args.__dict__.get(key) or value
     return args
 
 
-def load_config(args):
+def load_config(args, config_path='.inlineplz.yml'):
     """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
+    print(config_path)
     try:
-        with open('.inlineplz.yml') as configfile:
+        with open(config_path) as configfile:
             try:
                 config = yaml.safe_load(configfile) or {}
+                if config:
+                    print('Loaded config from {}'.format(config_path))
             except yaml.parser.ParserError:
                 pass
     except (IOError, OSError):
         pass
     args = update_from_config(args, config)
     args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git', '.tox']
+    if config_path != '.inlineplz.yml':
+        return args
+    # fall back to config_dir inlineplz yaml if we didn't find one locally
+    if args.config_dir and not config:
+        new_config_path = os.path.join(args.config_dir, config_path)
+        if os.path.exists(new_config_path):
+            return load_config(args, new_config_path)
     return args
 
 
@@ -140,6 +157,7 @@ def inline(args):
 def print_messages(messages):
     for msg in sorted([str(msg) for msg in messages]):
         print(msg)
+    print('{} lint messages found'.format(len(messages)))
 
 
 if __name__ == "__main__":

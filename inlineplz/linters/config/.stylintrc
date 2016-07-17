@@ -10,6 +10,7 @@
     "duplicates": true,
     "efficient": "always",
     "extendPref": false,
+    "exclude": ["node_modules"],
     "globalDupe": false,
     "indentPref": false,
     "leadingZero": "never",
