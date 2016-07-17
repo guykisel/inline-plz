@@ -58,11 +58,11 @@ class GitHubInterface(InterfaceBase):
         # randomize message order to more evenly distribute messages across different files
         messages = list(messages)
         random.shuffle(messages)
+        if self.out_of_date():
+            return messages_to_post
         for msg in messages:
             if not msg.comments:
                 continue
-            if self.out_of_date():
-                break
             msg_position = self.position(msg)
             if msg_position:
                 messages_to_post += 1
