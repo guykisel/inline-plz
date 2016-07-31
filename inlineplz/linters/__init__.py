@@ -277,13 +277,20 @@ def run_command(command, log_on_fail=False, log_all=False):
     shell = False
     if os.name == 'nt':
         shell = True
+    local_env = {}
+    safe_envvars = [
+        b'PATH', b'PYTHONPATH', b'GOPATH', b'SystemRoot',
+        b'HOME', b'USER', b'APPDATA'
+    ]
+    for envvar in safe_envvars:
+        local_env[envvar] = os.environ.get(envvar, b'')
     proc = subprocess.Popen(
         command,
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         shell=shell,
-        env=os.environ
+        env=local_env
     )
     stdout, stderr = proc.communicate()
     stdout = stdout.decode('utf-8', errors='replace')
