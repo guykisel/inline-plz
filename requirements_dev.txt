@@ -4,9 +4,9 @@ watchdog==0.8.3
 flake8==3.0.4
 tox==2.3.1
 coverage==4.2
-Sphinx==1.4.5
+Sphinx==1.4.6
 # only used for setup script
 # cryptography==1.0.1
 PyYAML==3.11
-pytest==2.9.2
+pytest==3.0.1
 prospector==0.12.2
