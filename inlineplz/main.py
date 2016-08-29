@@ -84,7 +84,7 @@ def load_config(args, config_path='.inlineplz.yml'):
     except (IOError, OSError):
         pass
     args = update_from_config(args, config)
-    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git', '.tox']
+    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git', '.tox', 'godeps']
     if config_path != '.inlineplz.yml':
         return args
     # fall back to config_dir inlineplz yaml if we didn't find one locally
