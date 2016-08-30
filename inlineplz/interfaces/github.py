@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import unicode_literals
 
 import random
+import time
 
 import github3
 import unidiff
@@ -41,11 +42,8 @@ class GitHubInterface(InterfaceBase):
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
         pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
-        try:
-            commits = [c for c in pull_request.commits()]
-        except (AttributeError, TypeError):
-            commits = [c for c in pull_request.iter_commits()]
-        return self.last_sha != commits[-1].sha
+        current_sha = pull_request.as_dict()['head']['sha']
+        return self.last_sha != current_sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
@@ -60,7 +58,11 @@ class GitHubInterface(InterfaceBase):
         random.shuffle(messages)
         if self.out_of_date():
             return messages_to_post
+        start = time.time()
         for msg in messages:
+            if time.time() - start > 10:
+                if self.out_of_date():
+                    return messages_to_post
             if not msg.comments:
                 continue
             msg_position = self.position(msg)
