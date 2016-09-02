@@ -16,7 +16,7 @@ requirements = [
     'xmltodict',
     'pyyaml',
     'scandir',
-    'uritemplate.py==2.0.0' # latest uritemplate doesn't install properly
+    'uritemplate.py==3.0.2' # latest uritemplate doesn't install properly
 ]
 
 test_requirements = [
