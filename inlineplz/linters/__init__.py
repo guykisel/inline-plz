@@ -25,6 +25,7 @@ except ImportError:
 
 from inlineplz import parsers
 from inlineplz import message
+from inlineplz.util import system
 
 
 HERE = os.path.dirname(__file__)
@@ -456,6 +457,8 @@ def lint(
     cleanup()
     performance_hacks()
     for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
+        if system.should_stop():
+            return messages.get_messages()
         print('Running linter: {0}'.format(linter))
         sys.stdout.flush()
         start = time.time()
