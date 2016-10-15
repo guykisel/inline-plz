@@ -10,7 +10,7 @@ import github3
 import unidiff
 
 from inlineplz.interfaces.base import InterfaceBase
-from inlineplz.util import git
+from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
@@ -60,9 +60,8 @@ class GitHubInterface(InterfaceBase):
             return messages_to_post
         start = time.time()
         for msg in messages:
-            if time.time() - start > 10:
-                if self.out_of_date():
-                    return messages_to_post
+            if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
+                return messages_to_post
             if not msg.comments:
                 continue
             msg_position = self.position(msg)
