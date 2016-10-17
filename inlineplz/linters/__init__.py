@@ -408,10 +408,8 @@ def dotfiles_exist(config, path=None):
 PREVIOUS_INSTALL_COMMANDS = []
 
 
-def install_linter(config, trusted=False):
+def install_linter(config):
     install_cmds = config.get('install')
-    if trusted:
-        install_cmds = TRUSTED_INSTALL + install_cmds
     for install_cmd in install_cmds:
         if install_cmd in PREVIOUS_INSTALL_COMMANDS:
             continue
@@ -423,6 +421,14 @@ def install_linter(config, trusted=False):
                 print('Install failed: {0}\n{1}'.format(install_cmd, traceback.format_exc()))
         else:
             return
+
+
+def install_trusted():
+    for install_cmd in TRUSTED_INSTALL:
+        try:
+            run_command(install_cmd, log_all=True)
+        except OSError:
+            print('Install failed: {0}\n{1}'.format(install_cmd, traceback.format_exc()))
 
 
 def installed(config):
@@ -456,6 +462,8 @@ def lint(
     messages = message.Messages()
     cleanup()
     performance_hacks()
+    if trusted and (install or autorun):
+        install_trusted()
     for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
         if system.should_stop():
             return messages.get_messages()
@@ -466,7 +474,7 @@ def lint(
         config = LINTERS.get(linter)
         try:
             if (install or autorun) and config.get('install'):
-                install_linter(config, trusted)
+                install_linter(config)
             if config.get('run_per_file'):
                 output = run_per_file(config, ignore_paths, config_dir)
             else:
