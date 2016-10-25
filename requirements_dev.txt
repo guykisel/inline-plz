@@ -9,4 +9,4 @@ Sphinx==1.4.8
 # cryptography==1.0.1
 PyYAML==3.12
 pytest==3.0.3
-prospector==0.12.3
+prospector==0.12.4
