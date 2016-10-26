@@ -29,21 +29,25 @@ class GitHubInterface(InterfaceBase):
         self.repo = repo
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
-        # github3 has naming/compatibility issues
-        try:
-            self.commits = [c for c in self.pull_request.commits()]
-        except (AttributeError, TypeError):
-            self.commits = [c for c in self.pull_request.iter_commits()]
+        self.commits = self.pr_commits(self.pull_request)
         self.last_sha = self.commits[-1].sha
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
 
+    @staticmethod
+    def pr_commits(pull_request):
+        # github3 has naming/compatibility issues
+        try:
+            commits = [c for c in pull_request.commits()]
+        except (AttributeError, TypeError):
+            commits = [c for c in pull_request.iter_commits()]
+        return commits
+
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
         pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
-        current_sha = pull_request.as_dict()['head']['sha']
-        return self.last_sha != current_sha
+        return self.last_sha != self.pr_commits(pull_request)[-1].sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
