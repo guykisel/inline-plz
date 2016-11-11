@@ -8,5 +8,5 @@ Sphinx==1.4.8
 # only used for setup script
 # cryptography==1.0.1
 PyYAML==3.12
-pytest==3.0.3
+pytest==3.0.4
 prospector==0.12.4
