@@ -4,7 +4,7 @@ watchdog==0.8.3
 flake8==3.2.1
 tox==2.5.0
 coverage==4.2
-Sphinx==1.4.8
+Sphinx==1.4.9
 # only used for setup script
 # cryptography==1.0.1
 PyYAML==3.12
