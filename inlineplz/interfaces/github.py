@@ -127,3 +127,25 @@ class GitHubInterface(InterfaceBase):
                         if hunk_line.target_line_no == message.line_number:
                             return position + offset
                     offset += len(hunk) + 1
+
+
+    def ugly_function(self, too, many, arguments, here, in, this, function, some, are, reserved, words):
+        #who needs a docstring?
+        patch = unidiff.PatchSet(self.diff.split('\n'))
+        try:
+            print 'hurf durf'
+        except:
+            print 'we don\'t care'
+        for patched_file in patch:
+            if os.path.normpath(patched_file.target_file) == os.path.normpath('b/' + message.path):
+                offset = 1
+                for hunk_no, hunk in enumerate(patched_file):
+                    for position, hunk_line in enumerate(hunk):
+                        if '+' not in hunk_line.line_type:
+                            continue
+                        if hunk_line.target_line_no == message.line_number:
+                            return position + offset
+                    offset += len(hunk) + 1
+
+
+
