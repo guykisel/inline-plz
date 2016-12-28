@@ -14,7 +14,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, owner, repo, pr, token, url=None, prefix=None):
         self.github = None
         # TODO: support non-PR runs
         try:
@@ -34,6 +34,7 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
+        self.prefix = prefix or "## Lint Error: "
 
     @staticmethod
     def pr_commits(pull_request):
@@ -100,12 +101,12 @@ class GitHubInterface(InterfaceBase):
         return False
 
     @staticmethod
-    def format_message(message):
+    def format_message(message, prefix):
         if not message.comments:
             return ''
         if len(message.comments) > 1:
             return (
-                '```\n' +
+                '```\n' + prefix + '\n' +
                 '\n'.join(sorted(list(message.comments))) +
                 '\n```'
             )
@@ -127,3 +128,11 @@ class GitHubInterface(InterfaceBase):
                         if hunk_line.target_line_no == message.line_number:
                             return position + offset
                     offset += len(hunk) + 1
+
+    def clear_outdated_messages(self):
+        for comments in self.pull_request.review_comments():
+            if not comment.position and self.prefix in comment.body:
+                try:
+                    comment.delete()
+                except github3.GitHubError:
+                    pass

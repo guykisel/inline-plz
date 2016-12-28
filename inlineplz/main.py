@@ -34,6 +34,7 @@ def main():
     parser.add_argument('--install', action='store_true')
     parser.add_argument('--trusted', action='store_true', help='allow installing all local dependencies')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
+    parser.add_argument('--prefix', type=str)
     parser.add_argument(
         '--autorun',
         action='store_true',
@@ -110,6 +111,7 @@ def inline(args):
         zero_exit: If true: always return a 0 exit code.
         install: If true: install linters.
         max_comments: Maximum comments to write
+        prefix: Prefix to inline-plz comments. Default: "## Lint error: "
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
     if args.repo_slug:
@@ -145,10 +147,13 @@ def inline(args):
             repo,
             args.pull_request,
             args.token,
-            args.url
+            args.url,
+            args.prefix
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
+
+        my_interface.clear_outdated_messages()
     except KeyError:
         pass
     return 0
