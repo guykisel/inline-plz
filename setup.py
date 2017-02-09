@@ -16,7 +16,8 @@ requirements = [
     #'stashy>=0.3',  #TODO: Use this instead of dependency_links for stashy
     'xmltodict',
     'pyyaml',
-    'scandir'
+    'scandir',
+    'uritemplate.py==2.0.0' # latest uritemplate doesn't install properly
 ]
 
 test_requirements = [
@@ -25,7 +26,7 @@ test_requirements = [
 
 setup(
     name='inlineplz',
-    version='0.12.5',
+    version='0.23.1',
     description="Inline your lint messages",
     long_description=readme + '\n\n' + history,
     author="Guy Kisel",

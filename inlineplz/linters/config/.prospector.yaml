@@ -8,6 +8,15 @@ max-line-length: 120
 ignore-paths:
   - docs/
   - node_modules/
+  - node_modules\\\\
+  - node_modules\\
+  - node_modules\
+
+ignore-patterns:
+  - (^|/)docs(/|$)
+  - (^|/|\\|\\\\)node_modules(\\\\|\\|/|$)
+  - ^node_modules?/?
+  - /node_modules?(/|$)
 
 pylint:
   disable:
@@ -24,6 +33,7 @@ pep8:
 
 pep257:
   disable:
+    - D000
     - D100
     - D101
     - D102
@@ -32,3 +42,12 @@ pep257:
     - D205
     - D400
     - D401
+
+pyroma:
+  run: true
+  disable:
+    - PYR19
+    - PYR16
+
+vulture:
+  run: true

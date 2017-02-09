@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import argparse
 import os
+import sys
 import time
 
 import yaml
@@ -28,9 +29,12 @@ def main():
     parser.add_argument('--password', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
+    parser.add_argument('--enabled-linters', type=str, nargs='+')
+    parser.add_argument('--disabled-linters', type=str, nargs='+')
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
+    parser.add_argument('--trusted', action='store_true', help='allow installing all local dependencies')
     parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
     parser.add_argument(
         '--autorun',
@@ -45,33 +49,51 @@ def main():
     args = env.update_args(args)
     if args.config_dir:
         args.config_dir = os.path.abspath(args.config_dir)
+        if not os.path.exists(args.config_dir):
+            args.config_dir = None
     print('inline-plz version: {}'.format(__version__))
-    start = time.clock()
+    print('Python version: {}'.format(sys.version))
+    start = time.time()
     result = inline(args)
-    print('inline-plz ran for {} seconds'.format(int(time.clock() - start)))
+    print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
+    print('inline-plz returned exit code {}'.format(result))
     return result
 
 
 def update_from_config(args, config):
+    blacklist = [
+        'trusted', 'token', 'interface', 'owner', 'repo', 'config_dir'
+        'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url'
+    ]
     for key, value in config.items():
-        if not key.startswith('_'):
+        if not key.startswith('_') and key not in blacklist:
             args.__dict__[key] = args.__dict__.get(key) or value
     return args
 
 
-def load_config(args):
+def load_config(args, config_path='.inlineplz.yml'):
     """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
+    print(config_path)
     try:
-        with open('.inlineplz.yml') as configfile:
+        with open(config_path) as configfile:
             try:
                 config = yaml.safe_load(configfile) or {}
+                if config:
+                    print('Loaded config from {}'.format(config_path))
             except yaml.parser.ParserError:
                 pass
     except (IOError, OSError):
         pass
     args = update_from_config(args, config)
-    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git']
+    args.ignore_paths = args.__dict__.get('ignore_paths') or ['node_modules', '.git', '.tox', 'godeps']
+    if config_path != '.inlineplz.yml':
+        return args
+    # fall back to config_dir inlineplz yaml if we didn't find one locally
+    if args.config_dir and not config:
+        new_config_path = os.path.join(args.config_dir, config_path)
+        if os.path.exists(new_config_path):
+            return load_config(args, new_config_path)
     return args
 
 
@@ -100,11 +122,21 @@ def inline(args):
     else:
         owner = args.owner
         repo = args.repo
+    # don't load trusted value from config because we don't trust the config
+    trusted = args.trusted
     args = load_config(args)
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
-    messages = linters.lint(args.install, args.autorun, args.ignore_paths, args.config_dir)
+    messages = linters.lint(
+        args.install,
+        args.autorun,
+        args.ignore_paths,
+        args.config_dir,
+        args.enabled_linters,
+        args.disabled_linters,
+        trusted
+    )
     print('{} lint messages found'.format(len(messages)))
 
     # TODO: implement dryrun as an interface instead of a special case here
@@ -129,6 +161,7 @@ def inline(args):
 def print_messages(messages):
     for msg in sorted([str(msg) for msg in messages]):
         print(msg)
+    print('{} lint messages found'.format(len(messages)))
 
 
 if __name__ == "__main__":
