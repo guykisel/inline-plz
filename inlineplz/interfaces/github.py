@@ -39,10 +39,9 @@ class GitHubInterface(InterfaceBase):
     def pr_commits(pull_request):
         # github3 has naming/compatibility issues
         try:
-            commits = [c for c in pull_request.commits()]
+            return [c for c in pull_request.commits()]
         except (AttributeError, TypeError):
-            commits = [c for c in pull_request.iter_commits()]
-        return commits
+            return [c for c in pull_request.iter_commits()]
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
@@ -89,6 +88,7 @@ class GitHubInterface(InterfaceBase):
                     messages_posted += 1
                     if max_comments >= 0 and messages_posted > max_comments:
                         break
+        print('{} messages posted to Github.'.format(messages_to_post))
         return messages_to_post
 
     def is_duplicate(self, message, position):
