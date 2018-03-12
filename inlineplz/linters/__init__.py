@@ -28,6 +28,7 @@ from inlineplz.util import system
 
 HERE = os.path.dirname(__file__)
 
+# glob patterns for what language is represented by what type of files.
 PATTERNS = {
     'docker': ['*Dockerfile'],
     'gherkin': ['*.feature'],
@@ -43,6 +44,7 @@ PATTERNS = {
     'yaml': ['*.yaml', '*.yml'],
 }
 
+# these commands will be autorun to try to install dependencies.
 TRUSTED_INSTALL = [
     ['bundle', 'install'],
     ['cabal', 'update'],
@@ -55,8 +57,10 @@ TRUSTED_INSTALL = [
     ['pip', 'install', '-r', 'requirements_dev.txt'],
 ]
 
+# these dirs will get deleted after a run
 INSTALL_DIRS = ['node_modules', '.bundle']
 
+# linter configs. add new tools here.
 LINTERS = {
     'bandit': {
         'install': [['pip', 'install', '-U', 'bandit']],
@@ -412,6 +416,7 @@ def dotfiles_exist(config, path=None):
                for dotfile in config.get('dotfiles'))
 
 
+# track commands we've already run so that we don't re-run them
 PREVIOUS_INSTALL_COMMANDS = []
 
 
