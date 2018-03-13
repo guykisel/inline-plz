@@ -13,10 +13,7 @@ class ESLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for filedata in json.loads(
-            lint_data,
-            object_pairs_hook=OrderedDict
-        ):
+        for filedata in json.loads(lint_data):
             try:
                 if filedata.get('messages'):
                     for msgdata in filedata['messages']:

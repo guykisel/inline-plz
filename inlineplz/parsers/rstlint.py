@@ -14,12 +14,12 @@ class RSTLintParser(ParserBase):
     def parse(self, lint_data):
         messages = set()
         for file_path, output in lint_data:
-            for msgdata in json.loads(
-                output,
-                object_pairs_hook=OrderedDict
-            ):
-                path = file_path
-                line = msgdata['line']
-                msgbody = msgdata['message']
-                messages.add((path, line, msgbody))
+            for msgdata in json.loads(output):
+                try:
+                    path = file_path
+                    line = msgdata['line']
+                    msgbody = msgdata['message']
+                    messages.add((path, line, msgbody))
+                except (ValueError, KeyError):
+                    pass
         return messages

@@ -12,10 +12,7 @@ class GherkinLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for filedata in json.loads(
-            lint_data,
-            object_pairs_hook=OrderedDict
-        ):
+        for filedata in json.loads(lint_data):
             try:
                 if filedata.get('errors'):
                     path = filedata['filePath']

@@ -15,14 +15,14 @@ class ShellcheckParser(ParserBase):
         messages = set()
         for file_path, output in lint_data:
             if file_path.strip() and output.strip():
-                filedata = json.loads(
-                    output,
-                    object_pairs_hook=OrderedDict
-                )
+                filedata = json.loads(output)
                 if filedata:
                     for msgdata in filedata:
-                        path = file_path
-                        line = msgdata['line']
-                        msgbody = msgdata['message']
-                        messages.add((path, line, msgbody))
+                        try:
+                            path = file_path
+                            line = msgdata['line']
+                            msgbody = msgdata['message']
+                            messages.add((path, line, msgbody))
+                        except (ValueError, KeyError):
+                            pass
         return messages

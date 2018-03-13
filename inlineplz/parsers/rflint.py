@@ -23,5 +23,4 @@ class RobotFrameworkLintParser(ParserBase):
                         messages.add((current_file, int(line_number), message.strip()))
                 except (ValueError, IndexError):
                     pass
-
         return messages
