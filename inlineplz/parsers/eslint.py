@@ -24,6 +24,6 @@ class ESLintParser(ParserBase):
                         line = msgdata['line']
                         msgbody = msgdata['message']
                         messages.add((path, line, msgbody))
-                except (ValueError, KeyError):
-                    pass
+            except (ValueError, KeyError):
+                pass
         return messages
