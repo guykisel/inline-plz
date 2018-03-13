@@ -14,6 +14,8 @@ class RobotFrameworkLintParser(ParserBase):
         for _, output in lint_data:
             for line in output.split('\n'):
                 try:
+                    if not line.strip():
+                        continue
                     if line.startswith('+'):
                         current_file = line[2:]
                         continue
@@ -22,5 +24,5 @@ class RobotFrameworkLintParser(ParserBase):
                         line_number, _ = position.split(',')
                         messages.add((current_file, int(line_number), message.strip()))
                 except (ValueError, IndexError):
-                    pass
+                    print('Invalid message: {0}'.format(line))
         return messages

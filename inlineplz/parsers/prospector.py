@@ -2,7 +2,6 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-from collections import OrderedDict
 import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
@@ -24,5 +23,5 @@ class ProspectorParser(ParserBase):
                 )
                 messages.add((path, line, msgbody))
             except (ValueError, KeyError):
-                pass
+                print('Invalid message: {0}'.format(msgdata))
         return messages
