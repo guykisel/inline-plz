@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 # pylint: disable=W0703,C0412
-
 """Linter configurations."""
 
 from __future__ import absolute_import
@@ -21,15 +20,15 @@ import traceback
 try:
     from os import scandir, walk
 except ImportError:
-    from scandir import scandir, walk # noqa
+    from scandir import scandir, walk  # noqa
 
 from inlineplz import parsers
 from inlineplz import message
-
+from inlineplz.util import system
 
 HERE = os.path.dirname(__file__)
 
-
+# glob patterns for what language is represented by what type of files.
 PATTERNS = {
     'docker': ['*Dockerfile'],
     'gherkin': ['*.feature'],
@@ -45,7 +44,7 @@ PATTERNS = {
     'yaml': ['*.yaml', '*.yml'],
 }
 
-
+# these commands will be autorun to try to install dependencies.
 TRUSTED_INSTALL = [
     ['bundle', 'install'],
     ['cabal', 'update'],
@@ -56,23 +55,21 @@ TRUSTED_INSTALL = [
     ['npm', 'install'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
-
 ]
 
+# these dirs will get deleted after a run
+INSTALL_DIRS = ['node_modules', '.bundle']
 
-INSTALL_DIRS = [
-    'node_modules',
-    '.bundle'
-]
-
-
+# linter configs. add new tools here.
 LINTERS = {
     'bandit': {
         'install': [['pip', 'install', '-U', 'bandit']],
         'help': ['bandit', '-h'],
         'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
-        'rundefault': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
-                       '{config_dir}/bandit.yaml'],
+        'rundefault': [
+            'bandit', '-f', 'json', '-iii', '-ll', '-r', '.', '-c',
+            '{config_dir}/bandit.yaml'
+        ],
         'dotfiles': ['bandit.yaml'],
         'parser': parsers.BanditParser,
         'language': 'python',
@@ -81,9 +78,12 @@ LINTERS = {
     },
     'dockerfile_lint': {
         'install': [['npm', 'install', 'dockerfile_lint']],
-        'help': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'help':
+        [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
+        'run':
+        [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
+        'rundefault':
+        [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-j', '-f'],
         'dotfiles': [],
         'parser': parsers.DockerfileLintParser,
         'language': 'docker',
@@ -93,16 +93,15 @@ LINTERS = {
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json', '-c',
-                       '{config_dir}/.eslintrc.js'],
+        'run':
+        [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json',
+            '-c', '{config_dir}/.eslintrc.js'
+        ],
         'dotfiles': [
-            '.eslintrc.yml',
-            '.eslintrc.yaml',
-            '.eslintignore',
-            '.eslintrc',
-            '.eslintrc.js',
-            '.eslintrc.json'
+            '.eslintrc.yml', '.eslintrc.yaml', '.eslintignore', '.eslintrc',
+            '.eslintrc.js', '.eslintrc.json'
         ],
         'parser': parsers.ESLintParser,
         'language': 'javascript',
@@ -111,13 +110,17 @@ LINTERS = {
     },
     'gherkin-lint': {
         'install': [['npm', 'install', 'gherkin-lint']],
-        'help': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '--help'],
-        'run': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f', 'json', '-c',
-                       '{config_dir}/.gherkin-lintrc'],
-        'dotfiles': [
-            '.gherkin-lintrc'
+        'help':
+        [os.path.normpath('./node_modules/.bin/gherkin-lint'), '--help'],
+        'run': [
+            os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f',
+            'json'
         ],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/gherkin-lint'), '.', '-f',
+            'json', '-c', '{config_dir}/.gherkin-lintrc'
+        ],
+        'dotfiles': ['.gherkin-lintrc'],
         'parser': parsers.GherkinLintParser,
         'language': 'gherkin',
         'autorun': True,
@@ -127,7 +130,8 @@ LINTERS = {
         'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
         'help': ['gometalinter', '--install', '--update'],
         'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
-        'rundefault': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'rundefault':
+        ['gometalinter', '--json', '-s', 'node_modules', './...'],
         'dotfiles': [],
         'parser': parsers.GometalinterParser,
         'language': 'go',
@@ -137,11 +141,13 @@ LINTERS = {
     'jscs': {
         'install': [['npm', 'install', 'jscs']],
         'help': [os.path.normpath('./node_modules/.bin/jscs'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json', '-m', '-1', '-v'],
+        'run': [
+            os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json',
+            '-m', '-1', '-v'
+        ],
         'rundefault': [
-            os.path.normpath('./node_modules/.bin/jscs'),
-            '.', '-r', 'json', '-m', '-1', '-v', '-c',
-            '{config_dir}/.jscsrc'
+            os.path.normpath('./node_modules/.bin/jscs'), '.', '-r', 'json',
+            '-m', '-1', '-v', '-c', '{config_dir}/.jscsrc'
         ],
         'dotfiles': ['.jscsrc', '.jscs.json'],
         'parser': parsers.JSCSParser,
@@ -152,9 +158,14 @@ LINTERS = {
     'jshint': {
         'install': [['npm', 'install', 'jshint']],
         'help': [os.path.normpath('./node_modules/.bin/jshint'), '-h'],
-        'run': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter', 'checkstyle', '-c',
-                       '{config_dir}/.jshintrc'],
+        'run': [
+            os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter',
+            'checkstyle'
+        ],
+        'rundefault': [
+            os.path.normpath('./node_modules/.bin/jshint'), '.', '--reporter',
+            'checkstyle', '-c', '{config_dir}/.jshintrc'
+        ],
         'dotfiles': ['.jshintrc'],
         'parser': parsers.JSHintParser,
         'language': 'javascript',
@@ -165,7 +176,8 @@ LINTERS = {
         'install': [['npm', 'install', 'jsonlint']],
         'help': [os.path.normpath('./node_modules/.bin/jsonlint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
-        'rundefault': [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
+        'rundefault':
+        [os.path.normpath('./node_modules/.bin/jsonlint'), '-c', '-q'],
         'dotfiles': [],
         'parser': parsers.JSONLintParser,
         'language': 'json',
@@ -177,9 +189,7 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/markdownlint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/markdownlint'), '.'],
         'rundefault': [
-            os.path.normpath('./node_modules/.bin/markdownlint'),
-            '.',
-            '-c',
+            os.path.normpath('./node_modules/.bin/markdownlint'), '.', '-c',
             '{config_dir}/.markdownlintrc'
         ],
         'dotfiles': ['.markdownlintrc', '.markdownlint.json'],
@@ -189,14 +199,14 @@ LINTERS = {
         'run_per_file': False
     },
     'prospector': {
-        'install': [
-            ['pip', 'install', '-U', 'prospector[with_everything]'],
-            ['pip', 'install', '-U', 'prospector']
-        ],
+        'install': [['pip', 'install', '-U', 'prospector[with_everything]'],
+                    ['pip', 'install', '-U', 'prospector']],
         'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
-        'rundefault': ['prospector', '--zero-exit', '-o', 'json', '-P',
-                       '{config_dir}/.prospector.yaml'],
+        'rundefault': [
+            'prospector', '--zero-exit', '-o', 'json', '-P',
+            '{config_dir}/.prospector.yaml'
+        ],
         'dotfiles': ['.prospector.yaml'],
         'parser': parsers.ProspectorParser,
         'language': 'python',
@@ -249,8 +259,7 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/stylint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/stylint')],
         'rundefault': [
-            os.path.normpath('./node_modules/.bin/stylint'),
-            '-c',
+            os.path.normpath('./node_modules/.bin/stylint'), '-c',
             '{config_dir}/.stylintrc'
         ],
         'dotfiles': ['.stylintrc'],
@@ -283,8 +292,7 @@ def run_command(command, log_on_fail=False, log_all=False):
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         shell=shell,
-        env=os.environ
-    )
+        env=os.environ)
     stdout, stderr = proc.communicate()
     stdout = stdout.decode('utf-8', errors='replace')
     stderr = stderr.decode('utf-8', errors='replace')
@@ -316,11 +324,9 @@ def cleanup():
 
 def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
-        if (
-            os.path.relpath(path).startswith(ignore_path) or
-            path.startswith(ignore_path) or
-            fnmatch.fnmatch(path, ignore_path)
-        ):
+        if (os.path.relpath(path).startswith(ignore_path) or
+                path.startswith(ignore_path) or
+                fnmatch.fnmatch(path, ignore_path)):
             return True
     return False
 
@@ -346,13 +352,18 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     return output
 
 
-def linters_to_run(install=False, autorun=False, ignore_paths=None, enabled_linters=None, disabled_linters=None):
+def linters_to_run(install=False,
+                   autorun=False,
+                   ignore_paths=None,
+                   enabled_linters=None,
+                   disabled_linters=None):
     linters = set()
     enabled_linters = enabled_linters or []
     disabled_linters = disabled_linters or []
     if not autorun:
         for linter, config in LINTERS.items():
-            if (installed(config) or install or linter in enabled_linters) and dotfiles_exist(config):
+            if (installed(config) or install or
+                    linter in enabled_linters) and dotfiles_exist(config):
                 if linter not in disabled_linters:
                     linters.add(linter)
     else:
@@ -362,12 +373,12 @@ def linters_to_run(install=False, autorun=False, ignore_paths=None, enabled_lint
                 dotfilefound[config.get('language')] = True
                 if linter not in disabled_linters:
                     linters.add(linter)
-        filenames = all_filenames_in_dir(path=os.getcwd(), ignore_paths=ignore_paths)
+        filenames = all_filenames_in_dir(
+            path=os.getcwd(), ignore_paths=ignore_paths)
         for linter, config in LINTERS.items():
             if linter in enabled_linters or (
-                not dotfilefound.get(config.get('language')) and
-                should_autorun(config, filenames)
-            ):
+                    not dotfilefound.get(config.get('language')) and
+                    should_autorun(config, filenames)):
                 if linter not in disabled_linters:
                     linters.add(linter)
     return linters
@@ -401,16 +412,16 @@ def should_autorun(config, filenames):
 
 def dotfiles_exist(config, path=None):
     path = path or os.getcwd()
-    return any(dotfile.strip() in os.listdir(path) for dotfile in config.get('dotfiles'))
+    return any(dotfile.strip() in os.listdir(path)
+               for dotfile in config.get('dotfiles'))
 
 
+# track commands we've already run so that we don't re-run them
 PREVIOUS_INSTALL_COMMANDS = []
 
 
-def install_linter(config, trusted=False):
+def install_linter(config):
     install_cmds = config.get('install')
-    if trusted:
-        install_cmds = TRUSTED_INSTALL + install_cmds
     for install_cmd in install_cmds:
         if install_cmd in PREVIOUS_INSTALL_COMMANDS:
             continue
@@ -419,9 +430,19 @@ def install_linter(config, trusted=False):
             try:
                 run_command(install_cmd, log_all=True)
             except OSError:
-                print('Install failed: {0}\n{1}'.format(install_cmd, traceback.format_exc()))
+                print('Install failed: {0}\n{1}'.format(
+                    install_cmd, traceback.format_exc()))
         else:
             return
+
+
+def install_trusted():
+    for install_cmd in TRUSTED_INSTALL:
+        try:
+            run_command(install_cmd, log_all=True)
+        except OSError:
+            print('Install failed: {0}\n{1}'.format(install_cmd,
+                                                    traceback.format_exc()))
 
 
 def installed(config):
@@ -443,19 +464,22 @@ def run_config(config, config_dir):
     ]
 
 
-def lint(
-    install=False,
-    autorun=False,
-    ignore_paths=None,
-    config_dir=None,
-    enabled_linters=None,
-    disabled_linters=None,
-    trusted=False
-):
+def lint(install=False,
+         autorun=False,
+         ignore_paths=None,
+         config_dir=None,
+         enabled_linters=None,
+         disabled_linters=None,
+         trusted=False):
     messages = message.Messages()
     cleanup()
     performance_hacks()
-    for linter in linters_to_run(install, autorun, ignore_paths, enabled_linters, disabled_linters):
+    if trusted and (install or autorun):
+        install_trusted()
+    for linter in linters_to_run(install, autorun, ignore_paths,
+                                 enabled_linters, disabled_linters):
+        if system.should_stop():
+            return messages.get_messages()
         print('Running linter: {0}'.format(linter))
         sys.stdout.flush()
         start = time.time()
@@ -463,7 +487,7 @@ def lint(
         config = LINTERS.get(linter)
         try:
             if (install or autorun) and config.get('install'):
-                install_linter(config, trusted)
+                install_linter(config)
             if config.get('run_per_file'):
                 output = run_per_file(config, ignore_paths, config_dir)
             else:
@@ -473,7 +497,8 @@ def lint(
         except Exception:
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
-        print('Installation and running of {0} took {1} seconds'.format(linter, int(time.time() - start)))
+        print('Installation and running of {0} took {1} seconds'.format(
+            linter, int(time.time() - start)))
         sys.stdout.flush()
         start = time.time()
         try:
@@ -481,11 +506,13 @@ def lint(
                 linter_messages = config.get('parser')().parse(output)
                 # prepend linter name to message content
                 linter_messages = {
-                    (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2])) for msg in linter_messages
+                    (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2]))
+                    for msg in linter_messages
                 }
                 messages.add_messages(linter_messages)
         except Exception:
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
-        print('Parsing of {0} took {1} seconds'.format(linter, int(time.time() - start)))
+        print('Parsing of {0} took {1} seconds'.format(
+            linter, int(time.time() - start)))
     return messages.get_messages()

@@ -53,6 +53,8 @@ def main():
     print('Python version: {}'.format(sys.version))
     start = time.time()
     result = inline(args)
+    print('inline-plz version: {}'.format(__version__))
+    print('Python version: {}'.format(sys.version))
     print('inline-plz ran for {} seconds'.format(int(time.time() - start)))
     print('inline-plz returned exit code {}'.format(result))
     return result
@@ -134,6 +136,8 @@ def inline(args):
         trusted
     )
     print('{} lint messages found'.format(len(messages)))
+    print('inline-plz version: {}'.format(__version__))
+    print('Python version: {}'.format(sys.version))
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
@@ -150,7 +154,7 @@ def inline(args):
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:
-        pass
+        print('Interface not found: {}'.format(args.interface))
     return 0
 
 
