@@ -2,6 +2,7 @@ addons:
   apt:
     packages:
       - python3.5-dev
+      - python3.6-dev
     sources:
       - deadsnakes
 deploy:
@@ -21,13 +22,14 @@ env:
       hJjNRzaBuateybOSFPW8nkmWfXOfP4FM1S3FtbyTTB4NAoE9L7Hoo1ZiUjt+oLDy0kAre0tO8aKjin18lKE2No0IddE67XRTZAF+ah8iiDUkBIyN7kkgDm8M7byIK+nRS0jrSdcrFcWvAGtufQHT5MN6kfMNGJIe5m2QttS0rRLOxF+nO0CjiBOF4K+YyyBbwojfk8UY4aCNDlIucH16wwxv+LjV2d3eDxb+Rh6F+h8A5y7xk3F01NPM3K853LPR+nMqlXXGGt/gkM3sFDPRnVZ6k67geOJoWXVtFovQ/0iWgI8tW+Yr58NO23YiGSt+Uq7fDfOvjf1KXjr33dOl15mcUGWy3P6i3h1xnbVWCOCmH5ld14hTIK6mcMM226AjP3iXi3T6QqNzOaSDTO6JQXAIKKEdNsvQdNKzG39rLUot+JUmfpxIAZGeWj5TwIlSFOj87UbQL8cGZKKMB/4iyMNDkdXKQvdRwJy2QOp+tssbyAfm4650EDIA1nltbTFyHn8wWPNAkcdnLMb2gF2RBqQpe7mbfqR3P04Y17MPDUEIyaeNb2zROo4Twxb6xB2uKU0ZtpOM+ksDV6AkLWOQkkMApHdMVeYjiE5xi4itSNfv1kpGYpgpKQOg/FqMIqlQZd48r4ukbLnNwUDZ7sKtR744IOd/94C7Kpt+h3stotA=
 install:
   - pip install -U pip
+  - pip install tox-travis
   - pip install -r requirements_dev.txt
   - python setup.py develop
 language: python
 python:
+  - '3.6'
   - '3.5'
   - '3.4'
-  - '3.3'
   - '2.7'
 script:
   - tox
