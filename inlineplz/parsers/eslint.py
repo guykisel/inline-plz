@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from collections import OrderedDict
-import json
+import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
 
@@ -17,10 +17,13 @@ class ESLintParser(ParserBase):
             lint_data,
             object_pairs_hook=OrderedDict
         ):
-            if filedata.get('messages'):
-                for msgdata in filedata['messages']:
-                    path = filedata['filePath']
-                    line = msgdata['line']
-                    msgbody = msgdata['message']
-                    messages.add((path, line, msgbody))
+            try:
+                if filedata.get('messages'):
+                    for msgdata in filedata['messages']:
+                        path = filedata['filePath']
+                        line = msgdata['line']
+                        msgbody = msgdata['message']
+                        messages.add((path, line, msgbody))
+                except (ValueError, KeyError):
+                    pass
         return messages

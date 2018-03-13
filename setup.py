@@ -16,6 +16,7 @@ requirements = [
     'xmltodict',
     'pyyaml',
     'scandir',
+    'dirtyjson',
     'uritemplate.py==2.0.0' # latest uritemplate doesn't install properly
 ]
 
