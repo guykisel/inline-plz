@@ -18,20 +18,6 @@ module.exports = {
     "sourceType": "module"
   },
 
-  "ecmaFeatures": {
-    "arrowFunctions": true,
-    "blockBindings": true,
-    "classes": true,
-    "defaultParams": true,
-    "destructuring": true,
-    "forOf": true,
-    "generators": true,
-    "modules": true,
-    "objectLiteralShorthandMethods": true,
-    "spread": true,
-    "templateStrings": true
-  },
-
   "rules": {
     // Disallow declaring the same variable more then once
     //
