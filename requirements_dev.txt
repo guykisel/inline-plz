@@ -1,3 +1,4 @@
+-e .
 bumpversion==0.5.3
 wheel==0.30.0
 watchdog==0.8.3
