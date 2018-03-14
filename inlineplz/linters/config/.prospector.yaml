@@ -25,6 +25,7 @@ pylint:
     - missing-docstring
     - star-args
     - redefined-variable-type
+    - superfluous-parens
 
 pep8:
   full: true
