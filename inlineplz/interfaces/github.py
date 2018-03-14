@@ -15,7 +15,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, owner, repo, pr, token, url=None, prefix=None):
         self.github = None
         # TODO: support non-PR runs
         try:
@@ -36,6 +36,7 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
+        self.prefix = prefix
 
     @staticmethod
     def pr_commits(pull_request):
@@ -80,7 +81,7 @@ class GitHubInterface(InterfaceBase):
                     try:
                         print('Creating review comment: {0}'.format(msg))
                         self.pull_request.create_review_comment(
-                            self.format_message(msg),
+                            self.format_message(msg, self.prefix),
                             self.last_sha,
                             msg.path,
                             msg_position
@@ -98,21 +99,24 @@ class GitHubInterface(InterfaceBase):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
                     comment.path == message.path and
-                    comment.body.strip() == self.format_message(message).strip()):
+                    comment.body.strip() == self.format_message(message, self.prefix).strip()):
                 return True
         return False
 
     @staticmethod
-    def format_message(message):
+    def format_message(message, prefix):
         if not message.comments:
             return ''
         if len(message.comments) > 1:
-            return (
-                '```\n' +
-                '\n'.join(sorted(list(message.comments))) +
-                '\n```'
-            )
-        return '`{0}`'.format(list(message.comments)[0].strip())
+            comment_output = '\n'.join(sorted(list(message.comments)))
+            if prefix:
+                comment_output = prefix + '\n' + comment_output
+            return '```\n {0} \n ```'.format(comment_output)
+
+        comment_output = list(message.comments)[0].strip()
+        if prefix:
+            comment_output = prefix + '\n' + comment_output
+        return '`{0}`'.format(comment_output)
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
@@ -130,3 +134,11 @@ class GitHubInterface(InterfaceBase):
                         if hunk_line.target_line_no == message.line_number:
                             return position + offset
                     offset += len(hunk) + 1
+
+    def clear_outdated_messages(self):
+        for comment in self.pull_request.review_comments():
+            if not comment.position and self.prefix in comment.body:
+                try:
+                    comment.delete()
+                except github3.GitHubError:
+                    pass
