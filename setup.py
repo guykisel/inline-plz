@@ -13,6 +13,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'unidiff',
     'github3.py',
+    #'stashy>=0.3',  #TODO: Use this instead of dependency_links for stashy
     'xmltodict',
     'pyyaml',
     'scandir',
@@ -36,6 +37,9 @@ setup(
     packages=find_packages('.', exclude=('tests*', 'testing*')),
     include_package_data=True,
     install_requires=requirements,
+    dependency_links=[  # TODO: Remove dependency_links once stashy is updated on PyPI
+        'git+https://github.com/RisingOak/stashy.git#egg=stashy-0.3'
+    ],
     license="ISCL",
     zip_safe=False,
     keywords='inlineplz',

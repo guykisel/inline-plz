@@ -25,6 +25,8 @@ def main():
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--token', type=str)
+    parser.add_argument('--user', type=str)
+    parser.add_argument('--password', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
     parser.add_argument('--enabled-linters', type=str, nargs='+')
@@ -107,6 +109,8 @@ def inline(args):
         repo: Repository name
         pr: Pull request ID
         token: Authentication for repository
+        user: (If not using token) username for repository
+        password: (If not using token) password for repository
         url: Root URL of repository (not your project) Default: https://github.com
         dryrun: Prints instead of posting comments.
         zero_exit: If true: always return a 0 exit code.
@@ -148,7 +152,7 @@ def inline(args):
             owner,
             repo,
             args.pull_request,
-            args.token,
+            dict(token=args.token, username=args.user, password=args.password),
             args.url
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
