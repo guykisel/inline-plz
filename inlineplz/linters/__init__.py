@@ -346,7 +346,7 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
 
     def result(run_cmd):
         _, out = run_command(run_cmd)
-        return run_cmd[-1], out
+        return run_cmd[-1], out.strip()
 
     output = pool.map(result, run_cmds)
     return output
@@ -494,6 +494,7 @@ def lint(install=False,
                 cmd = run_config(config, config_dir)
                 print(cmd)
                 _, output = run_command(cmd)
+                output = output.strip()
         except Exception:
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
