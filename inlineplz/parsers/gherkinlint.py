@@ -22,6 +22,6 @@ class GherkinLintParser(ParserBase):
                             messages.add((path, line, msgbody))
                         except (ValueError, KeyError):
                             print('Invalid message: {0}'.format(msgdata))
-        except Exception:
+        except ValueError:
             print(lint_data)
         return messages
