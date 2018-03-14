@@ -501,6 +501,7 @@ def lint(install=False,
             linter, int(time.time() - start)))
         sys.stdout.flush()
         start = time.time()
+        output = output.strip()
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
