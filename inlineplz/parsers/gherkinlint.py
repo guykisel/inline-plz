@@ -11,14 +11,17 @@ class GherkinLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for filedata in json.loads(lint_data):
-            if filedata.get('errors') and filedata.get('filePath'):
-                path = filedata['filePath']
-                for msgdata in filedata['errors']:
-                    try:
-                        line = msgdata['line']
-                        msgbody = msgdata['message']
-                        messages.add((path, line, msgbody))
-                    except (ValueError, KeyError):
-                        print('Invalid message: {0}'.format(msgdata))
+        try:
+            for filedata in json.loads(lint_data):
+                if filedata.get('errors') and filedata.get('filePath'):
+                    path = filedata['filePath']
+                    for msgdata in filedata['errors']:
+                        try:
+                            line = msgdata['line']
+                            msgbody = msgdata['message']
+                            messages.add((path, line, msgbody))
+                        except (ValueError, KeyError):
+                            print('Invalid message: {0}'.format(msgdata))
+        except Exception:
+            print(lint_data)
         return messages
