@@ -1,6 +1,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import traceback
+
 import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
@@ -23,5 +25,6 @@ class GherkinLintParser(ParserBase):
                         except (ValueError, KeyError):
                             print('Invalid message: {0}'.format(msgdata))
         except ValueError:
+            traceback.print_exc()
             print(lint_data)
         return messages

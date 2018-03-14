@@ -15,9 +15,9 @@ class Messages(object):
         self.messages = {}
 
     def add_message(self, path, line, message):
-        path = os.path.relpath(path).replace('\\', '/')
+        path = os.path.relpath(path).replace('\\', '/').strip()
         # replace backticks with single quotes to avoid markdown escaping issues
-        message = message.replace('`', '\'')
+        message = message.replace('`', '\'').strip()
         try:
             line = int(line)
         except (ValueError, TypeError):

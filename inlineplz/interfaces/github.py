@@ -31,7 +31,8 @@ class GitHubInterface(InterfaceBase):
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
-        self.last_sha = self.commits[-1].sha
+        self.last_sha = git.current_sha()
+        print('Last SHA: {0}'.format(self.last_sha))
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
@@ -77,6 +78,7 @@ class GitHubInterface(InterfaceBase):
                     if paths.setdefault(msg.path, 0) > max_comments // 5:
                         continue
                     try:
+                        print('Creating review comment: {0}'.format(msg))
                         self.pull_request.create_review_comment(
                             self.format_message(msg),
                             self.last_sha,
