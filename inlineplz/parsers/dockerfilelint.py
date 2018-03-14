@@ -22,7 +22,7 @@ class DockerfileLintParser(ParserBase):
                                 path = file_path
                                 line = msgdata['line']
                                 msgbody = msgdata['message']
-                                messages.add((path, line, msgbody))
+                                messages.add((path.strip(), line, msgbody.strip()))
                             except (ValueError, KeyError):
                                 print('Invalid message: {0}'.format(msgdata))
         return messages
