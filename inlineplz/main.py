@@ -119,6 +119,7 @@ def inline(args):
     trusted = args.trusted
     args = load_config(args)
 
+    # TODO: consider moving this git parsing stuff into the github interface
     url = args.url
     if args.repo_slug:
         owner = args.repo_slug.split('/')[0]
