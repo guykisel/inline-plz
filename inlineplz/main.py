@@ -115,6 +115,10 @@ def inline(args):
         max_comments: Maximum comments to write
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
+    # don't load trusted value from config because we don't trust the config
+    trusted = args.trusted
+    args = load_config(args)
+
     url = args.url
     if args.repo_slug:
         owner = args.repo_slug.split('/')[0]
@@ -128,7 +132,7 @@ def inline(args):
             # giturlparse won't parse URLs that don't end in .git
             if not url_to_parse.endswith('.git'):
                 url_to_parse += '.git'
-            parsed = giturlparse.parse(args.url)
+            parsed = giturlparse.parse(url_to_parse)
             url = parsed.resource
             if not url.startswith('https://'):
                 url = 'https://' + url
@@ -136,9 +140,6 @@ def inline(args):
             repo = parsed.name
         except giturlparse.parser.ParserError:
             pass
-    # don't load trusted value from config because we don't trust the config
-    trusted = args.trusted
-    args = load_config(args)
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
