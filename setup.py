@@ -18,7 +18,8 @@ requirements = [
     'scandir',
     'uritemplate.py',
     'dirtyjson',
-    'python-dateutil'
+    'python-dateutil',
+    'git-url-parse'
 ]
 
 test_requirements = [

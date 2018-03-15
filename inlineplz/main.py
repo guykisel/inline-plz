@@ -10,6 +10,7 @@ import os
 import sys
 import time
 
+import giturlparse
 import yaml
 
 from inlineplz import interfaces
@@ -114,12 +115,27 @@ def inline(args):
         max_comments: Maximum comments to write
     :return: Exit code. 1 if there are any comments, 0 if there are none.
     """
+    url = args.url
     if args.repo_slug:
         owner = args.repo_slug.split('/')[0]
         repo = args.repo_slug.split('/')[1]
     else:
         owner = args.owner
         repo = args.repo
+    if args.url:
+        try:
+            url_to_parse = args.url
+            # giturlparse won't parse URLs that don't end in .git
+            if not url_to_parse.endswith('.git'):
+                url_to_parse += '.git'
+            parsed = giturlparse.parse(args.url)
+            url = parsed.resource
+            if not url.startswith('https://'):
+                url = 'https://' + url
+            owner = parsed.owner
+            repo = parsed.name
+        except giturlparse.parser.ParserError:
+            pass
     # don't load trusted value from config because we don't trust the config
     trusted = args.trusted
     args = load_config(args)
@@ -149,7 +165,7 @@ def inline(args):
             repo,
             args.pull_request,
             args.token,
-            args.url
+            url
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
