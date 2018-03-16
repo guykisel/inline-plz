@@ -46,6 +46,7 @@ class GitHubInterface(InterfaceBase):
             pr = int(pr)
         except (ValueError, TypeError):
             print('{0} is not a valid pull request ID'.format(pr))
+            self.github = None
             return
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
