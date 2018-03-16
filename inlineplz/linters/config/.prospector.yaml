@@ -26,6 +26,7 @@ pylint:
     - star-args
     - redefined-variable-type
     - superfluous-parens
+    - too-many-arguments
 
 pep8:
   full: true
