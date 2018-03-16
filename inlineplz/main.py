@@ -27,7 +27,11 @@ def main():
     parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--token', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
-    parser.add_argument('--url', type=str)
+    parser.add_argument('--url', type=str, default=None)
+    parser.add_argument('--username', type=str)
+    parser.add_argument('--password', type=str)
+    parser.add_argument('--host', type=str)
+    parser.add_argument('--topic', type=str)
     parser.add_argument('--enabled-linters', type=str, nargs='+')
     parser.add_argument('--disabled-linters', type=str, nargs='+')
     parser.add_argument('--dryrun', action='store_true')
@@ -119,28 +123,6 @@ def inline(args):
     trusted = args.trusted
     args = load_config(args)
 
-    # TODO: consider moving this git parsing stuff into the github interface
-    url = args.url
-    if args.repo_slug:
-        owner = args.repo_slug.split('/')[0]
-        repo = args.repo_slug.split('/')[1]
-    else:
-        owner = args.owner
-        repo = args.repo
-    if args.url:
-        try:
-            url_to_parse = args.url
-            # giturlparse won't parse URLs that don't end in .git
-            if not url_to_parse.endswith('.git'):
-                url_to_parse += '.git'
-            parsed = giturlparse.parse(url_to_parse)
-            url = parsed.resource
-            if not url.startswith('https://'):
-                url = 'https://' + url
-            owner = parsed.owner
-            repo = parsed.name
-        except giturlparse.parser.ParserError:
-            pass
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
@@ -162,13 +144,7 @@ def inline(args):
         print_messages(messages)
         return 0
     try:
-        my_interface = interfaces.INTERFACES[args.interface](
-            owner,
-            repo,
-            args.pull_request,
-            args.token,
-            url
-        )
+        my_interface = interfaces.INTERFACES[args.interface](args)
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:

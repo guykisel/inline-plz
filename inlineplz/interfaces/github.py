@@ -15,7 +15,32 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, args):
+        url = args.url
+        if args.repo_slug:
+            owner = args.repo_slug.split('/')[0]
+            repo = args.repo_slug.split('/')[1]
+        else:
+            owner = args.owner
+            repo = args.repo
+        if args.url:
+            try:
+                url_to_parse = args.url
+                # giturlparse won't parse URLs that don't end in .git
+                if not url_to_parse.endswith('.git'):
+                    url_to_parse += '.git'
+                parsed = giturlparse.parse(url_to_parse)
+                url = parsed.resource
+                if not url.startswith('https://'):
+                    url = 'https://' + url
+                owner = parsed.owner
+                repo = parsed.name
+            except giturlparse.parser.ParserError:
+                pass
+
+        pr = args.pull_request
+        token = args.token
+
         self.github = None
         # TODO: support non-PR runs
         try:

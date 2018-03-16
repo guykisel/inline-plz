@@ -6,12 +6,12 @@ import random
 from inlineplz.interfaces.base import InterfaceBase
 
 class SwarmInterface(InterfaceBase):
-    def __init__(self, username, password, host, topic, version='v8'):
-        self.username = username
-        self.password = password
-        self.host = host
-        self.topic = topic
-        self.version = version
+    def __init__(self, args):
+        self.username = args.username
+        self.password = args.password
+        self.host = args.host
+        self.topic = args.topic
+        self.version = 'v8'
 
     def post_messages(self, messages, max_comments):
         # randomize message order to more evenly distribute messages across different files
@@ -52,7 +52,7 @@ class SwarmInterface(InterfaceBase):
         parameters = "topic={}&max={}".format(self.topic, max_comments)
         url = "https://{}/api/{}/comments".format(self.host, self.version)
         r = requests.get(url, auth=(self.username, self.password))
-        if (r.status_code != 200):
+        if (r.status_code != requests.code.ok):
             return {}
         return r.json()["comments"]
 
@@ -60,9 +60,9 @@ class SwarmInterface(InterfaceBase):
     def is_duplicate(comments, msg, body):
         for comment in comments:
             try:
-                if (comment["context"]["rightLine"] == msg.line_number):
-                    if (comment["context"]["file"] == msg.path):
-                        if (comment["body"].strip() == body.strip()):
+                if (comment["context"]["rightLine"] == msg.line_number and
+                    comment["context"]["file"] == msg.path and
+                    comment["body"].strip() == body.strip()):
                             return True
             except (KeyError, TypeError) as e:
                 continue
