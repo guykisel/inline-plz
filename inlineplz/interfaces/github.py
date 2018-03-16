@@ -17,11 +17,6 @@ from inlineplz.util import git, system
 class GitHubInterface(InterfaceBase):
     def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
         self.github = None
-        # TODO: support non-PR runs
-        try:
-            pr = int(pr)
-        except (ValueError, TypeError):
-            return
         if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
@@ -33,6 +28,11 @@ class GitHubInterface(InterfaceBase):
             for pull_request in github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
+        # TODO: support non-PR runs
+        try:
+            pr = int(pr)
+        except (ValueError, TypeError):
+            print('{0} is not a valid pull request ID').format(pr)
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
