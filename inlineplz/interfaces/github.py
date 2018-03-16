@@ -15,7 +15,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
         self.github = None
         # TODO: support non-PR runs
         try:
@@ -28,6 +28,11 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
+        if branch and not pr:
+            github_repo = self.github.repository(self.owner, self.repo)
+            for pull_request in github_repo.iter_pulls():
+                if pull_request.to_json()['head']['ref'] == branch:
+                    pr = pull_request.to_json()['number']
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
