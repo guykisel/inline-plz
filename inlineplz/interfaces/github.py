@@ -52,7 +52,7 @@ class GitHubInterface(InterfaceBase):
                 pass
 
         pr = args.review_id
-        token = args.credential
+        token = args.password
         branch = args.branch
 
         self.github = None

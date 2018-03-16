@@ -23,7 +23,7 @@ class SwarmInterface(InterfaceBase):
             print('{0} is not a valid review ID'.format(review_id))
             return
         self.username = args.username
-        self.password = args.credential
+        self.password = args.password
         self.host = args.host
         self.topic = "review/{}".format(review_id)
         # current implementation uses version 8 of the implementation
