@@ -2,6 +2,7 @@
 
 import requests
 import random
+import subprocess
 
 from inlineplz.interfaces.base import InterfaceBase
 
@@ -26,45 +27,56 @@ class SwarmInterface(InterfaceBase):
                 continue
             messages_to_post += 1
             body = self.format_message(msg)
-            if self.is_duplicate(current_comments, msg, body):
+            proc = subprocess.Popen(["p4", "fstat", "-T", "depotFile", msg.path], stdout=subprocess.PIPE)
+            output = proc.stdout.read()
+            l = output.split()
+            if (len(l) != 3):
+                print "Can't find depotFile for '{}': {}".format(msg.path, output)
+                continue
+            path = output.split()[2]
+            if self.is_duplicate(current_comments, body, path, msg.line_number):
+                print "Duplicate for {}:{}".format(path, msg.line_number)
                 continue
             # try to send swarm post comment
-            self.post_comment(msg)
+            self.post_comment(body, path, msg.line_number)
             messages_posted += 1
             if max_comments >= 0 and messages_posted > max_comments:
                 break
         print('{} messages posted to Swarm.'.format(messages_to_post))
         return messages_to_post
 
-    def post_comment(self, msg):
+    def post_comment(self, body, path, line_number):
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Comments___Swarm_Comments%3FTocPath%3DSwarm%2520API%7CAPI%2520Endpoints%7C_____3
         url = "https://{}/api/{}/comments".format(self.host, self.version)
         payload = {
             'topic': self.topic,
-            'body': self.format_message(msg),
-            'context[file]': msg.path,
-            'context[rightLine]': msg.line_number
+            'body': body,
+            'context[file]': path,
+            'context[rightLine]': line_number
         }
+        print payload
         r = requests.post(url, auth=(self.username, self.password), data=payload)
 
     def get_comments(self, max_comments=100):
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Comments___Swarm_Comments%3FTocPath%3DSwarm%2520API%7CAPI%2520Endpoints%7C_____3
         parameters = "topic={}&max={}".format(self.topic, max_comments)
-        url = "https://{}/api/{}/comments".format(self.host, self.version)
-        r = requests.get(url, auth=(self.username, self.password))
-        if (r.status_code != requests.code.ok):
+        url = "https://{}/api/{}/comments?{}".format(self.host, self.version, parameters)
+        response = requests.get(url, auth=(self.username, self.password))
+        if (response.status_code != requests.codes.ok):
+            print "Can't get comments, status code: {}".format(response.status_code)
             return {}
-        return r.json()["comments"]
+        return response.json()["comments"]
 
     @staticmethod
-    def is_duplicate(comments, msg, body):
+    def is_duplicate(comments, body, path, line_number):
         for comment in comments:
             try:
-                if (comment["context"]["rightLine"] == msg.line_number and
-                    comment["context"]["file"] == msg.path and
+                if (comment["context"]["rightLine"] == line_number and
+                    comment["context"]["file"] == path and
                     comment["body"].strip() == body.strip()):
-                            return True
-            except (KeyError, TypeError) as e:
+                    print "Dupe: {}:{}".format(comment["context"]["file"], comment["context"]["rightLine"])
+                    return True
+            except (KeyError, TypeError) as exceptError:
                 continue
         return False
 
@@ -72,11 +84,8 @@ class SwarmInterface(InterfaceBase):
     def format_message(message):
         if not message.comments:
             return ''
-        if len(message.comments) > 1:
-            return (
-                '```\n' +
-                '\n'.join(sorted(list(message.comments))) +
-                '\n```'
-            )
-        return '`{0}`'.format(list(message.comments)[0].strip())
-
+        return (
+            '```\n' +
+            '\n'.join(sorted(list(message.comments))) +
+            '\n```'
+        )
