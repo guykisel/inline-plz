@@ -65,7 +65,7 @@ def main():
 
 def update_from_config(args, config):
     blacklist = [
-        'trusted', 'token', 'interface', 'owner', 'repo', 'config_dir'
+        'trusted', 'credential', 'interface', 'owner', 'repo', 'config_dir'
         'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url', 'branch'
     ]
     for key, value in config.items():

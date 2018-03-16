@@ -23,7 +23,7 @@ class Jenkins(EnvBase):
             self.repo = os.environ.get('GITHUB_REPO_NAME') or os.environ.get('ghprbPullLink').split('/')[-3]
             self.commit = os.environ.get('ghprbActualCommit')
             self.interface = 'github'
-            self.token = os.environ.get('GITHUB_TOKEN')
+            self.credential = os.environ.get('GITHUB_TOKEN')
             spliturl = urlparse.urlsplit(os.environ.get('ghprbPullLink'))
             if spliturl.netloc != 'github.com':
                 self.url = '{0}://{1}'.format(spliturl.scheme, spliturl.netloc)
