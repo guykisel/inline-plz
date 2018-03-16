@@ -16,10 +16,16 @@ class SwarmInterface(InterfaceBase):
         host is the server (And any additional paths before the api)
         topic is the the review you are commenting on (for reviews, it will typically be "review/###" for some review number)
         """
+        review_id = args.review_id
+        try:
+            review_id = int(review_id)
+        except (ValueError, TypeError):
+            print('{0} is not a valid review ID'.format(review_id))
+            return
         self.username = args.username
-        self.password = args.password
+        self.password = args.credential
         self.host = args.host
-        self.topic = args.topic
+        self.topic = "review/{}".format(review_id)
         # current implementation uses version 8 of the implementation
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Swarm_API%3FTocPath%3DSwarm%2520API%7C_____0
         self.version = 'v8'

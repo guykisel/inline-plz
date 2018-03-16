@@ -51,8 +51,8 @@ class GitHubInterface(InterfaceBase):
             except giturlparse.parser.ParserError:
                 pass
 
-        pr = args.pull_request
-        token = args.token
+        pr = args.review_id
+        token = args.credential
         branch = args.branch
 
         self.github = None
