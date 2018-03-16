@@ -16,7 +16,8 @@ from inlineplz.util import git, system
 
 class GitHubInterface(InterfaceBase):
     def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
-        """ GitHubInterface lets us post messages to GitHub.
+        """
+        GitHubInterface lets us post messages to GitHub.
 
         owner and repo are the repository owner/organization and repo name respectively.
 
