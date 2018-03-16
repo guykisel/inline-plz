@@ -38,8 +38,10 @@ class GitHubInterface(InterfaceBase):
         if branch and not pr:
             github_repo = self.github.repository(self.owner, self.repo)
             for pull_request in github_repo.iter_pulls():
+                print(pull_request.to_json())
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
+                    break
         # TODO: support non-PR runs
         try:
             pr = int(pr)
