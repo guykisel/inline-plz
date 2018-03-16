@@ -12,3 +12,4 @@ class Local(EnvBase):
     def __init__(self):
         if os.path.exists('.git'):
             self.commit = git.current_sha()
+            self.branch = git.current_branch()
