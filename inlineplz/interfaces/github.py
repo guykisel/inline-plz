@@ -69,35 +69,36 @@ class GitHubInterface(InterfaceBase):
                 return messages_to_post
             if not msg.comments:
                 continue
-            msg_position = self.position(msg)
+            msg_path = os.path.relpath(msg.path).replace('\\', '/').strip()
+            msg_position = self.position(msg, msg_path)
             if msg_position:
                 messages_to_post += 1
-                if not self.is_duplicate(msg, msg_position):
+                if not self.is_duplicate(msg, msg_path, msg_position):
                     # skip this message if we already have too many comments on this file
                     # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
-                    if paths.setdefault(msg.path, 0) > max_comments // 5:
+                    if paths.setdefault(msg_path, 0) > max_comments // 5:
                         continue
                     try:
                         print('Creating review comment: {0}'.format(msg))
                         self.pull_request.create_review_comment(
                             self.format_message(msg),
                             self.last_sha,
-                            msg.path,
+                            msg_path,
                             msg_position
                         )
                     except github3.GitHubError:
                         pass
-                    paths[msg.path] += 1
+                    paths[msg_path] += 1
                     messages_posted += 1
                     if max_comments >= 0 and messages_posted > max_comments:
                         break
         print('{} messages posted to Github.'.format(messages_to_post))
         return messages_to_post
 
-    def is_duplicate(self, message, position):
+    def is_duplicate(self, message, path, position):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
-                    comment.path == message.path and
+                    comment.path == path and
                     comment.body.strip() == self.format_message(message).strip()):
                 return True
         return False
@@ -114,14 +115,14 @@ class GitHubInterface(InterfaceBase):
             )
         return '`{0}`'.format(list(message.comments)[0].strip())
 
-    def position(self, message):
+    def position(self, message, path):
         """Calculate position within the PR, which is not the line number"""
         if not message.line_number:
             message.line_number = 1
         patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
             target = patched_file.target_file.lstrip('b/')
-            if target == message.path:
+            if target == path:
                 offset = 1
                 for hunk_no, hunk in enumerate(patched_file):
                     for position, hunk_line in enumerate(hunk):

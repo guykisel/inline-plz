@@ -15,7 +15,7 @@ class Messages(object):
         self.messages = {}
 
     def add_message(self, path, line, message):
-        path = os.path.relpath(path).replace('\\', '/').strip()
+        path = path.replace('\\', '/').strip()
         # replace backticks with single quotes to avoid markdown escaping issues
         message = message.replace('`', '\'').strip()
         try:
@@ -42,7 +42,7 @@ class Messages(object):
 class Message(object):
 
     def __init__(self, path, line_number):
-        self.path = os.path.relpath(path).replace('\\', '/')
+        self.path = path.replace('\\', '/').strip()
         self.line_number = int(line_number)
         self.comments = set()
 
