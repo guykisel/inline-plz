@@ -9,6 +9,7 @@ import time
 
 import github3
 import unidiff
+import giturlparse
 
 from inlineplz.interfaces.base import InterfaceBase
 from inlineplz.util import git, system
@@ -52,6 +53,7 @@ class GitHubInterface(InterfaceBase):
 
         pr = args.pull_request
         token = args.token
+        branch = args.branch
 
         self.github = None
         if not url or url == 'https://github.com':

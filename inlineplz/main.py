@@ -10,7 +10,6 @@ import os
 import sys
 import time
 
-import giturlparse
 import yaml
 
 from inlineplz import interfaces
@@ -21,12 +20,12 @@ from inlineplz import __version__
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pull-request', type=int)
+    parser.add_argument('--pull-request', type=int, default=None)
     parser.add_argument('--owner', type=str)
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
-    parser.add_argument('--branch', type=str)
-    parser.add_argument('--token', type=str)
+    parser.add_argument('--branch', type=str, default=None)
+    parser.add_argument('--token', type=str, default=None)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str, default=None)
     parser.add_argument('--username', type=str)

@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 
-import requests
 import random
 import subprocess
+
+import requests
 
 from inlineplz.interfaces.base import InterfaceBase
 
@@ -19,6 +20,8 @@ class SwarmInterface(InterfaceBase):
         self.password = args.password
         self.host = args.host
         self.topic = args.topic
+        # current implementation uses version 8 of the implementation
+        # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Swarm_API%3FTocPath%3DSwarm%2520API%7C_____0
         self.version = 'v8'
 
     def post_messages(self, messages, max_comments):
@@ -62,7 +65,7 @@ class SwarmInterface(InterfaceBase):
             'context[rightLine]': line_number
         }
         print("".format(payload))
-        r = requests.post(url, auth=(self.username, self.password), data=payload)
+        requests.post(url, auth=(self.username, self.password), data=payload)
 
     def get_comments(self, max_comments=100):
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Comments___Swarm_Comments%3FTocPath%3DSwarm%2520API%7CAPI%2520Endpoints%7C_____3
@@ -83,7 +86,7 @@ class SwarmInterface(InterfaceBase):
                     comment["body"].strip() == body.strip()):
                     print("Dupe: {}:{}".format(comment["context"]["file"], comment["context"]["rightLine"]))
                     return True
-            except (KeyError, TypeError) as exceptError:
+            except (KeyError, TypeError):
                 continue
         return False
 
