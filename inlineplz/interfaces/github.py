@@ -15,19 +15,37 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr, token, url=None):
+    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
+        """
+        GitHubInterface lets us post messages to GitHub.
+
+        owner and repo are the repository owner/organization and repo name respectively.
+
+        pr is the ID number of the pull request. branch is the branch name. either pr OR branch
+        must be populated.
+
+        token is your GitHub API token.
+
+        url is the base URL of your GitHub instance, such as https://github.com
+        """
         self.github = None
-        # TODO: support non-PR runs
-        try:
-            pr = int(pr)
-        except (ValueError, TypeError):
-            return
         if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
+        if branch and not pr:
+            github_repo = self.github.repository(self.owner, self.repo)
+            for pull_request in github_repo.iter_pulls():
+                if pull_request.to_json()['head']['ref'] == branch:
+                    pr = pull_request.to_json()['number']
+                    break
+        # TODO: support non-PR runs
+        try:
+            pr = int(pr)
+        except (ValueError, TypeError):
+            print('{0} is not a valid pull request ID'.format(pr))
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
