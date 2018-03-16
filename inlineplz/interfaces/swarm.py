@@ -38,11 +38,11 @@ class SwarmInterface(InterfaceBase):
             output = proc.stdout.read()
             l = output.split()
             if (len(l) != 3):
-                print "Can't find depotFile for '{}': {}".format(msg.path, output)
+                print("Can't find depotFile for '{}': {}".format(msg.path, output))
                 continue
             path = output.split()[2]
             if self.is_duplicate(current_comments, body, path, msg.line_number):
-                print "Duplicate for {}:{}".format(path, msg.line_number)
+                print("Duplicate for {}:{}".format(path, msg.line_number))
                 continue
             # try to send swarm post comment
             self.post_comment(body, path, msg.line_number)
@@ -61,7 +61,7 @@ class SwarmInterface(InterfaceBase):
             'context[file]': path,
             'context[rightLine]': line_number
         }
-        print payload
+        print("".format(payload))
         r = requests.post(url, auth=(self.username, self.password), data=payload)
 
     def get_comments(self, max_comments=100):
@@ -70,7 +70,7 @@ class SwarmInterface(InterfaceBase):
         url = "https://{}/api/{}/comments?{}".format(self.host, self.version, parameters)
         response = requests.get(url, auth=(self.username, self.password))
         if (response.status_code != requests.codes.ok):
-            print "Can't get comments, status code: {}".format(response.status_code)
+            print("Can't get comments, status code: {}".format(response.status_code))
             return {}
         return response.json()["comments"]
 
@@ -81,7 +81,7 @@ class SwarmInterface(InterfaceBase):
                 if (comment["context"]["rightLine"] == line_number and
                     comment["context"]["file"] == path and
                     comment["body"].strip() == body.strip()):
-                    print "Dupe: {}:{}".format(comment["context"]["file"], comment["context"]["rightLine"])
+                    print("Dupe: {}:{}".format(comment["context"]["file"], comment["context"]["rightLine"]))
                     return True
             except (KeyError, TypeError) as exceptError:
                 continue
