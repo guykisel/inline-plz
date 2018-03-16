@@ -47,6 +47,7 @@ pep257:
     - D400
     - D401
     - D403
+    - D404
 
 pyroma:
   run: true
