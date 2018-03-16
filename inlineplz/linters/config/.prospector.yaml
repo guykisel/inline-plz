@@ -26,6 +26,7 @@ pylint:
     - star-args
     - redefined-variable-type
     - superfluous-parens
+    - too-many-arguments
 
 pep8:
   full: true
@@ -41,8 +42,12 @@ pep257:
     - D103
     - D203
     - D205
+    - D212
+    - D213
     - D400
     - D401
+    - D403
+    - D404
 
 pyroma:
   run: true

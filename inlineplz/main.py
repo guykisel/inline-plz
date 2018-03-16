@@ -25,6 +25,7 @@ def main():
     parser.add_argument('--owner', type=str)
     parser.add_argument('--repo', type=str)
     parser.add_argument('--repo-slug', type=str)
+    parser.add_argument('--branch', type=str)
     parser.add_argument('--token', type=str)
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str, default=None)
@@ -68,7 +69,7 @@ def main():
 def update_from_config(args, config):
     blacklist = [
         'trusted', 'token', 'interface', 'owner', 'repo', 'config_dir'
-        'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url'
+        'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url', 'branch'
     ]
     for key, value in config.items():
         if not key.startswith('_') and key not in blacklist:

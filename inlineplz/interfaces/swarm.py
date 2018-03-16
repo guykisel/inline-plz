@@ -8,6 +8,13 @@ from inlineplz.interfaces.base import InterfaceBase
 
 class SwarmInterface(InterfaceBase):
     def __init__(self, args):
+        """
+        SwarmInterface lets us post messages to Swarm (Helix).
+
+        username and password are the credentials used to access Swarm/Perforce.
+        host is the server (And any additional paths before the api)
+        topic is the the review you are commenting on (for reviews, it will typically be "review/###" for some review number)
+        """
         self.username = args.username
         self.password = args.password
         self.host = args.host
