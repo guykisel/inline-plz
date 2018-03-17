@@ -12,9 +12,9 @@ class SwarmInterface(InterfaceBase):
         """
         SwarmInterface lets us post messages to Swarm (Helix).
 
-        username and password are the credentials used to access Swarm/Perforce.
-        host is the server (And any additional paths before the api)
-        topic is the the review you are commenting on (for reviews, it will typically be "review/###" for some review number)
+        args.username and args.password are the credentials used to access Swarm/Perforce.
+        args.host is the server (And any additional paths before the api)
+        args.review_id is the the review number you are commenting on
         """
         review_id = args.review_id
         try:

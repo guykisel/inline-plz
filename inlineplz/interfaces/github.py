@@ -20,14 +20,15 @@ class GitHubInterface(InterfaceBase):
         """
         GitHubInterface lets us post messages to GitHub.
 
-        owner and repo are the repository owner/organization and repo name respectively.
+        args.owner and args.repo are the repository owner/organization and repo name respectively.
 
-        pr is the ID number of the pull request. branch is the branch name. either pr OR branch
-        must be populated.
+        args.review_id is the ID number of the pull request.
+        args.branch is the branch name.
+        either args.review_id OR args.branch must be populated.
 
-        token is your GitHub API token.
+        args.password is your GitHub API token.
 
-        url is the base URL of your GitHub instance, such as https://github.com
+        args.url is the base URL of your GitHub instance, such as https://github.com
         """
         url = args.url
         if args.repo_slug:
@@ -63,6 +64,7 @@ class GitHubInterface(InterfaceBase):
         self.owner = owner
         self.repo = repo
         if branch and not pr:
+            print "{}, {}".format(owner, repo)
             github_repo = self.github.repository(self.owner, self.repo)
             for pull_request in github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:

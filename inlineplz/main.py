@@ -67,6 +67,7 @@ def update_from_config(args, config):
     blacklist = [
         'trusted', 'password', 'interface', 'owner', 'repo', 'config_dir'
         'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url', 'branch'
+        'username'
     ]
     for key, value in config.items():
         if not key.startswith('_') and key not in blacklist:
@@ -108,8 +109,8 @@ def inline(args):
         interface: How are we going to post comments?
         owner: Username of repo owner
         repo: Repository name
-        pr: Pull request ID
-        token: Authentication for repository
+        review_id: Pull request ID
+        password: Authentication for repository
         url: Root URL of repository (not your project) Default: https://github.com
         dryrun: Prints instead of posting comments.
         zero_exit: If true: always return a 0 exit code.
