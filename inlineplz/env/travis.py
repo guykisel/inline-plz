@@ -12,7 +12,7 @@ from inlineplz.env.base import EnvBase
 
 class Travis(EnvBase):
     def __init__(self):
-        self.pull_request = os.environ.get('TRAVIS_PULL_REQUEST')
+        self.review_id = os.environ.get('TRAVIS_PULL_REQUEST')
         self.branch = os.environ.get('TRAVIS_BRANCH')
         self.repo_slug = os.environ.get('TRAVIS_REPO_SLUG')
         self.commit = os.environ.get('TRAVIS_COMMIT')
