@@ -64,7 +64,7 @@ class GitHubInterface(InterfaceBase):
         self.owner = owner
         self.repo = repo
         if branch and not pr:
-            print "{}, {}".format(owner, repo)
+            print("{}, {}".format(owner, repo))
             github_repo = self.github.repository(self.owner, self.repo)
             for pull_request in github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
