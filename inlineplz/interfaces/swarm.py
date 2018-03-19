@@ -25,7 +25,7 @@ class SwarmInterface(InterfaceBase):
         self.username = args.username
         self.password = args.password
         self.host = args.host
-        self.topic = "review/{}".format(review_id)
+        self.topic = "reviews/{}".format(review_id)
         # current implementation uses version 8 of the implementation
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Swarm_API%3FTocPath%3DSwarm%2520API%7C_____0
         self.version = 'v8'
@@ -43,11 +43,14 @@ class SwarmInterface(InterfaceBase):
                 continue
             messages_to_post += 1
             body = self.format_message(msg)
-            proc = subprocess.Popen(["p4", "fstat", "-T", "depotFile", msg.path], stdout=subprocess.PIPE)
-            output = proc.stdout.read()
+            try:
+                output = subprocess.check_output(["p4", "fstat", "-T", "depotFile", msg.path])
+            except subprocess.CalledProcessError as procError:
+                print("Process call error: Can't find depotFile for '{}': {}".format(msg.path, procError.output))
+                continue
             l = output.split()
-            if (len(l) != 3):
-                print("Can't find depotFile for '{}': {}".format(msg.path, output))
+            if len(l) != 3:
+                print("Invalid output: Can't find depotFile for '{}': {}".format(msg.path, output))
                 continue
             path = output.split()[2]
             if self.is_duplicate(current_comments, body, path, msg.line_number):
@@ -70,8 +73,10 @@ class SwarmInterface(InterfaceBase):
             'context[file]': path,
             'context[rightLine]': line_number
         }
-        print("".format(payload))
-        requests.post(url, auth=(self.username, self.password), data=payload)
+        #print("{}".format(payload))
+        response = requests.post(url, auth=(self.username, self.password), data=payload)
+        if (response.status_code != requests.codes.ok):
+            print("Can't post comments, status code: {}".format(response.status_code))
 
     def get_comments(self, max_comments=100):
         # https://www.perforce.com/perforce/doc.current/manuals/swarm/index.html#Swarm/swarm-apidoc.html#Comments___Swarm_Comments%3FTocPath%3DSwarm%2520API%7CAPI%2520Endpoints%7C_____3
@@ -90,7 +95,6 @@ class SwarmInterface(InterfaceBase):
                 if (comment["context"]["rightLine"] == line_number and
                     comment["context"]["file"] == path and
                     comment["body"].strip() == body.strip()):
-                    print("Dupe: {}:{}".format(comment["context"]["file"], comment["context"]["rightLine"]))
                     return True
             except (KeyError, TypeError):
                 continue
