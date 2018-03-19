@@ -19,7 +19,8 @@ requirements = [
     'uritemplate.py',
     'dirtyjson',
     'python-dateutil',
-    'git-url-parse'
+    'git-url-parse',
+    'requests'
 ]
 
 test_requirements = [

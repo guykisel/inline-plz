@@ -9,25 +9,53 @@ import time
 
 import github3
 import unidiff
+import giturlparse
 
 from inlineplz.interfaces.base import InterfaceBase
 from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
+    def __init__(self, args):
         """
         GitHubInterface lets us post messages to GitHub.
 
-        owner and repo are the repository owner/organization and repo name respectively.
+        args.owner and args.repo are the repository owner/organization and repo name respectively.
 
-        pr is the ID number of the pull request. branch is the branch name. either pr OR branch
-        must be populated.
+        args.review_id is the ID number of the pull request.
+        args.branch is the branch name.
+        either args.review_id OR args.branch must be populated.
 
-        token is your GitHub API token.
+        args.password is your GitHub API token.
 
-        url is the base URL of your GitHub instance, such as https://github.com
+        args.url is the base URL of your GitHub instance, such as https://github.com
         """
+        url = args.url
+        if args.repo_slug:
+            owner = args.repo_slug.split('/')[0]
+            repo = args.repo_slug.split('/')[1]
+        else:
+            owner = args.owner
+            repo = args.repo
+        if args.url:
+            try:
+                url_to_parse = args.url
+                # giturlparse won't parse URLs that don't end in .git
+                if not url_to_parse.endswith('.git'):
+                    url_to_parse += '.git'
+                parsed = giturlparse.parse(url_to_parse)
+                url = parsed.resource
+                if not url.startswith('https://'):
+                    url = 'https://' + url
+                owner = parsed.owner
+                repo = parsed.name
+            except giturlparse.parser.ParserError:
+                pass
+
+        pr = args.review_id
+        token = args.password
+        branch = args.branch
+
         self.github = None
         if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
@@ -89,35 +117,36 @@ class GitHubInterface(InterfaceBase):
                 return messages_to_post
             if not msg.comments:
                 continue
-            msg_position = self.position(msg)
+            msg_path = os.path.relpath(msg.path).replace('\\', '/').strip()
+            msg_position = self.position(msg, msg_path)
             if msg_position:
                 messages_to_post += 1
-                if not self.is_duplicate(msg, msg_position):
+                if not self.is_duplicate(msg, msg_path, msg_position):
                     # skip this message if we already have too many comments on this file
                     # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
-                    if paths.setdefault(msg.path, 0) > max_comments // 5:
+                    if paths.setdefault(msg_path, 0) > max_comments // 5:
                         continue
                     try:
                         print('Creating review comment: {0}'.format(msg))
                         self.pull_request.create_review_comment(
                             self.format_message(msg),
                             self.last_sha,
-                            msg.path,
+                            msg_path,
                             msg_position
                         )
                     except github3.GitHubError:
                         pass
-                    paths[msg.path] += 1
+                    paths[msg_path] += 1
                     messages_posted += 1
                     if max_comments >= 0 and messages_posted > max_comments:
                         break
         print('{} messages posted to Github.'.format(messages_to_post))
         return messages_to_post
 
-    def is_duplicate(self, message, position):
+    def is_duplicate(self, message, path, position):
         for comment in self.pull_request.review_comments():
             if (comment.position == position and
-                    comment.path == message.path and
+                    comment.path == path and
                     comment.body.strip() == self.format_message(message).strip()):
                 return True
         return False
@@ -134,14 +163,14 @@ class GitHubInterface(InterfaceBase):
             )
         return '`{0}`'.format(list(message.comments)[0].strip())
 
-    def position(self, message):
+    def position(self, message, path):
         """Calculate position within the PR, which is not the line number"""
         if not message.line_number:
             message.line_number = 1
         patch = unidiff.PatchSet(self.diff.split('\n'))
         for patched_file in patch:
             target = patched_file.target_file.lstrip('b/')
-            if target == message.path:
+            if target == path:
                 offset = 1
                 for hunk_no, hunk in enumerate(patched_file):
                     for position, hunk_line in enumerate(hunk):

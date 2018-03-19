@@ -38,10 +38,12 @@ You probably want to run the above in a CI job, not in your regular development 
 
 You'll also need to provide the following either in the command line or via environment variables:
 
-* owner: the repo organization/owner
-* repo: the repo name
-* token: your auth token (encrypt this, don't put this in plaintext in any public configurations!)
-* url: the url of your scm host
+* owner: the repo organization/owner (for github)
+* repo: the repo name (for github)
+* password: your auth token for github (encrypt this, don't put this in plaintext in any public configurations!) or p4 ticket for swarm
+* url: the url of your scm host (for github)
+* username: username to acccess the interface (for swarm)
+* host: the host part of the url for the interface api (for swarm)
 * interface: the type of scm host (such as github)
 
 Dependencies:

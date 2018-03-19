@@ -10,7 +10,6 @@ import os
 import sys
 import time
 
-import giturlparse
 import yaml
 
 from inlineplz import interfaces
@@ -21,14 +20,16 @@ from inlineplz import __version__
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--pull-request', type=int)
-    parser.add_argument('--owner', type=str)
-    parser.add_argument('--repo', type=str)
+    parser.add_argument('--review-id', type=int, default=None)
+    parser.add_argument('--owner', type=str, help='the owner of the specified Git repo')
+    parser.add_argument('--repo', type=str, help='the repo to access through the Git interface')
     parser.add_argument('--repo-slug', type=str)
-    parser.add_argument('--branch', type=str)
-    parser.add_argument('--token', type=str)
+    parser.add_argument('--branch', type=str, default=None)
+    parser.add_argument('--password', type=str, default=None, help='credentials for accessing specified interface. This will be the token in Github or ticket/password for P4/Swarm.')
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
-    parser.add_argument('--url', type=str)
+    parser.add_argument('--url', type=str, default=None)
+    parser.add_argument('--username', type=str, help='the username of the credentials used to access the specified interface')
+    parser.add_argument('--host', type=str, help='the hostname of the server that the interface will access. For Perforce, this is the base of the api url for swarm.')
     parser.add_argument('--enabled-linters', type=str, nargs='+')
     parser.add_argument('--disabled-linters', type=str, nargs='+')
     parser.add_argument('--dryrun', action='store_true')
@@ -64,8 +65,9 @@ def main():
 
 def update_from_config(args, config):
     blacklist = [
-        'trusted', 'token', 'interface', 'owner', 'repo', 'config_dir'
+        'trusted', 'password', 'interface', 'owner', 'repo', 'config_dir'
         'repo_slug', 'pull_request', 'zero_exit', 'dryrun', 'url', 'branch'
+        'username'
     ]
     for key, value in config.items():
         if not key.startswith('_') and key not in blacklist:
@@ -107,8 +109,8 @@ def inline(args):
         interface: How are we going to post comments?
         owner: Username of repo owner
         repo: Repository name
-        pr: Pull request ID
-        token: Authentication for repository
+        review_id: Pull request ID
+        password: Authentication for repository
         url: Root URL of repository (not your project) Default: https://github.com
         dryrun: Prints instead of posting comments.
         zero_exit: If true: always return a 0 exit code.
@@ -120,28 +122,6 @@ def inline(args):
     trusted = args.trusted
     args = load_config(args)
 
-    # TODO: consider moving this git parsing stuff into the github interface
-    url = args.url
-    if args.repo_slug:
-        owner = args.repo_slug.split('/')[0]
-        repo = args.repo_slug.split('/')[1]
-    else:
-        owner = args.owner
-        repo = args.repo
-    if args.url:
-        try:
-            url_to_parse = args.url
-            # giturlparse won't parse URLs that don't end in .git
-            if not url_to_parse.endswith('.git'):
-                url_to_parse += '.git'
-            parsed = giturlparse.parse(url_to_parse)
-            url = parsed.resource
-            if not url.startswith('https://'):
-                url = 'https://' + url
-            owner = parsed.owner
-            repo = parsed.name
-        except giturlparse.parser.ParserError:
-            pass
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
@@ -163,14 +143,7 @@ def inline(args):
         print_messages(messages)
         return 0
     try:
-        my_interface = interfaces.INTERFACES[args.interface](
-            owner,
-            repo,
-            args.pull_request,
-            args.branch,
-            args.token,
-            url
-        )
+        my_interface = interfaces.INTERFACES[args.interface](args)
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1
     except KeyError:
