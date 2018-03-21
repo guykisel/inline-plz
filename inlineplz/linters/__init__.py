@@ -270,15 +270,15 @@ LINTERS = {
         'run_per_file': False
     },
     'yaml-lint': {
-        'install': [['gem', 'install', 'yaml-lint']],
-        'help': ['yaml-lint'],
-        'run': ['yaml-lint', '-q'],
-        'rundefault': ['yaml-lint', '-q'],
-        'dotfiles': [],
+        'install': [['pip', 'install', 'yamllint']],
+        'help': ['yamllint', '-h'],
+        'run': ['yamllint', '-f', 'parsable', '.'],
+        'rundefault': ['yamllint', '-f', 'parsable', '.'],
+        'dotfiles': ['.yamllint'],
         'parser': parsers.YAMLLintParser,
         'language': 'yaml',
         'autorun': True,
-        'run_per_file': True
+        'run_per_file': False
     },
 }
 

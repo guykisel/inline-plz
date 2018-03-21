@@ -10,13 +10,14 @@ class YAMLLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for file_path, output in lint_data:
+        for line in lint_data.split('\n'):
             try:
-                if file_path.strip() and output.strip():
-                    path = file_path
-                    line = int(output.split('at line')[1].split()[0].strip())
-                    msgbody = output
+                if line.strip():
+                    parts = line.split(':')
+                    path = parts[0].strip()
+                    line = int(parts[1].strip())
+                    msgbody = parts[3].strip()
                     messages.add((path, line, msgbody))
-            except (ValueError, IndexError):
-                print('Invalid message: {0}'.format(output))
+            except (ValueError, IndexError, TypeError):
+                print('Invalid message: {0}'.format(lint_data))
         return messages

@@ -1,0 +1,6 @@
+.\.inlineplz.yml:1:1: [warning] missing document start "---" (document-start)
+.\.travis.yml:1:1: [warning] missing document start "---" (document-start)
+.\.tox\py27\Lib\site-packages\inlineplz\linters\config\.prospector.yaml:1:1: [warning] missing document start "---" (document-start)
+.\.tox\py27\Lib\site-packages\inlineplz\linters\config\bandit.yaml:1:1: [warning] missing document start "---" (document-start)
+.\.tox\py27\Lib\site-packages\prospector\blender_combinations.yaml:8:1: [warning] missing document start "---" (document-start)
+.\.tox\py27\Lib\site-packages\prospector\blender_combinations.yaml:180:81: [error] line too long (112 > 80 characters) (line-length)
