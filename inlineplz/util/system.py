@@ -18,4 +18,3 @@ STOP_FILE_NAME = '.inlineplzstop'
 
 def should_stop():
     return os.path.isfile(os.path.join(os.getcwd(), STOP_FILE_NAME))
-

@@ -163,13 +163,15 @@ def inline(args):
         print_messages(messages)
         return 0
     try:
+        print('Using interface: {0}'.format(args.interface))
         my_interface = interfaces.INTERFACES[args.interface](
             owner,
             repo,
             args.pull_request,
             args.branch,
             args.token,
-            url
+            url,
+            args.commit
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1

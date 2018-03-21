@@ -15,7 +15,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
+    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None, commit=None):
         """
         GitHubInterface lets us post messages to GitHub.
 
@@ -27,6 +27,8 @@ class GitHubInterface(InterfaceBase):
         token is your GitHub API token.
 
         url is the base URL of your GitHub instance, such as https://github.com
+
+        commit is the commit hash we're running against
         """
         self.github = None
         if not url or url == 'https://github.com':
@@ -35,6 +37,7 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
+        print('Branch: {0}'.format(branch))
         if branch and not pr:
             github_repo = self.github.repository(self.owner, self.repo)
             for pull_request in github_repo.iter_pulls():
@@ -48,10 +51,11 @@ class GitHubInterface(InterfaceBase):
             print('{0} is not a valid pull request ID'.format(pr))
             self.github = None
             return
+        print('PR ID: {0}'.format(pr))
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
-        self.last_sha = git.current_sha()
+        self.last_sha = commit or git.current_sha()
         print('Last SHA: {0}'.format(self.last_sha))
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
@@ -68,11 +72,14 @@ class GitHubInterface(InterfaceBase):
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
         pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
-        return self.last_sha != self.pr_commits(pull_request)[-1].sha
+        latest_remote_sha = self.pr_commits(pull_request)[-1].sha
+        print('Latest remote SHA: {0}'.format(latest_remote_sha))
+        return self.last_sha != latest_remote_sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
         if not self.github:
+            print('Github connection is invalid.')
             return
         messages_to_post = 0
         messages_posted = 0
@@ -82,11 +89,13 @@ class GitHubInterface(InterfaceBase):
         messages = list(messages)
         random.shuffle(messages)
         if self.out_of_date():
-            return messages_to_post
+            print('This run is out of date because the PR has been updated.')
+            messages = []
         start = time.time()
         for msg in messages:
             if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
-                return messages_to_post
+                print('Stopping early.')
+                break
             if not msg.comments:
                 continue
             msg_position = self.position(msg)
@@ -143,7 +152,7 @@ class GitHubInterface(InterfaceBase):
             target = patched_file.target_file.lstrip('b/')
             if target == message.path:
                 offset = 1
-                for hunk_no, hunk in enumerate(patched_file):
+                for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
                         if '+' not in hunk_line.line_type:
                             continue

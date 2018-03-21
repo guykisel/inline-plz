@@ -63,3 +63,6 @@ target/
 
 # Node
 node_modules
+
+# pytest
+.pytest_cache/

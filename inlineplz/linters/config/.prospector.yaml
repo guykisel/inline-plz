@@ -27,6 +27,7 @@ pylint:
     - redefined-variable-type
     - superfluous-parens
     - too-many-arguments
+    - inconsistent-return-statements
 
 pep8:
   full: true
