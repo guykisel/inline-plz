@@ -15,7 +15,7 @@ class Travis(EnvBase):
         self.pull_request = os.environ.get('TRAVIS_PULL_REQUEST')
         self.branch = os.environ.get('TRAVIS_BRANCH')
         self.repo_slug = os.environ.get('TRAVIS_REPO_SLUG')
-        self.commit = os.environ.get('TRAVIS_COMMIT')
+        self.commit = os.environ.get('TRAVIS_PULL_REQUEST_SHA')
         self.commit_range = os.environ.get('TRAVIS_COMMIT_RANGE')
         self.interface = 'github'
         self.token = os.environ.get('GITHUB_TOKEN')
