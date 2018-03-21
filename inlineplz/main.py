@@ -163,6 +163,7 @@ def inline(args):
         print_messages(messages)
         return 0
     try:
+        print('Using interface: {0}'.format(args.interface))
         my_interface = interfaces.INTERFACES[args.interface](
             owner,
             repo,

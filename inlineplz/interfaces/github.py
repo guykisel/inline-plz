@@ -35,6 +35,7 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
+        print('Branch: {0}'.format(branch))
         if branch and not pr:
             github_repo = self.github.repository(self.owner, self.repo)
             for pull_request in github_repo.iter_pulls():
@@ -48,6 +49,7 @@ class GitHubInterface(InterfaceBase):
             print('{0} is not a valid pull request ID'.format(pr))
             self.github = None
             return
+        print('PR ID: {0}'.format(pr))
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
@@ -73,6 +75,7 @@ class GitHubInterface(InterfaceBase):
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
         if not self.github:
+            print('Github connection is invalid.')
             return
         messages_to_post = 0
         messages_posted = 0
@@ -82,11 +85,13 @@ class GitHubInterface(InterfaceBase):
         messages = list(messages)
         random.shuffle(messages)
         if self.out_of_date():
-            return messages_to_post
+            print('This run is out of date because the PR has been updated.')
+            messages = []
         start = time.time()
         for msg in messages:
             if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
-                return messages_to_post
+                print('Stopping early.')
+                break
             if not msg.comments:
                 continue
             msg_position = self.position(msg)
