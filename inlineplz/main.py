@@ -170,7 +170,8 @@ def inline(args):
             args.pull_request,
             args.branch,
             args.token,
-            url
+            url,
+            args.commit
         )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
             return 1

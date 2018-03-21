@@ -15,7 +15,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None):
+    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None, commit=None):
         """
         GitHubInterface lets us post messages to GitHub.
 
@@ -27,6 +27,8 @@ class GitHubInterface(InterfaceBase):
         token is your GitHub API token.
 
         url is the base URL of your GitHub instance, such as https://github.com
+
+        commit is the commit hash we're running against
         """
         self.github = None
         if not url or url == 'https://github.com':
@@ -53,7 +55,7 @@ class GitHubInterface(InterfaceBase):
         self.pr = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
-        self.last_sha = git.current_sha()
+        self.last_sha = commit or git.current_sha()
         print('Last SHA: {0}'.format(self.last_sha))
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
