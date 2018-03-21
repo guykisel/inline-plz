@@ -127,7 +127,8 @@ LINTERS = {
         'run_per_file': False
     },
     'gometalinter': {
-        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter']],
+        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter'],
+                    ['gometalinter', '--install', '--update']],
         'help': ['gometalinter', '--install', '--update'],
         'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
         'rundefault':
@@ -496,6 +497,7 @@ def lint(install=False,
                 _, output = run_command(cmd)
                 output = output.strip()
         except Exception:
+            print('Running {0} failed:'.format(linter))
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
         print('Installation and running of {0} took {1} seconds'.format(
@@ -505,6 +507,7 @@ def lint(install=False,
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
+                print('Found {0} messages from {1}'.format(len(linter_messages), linter))
                 # prepend linter name to message content
                 linter_messages = {
                     (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2]))
@@ -512,6 +515,7 @@ def lint(install=False,
                 }
                 messages.add_messages(linter_messages)
         except Exception:
+            print ('Parsing {0} output failed:'.format(linter))
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
         print('Parsing of {0} took {1} seconds'.format(

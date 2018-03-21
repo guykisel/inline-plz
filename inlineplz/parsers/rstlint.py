@@ -13,12 +13,15 @@ class RSTLintParser(ParserBase):
     def parse(self, lint_data):
         messages = set()
         for file_path, output in lint_data:
-            for msgdata in json.loads(output):
-                try:
-                    path = file_path
-                    line = msgdata['line']
-                    msgbody = msgdata['message']
-                    messages.add((path, line, msgbody))
-                except (ValueError, KeyError):
-                    print('Invalid message: {0}'.format(msgdata))
+            try:
+                for msgdata in json.loads(output):
+                    try:
+                        path = file_path
+                        line = msgdata['line']
+                        msgbody = msgdata['message']
+                        messages.add((path, line, msgbody))
+                    except (ValueError, KeyError):
+                        print('Invalid message: {0}'.format(msgdata))
+            except json.error.Error:
+                print('Invalid message: {0}'.format(output))
         return messages
