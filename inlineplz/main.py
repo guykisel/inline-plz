@@ -27,6 +27,7 @@ def main():
     parser.add_argument('--repo-slug', type=str)
     parser.add_argument('--branch', type=str)
     parser.add_argument('--token', type=str)
+    parser.add_argument('--commit', type=str, help='commit hash or number')
     parser.add_argument('--interface', type=str, choices=interfaces.INTERFACES)
     parser.add_argument('--url', type=str)
     parser.add_argument('--enabled-linters', type=str, nargs='+')
