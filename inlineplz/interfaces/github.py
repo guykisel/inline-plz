@@ -148,7 +148,7 @@ class GitHubInterface(InterfaceBase):
             target = patched_file.target_file.lstrip('b/')
             if target == message.path:
                 offset = 1
-                for hunk_no, hunk in enumerate(patched_file):
+                for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
                         if '+' not in hunk_line.line_type:
                             continue

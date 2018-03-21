@@ -515,7 +515,7 @@ def lint(install=False,
                 }
                 messages.add_messages(linter_messages)
         except Exception:
-            print ('Parsing {0} output failed:'.format(linter))
+            print('Parsing {0} output failed:'.format(linter))
             traceback.print_exc()
             print(str(output).encode('ascii', errors='replace'))
         print('Parsing of {0} took {1} seconds'.format(
