@@ -70,7 +70,9 @@ class GitHubInterface(InterfaceBase):
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
         pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
-        return self.last_sha != self.pr_commits(pull_request)[-1].sha
+        latest_remote_sha = self.pr_commits(pull_request)[-1].sha
+        print('Latest remote SHA: {0}'.format(latest_remote_sha))
+        return self.last_sha != latest_remote_sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
