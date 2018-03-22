@@ -21,7 +21,9 @@ class Messages(object):
         try:
             line = int(line)
         except (ValueError, TypeError):
-            line = 0
+            line = 1
+        if line <= 0:
+            line = 1
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)

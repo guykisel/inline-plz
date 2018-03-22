@@ -1,0 +1,61 @@
+{
+  "error": {
+    "count": 2,
+    "data": [
+      {
+        "message": "Required LABEL name/key 'Name' is not defined",
+        "line": -1,
+        "level": "error",
+        "lineContent": "",
+        "reference_url": [
+          "http://docs.projectatomic.io/container-best-practices/#",
+          "_recommended_labels_for_your_project"
+        ]
+      },
+      {
+        "message": "Required LABEL name/key 'Version' is not defined",
+        "line": -1,
+        "level": "error",
+        "lineContent": "",
+        "reference_url": [
+          "http://docs.projectatomic.io/container-best-practices/#",
+          "_recommended_labels_for_your_project"
+        ]
+      }
+    ]
+  },
+  "warn": {
+    "count": 0,
+    "data": []
+  },
+  "info": {
+    "count": 2,
+    "data": [
+      {
+        "label": "maintainer_deprecated",
+        "regex": {},
+        "level": "info",
+        "message": "the MAINTAINER command is deprecated",
+        "description": "MAINTAINER is deprecated in favor of using LABEL since Docker v1.13.0",
+        "reference_url": [
+          "https://github.com/docker/cli/blob/master/docs/deprecated.md",
+          "#maintainer-in-dockerfile"
+        ],
+        "lineContent": "MAINTAINER blah <blah@blah.com>",
+        "line": 5
+      },
+      {
+        "instruction": "CMD",
+        "count": 1,
+        "level": "info",
+        "message": "There is no 'CMD' instruction",
+        "description": "None",
+        "reference_url": [
+          "https://docs.docker.com/engine/reference/builder/",
+          "#cmd"
+        ]
+      }
+    ]
+  },
+  "summary": []
+}
