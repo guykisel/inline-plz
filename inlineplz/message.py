@@ -29,7 +29,7 @@ class Messages(object):
                 self.messages[(path, line)] = Message(path, line)
             except TypeError:
                 print('{0} {1} {2}'.format(path, line, message))
-                traceback.print_exc()
+                print(traceback.format_exc())
                 return
         self.messages[(path, line)].append(message)
 
