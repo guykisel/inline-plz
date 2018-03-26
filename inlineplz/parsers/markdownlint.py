@@ -16,7 +16,7 @@ class MarkdownLintParser(ParserBase):
                 if line.strip() and parts:
                     path = parts[0].strip()
                     line = int(parts[1].strip())
-                    msgbody = parts[2].strip()
+                    msgbody = ':'.join(parts[2:]).strip()
                     messages.add((path, line, msgbody))
             except (ValueError, IndexError):
                 print('Invalid message: {0}'.format(line))
