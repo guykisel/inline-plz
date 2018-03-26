@@ -51,10 +51,16 @@ TRUSTED_INSTALL = [
     ['cabal', 'install'],
     ['glide', 'install'],
     ['godep', 'get'],
+    ['godep', 'restore'],
+    ['dep', 'ensure'],
+    ['dep', 'prune'],
+    ['govendor', 'sync'],
     ['go', 'get', '-t', '-v', ' ./...'],
     ['npm', 'install'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
+    ['pipenv', 'install'],
+    ['python', 'setup.py', 'develop']
 ]
 
 # these dirs will get deleted after a run
