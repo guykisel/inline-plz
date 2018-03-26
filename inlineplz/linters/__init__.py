@@ -51,10 +51,16 @@ TRUSTED_INSTALL = [
     ['cabal', 'install'],
     ['glide', 'install'],
     ['godep', 'get'],
+    ['godep', 'restore'],
+    ['dep', 'ensure'],
+    ['dep', 'prune'],
+    ['govendor', 'sync'],
     ['go', 'get', '-t', '-v', ' ./...'],
     ['npm', 'install'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
+    ['pipenv', 'install'],
+    ['python', 'setup.py', 'develop']
 ]
 
 # these dirs will get deleted after a run
@@ -273,7 +279,7 @@ LINTERS = {
         'install': [['pip', 'install', 'yamllint']],
         'help': ['yamllint', '-h'],
         'run': ['yamllint', '-f', 'parsable', '.'],
-        'rundefault': ['yamllint', '-f', 'parsable', '.'],
+        'rundefault': ['yamllint', '-c', '{config_dir}/.yamllint', '-f', 'parsable', '.'],
         'dotfiles': ['.yamllint'],
         'parser': parsers.YAMLLintParser,
         'language': 'yaml',
@@ -298,7 +304,7 @@ def run_command(command, log_on_fail=False, log_all=False):
     stdout = stdout.decode('utf-8', errors='replace')
     stderr = stderr.decode('utf-8', errors='replace')
     output = '{}\n{}'.format(stdout, stderr).strip()
-    if (log_on_fail and proc.returncode) or log_all:
+    if output and ((log_on_fail and proc.returncode) or log_all):
         print(output.encode('ascii', errors='replace'))
         sys.stdout.flush()
     return proc.returncode, output
@@ -319,7 +325,7 @@ def cleanup():
         try:
             shutil.rmtree(install_dir, ignore_errors=True)
         except Exception:
-            traceback.print_exc()
+            print(traceback.format_exc())
             print('Failed to delete {}'.format(install_dir))
 
 
@@ -481,6 +487,7 @@ def lint(install=False,
                                  enabled_linters, disabled_linters):
         if system.should_stop():
             return messages.get_messages()
+        print('=' * 80)
         print('Running linter: {0}'.format(linter))
         sys.stdout.flush()
         start = time.time()
@@ -498,8 +505,9 @@ def lint(install=False,
                 output = output.strip()
         except Exception:
             print('Running {0} failed:'.format(linter))
-            traceback.print_exc()
-            print(str(output).encode('ascii', errors='replace'))
+            print(traceback.format_exc())
+            print('Failed {0} output: '.format(linter) +
+                  str(output).encode('ascii', errors='replace'))
         print('Installation and running of {0} took {1} seconds'.format(
             linter, int(time.time() - start)))
         sys.stdout.flush()
@@ -516,7 +524,7 @@ def lint(install=False,
                 messages.add_messages(linter_messages)
         except Exception:
             print('Parsing {0} output failed:'.format(linter))
-            traceback.print_exc()
+            print(traceback.format_exc())
             print(str(output).encode('ascii', errors='replace'))
         print('Parsing of {0} took {1} seconds'.format(
             linter, int(time.time() - start)))
