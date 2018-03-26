@@ -506,7 +506,8 @@ def lint(install=False,
         except Exception:
             print('Running {0} failed:'.format(linter))
             print(traceback.format_exc())
-            print('Failed {0} output: '.format(linter) + str(output).encode('ascii', errors='replace'))
+            print('Failed {0} output: '.format(linter) +
+                  str(output).encode('ascii', errors='replace'))
         print('Installation and running of {0} took {1} seconds'.format(
             linter, int(time.time() - start)))
         sys.stdout.flush()
