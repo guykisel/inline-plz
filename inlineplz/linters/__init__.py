@@ -273,7 +273,7 @@ LINTERS = {
         'install': [['pip', 'install', 'yamllint']],
         'help': ['yamllint', '-h'],
         'run': ['yamllint', '-f', 'parsable', '.'],
-        'rundefault': ['yamllint', '-f', 'parsable', '.'],
+        'rundefault': ['yamllint', '-c', '{config_dir}/.yamllint',  '-f', 'parsable', '.'],
         'dotfiles': ['.yamllint'],
         'parser': parsers.YAMLLintParser,
         'language': 'yaml',
