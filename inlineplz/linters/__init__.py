@@ -208,8 +208,8 @@ LINTERS = {
     'megacheck': {
         'install': [['go', 'get', '-u', 'honnef.co/go/tools/cmd/megacheck']],
         'help': ['megacheck', '--help'],
-        'run': ['megacheck', '--json', './...'],
-        'rundefault': ['gometalinter', '-f', 'json', './...'],
+        'run': ['megacheck', '-f', 'json', './...'],
+        'rundefault': ['megacheck', '-f', 'json', './...'],
         'dotfiles': [],
         'parser': parsers.MegacheckParser,
         'language': 'go',
