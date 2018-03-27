@@ -215,7 +215,7 @@ LINTERS = {
         'dotfiles': [],
         'parser': parsers.MegacheckParser,
         'language': 'go',
-        'autorun': True,
+        'autorun': False,
         'run_per_file': False
     },
     'prospector': {
