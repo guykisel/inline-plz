@@ -205,6 +205,17 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
+    'megacheck': {
+        'install': [['go', 'get', '-u', 'honnef.co/go/tools/cmd/megacheck']],
+        'help': ['megacheck', '--help'],
+        'run': ['megacheck', '-f', 'json', './...'],
+        'rundefault': ['megacheck', '-f', 'json', './...'],
+        'dotfiles': [],
+        'parser': parsers.MegacheckParser,
+        'language': 'go',
+        'autorun': True,
+        'run_per_file': False
+    },
     'prospector': {
         'install': [['pip', 'install', '-U', 'prospector[with_everything]'],
                     ['pip', 'install', '-U', 'prospector']],
