@@ -136,9 +136,9 @@ LINTERS = {
         'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter'],
                     ['gometalinter', '--install', '--update']],
         'help': ['gometalinter', '--install', '--update'],
-        'run': ['gometalinter', '--json', '-s', 'node_modules', './...'],
+        'run': ['gometalinter', '--enable-all', '--vendor', '--disable=lll', '--json', '-s', 'node_modules', './...'],
         'rundefault':
-        ['gometalinter', '--json', '-s', 'node_modules', './...'],
+            ['gometalinter', '--enable-all', '--vendor', '--disable=lll', '--json', '-s', 'node_modules', './...'],
         'dotfiles': [],
         'parser': parsers.GometalinterParser,
         'language': 'go',
@@ -304,6 +304,7 @@ def run_command(command, log_on_fail=False, log_all=False):
     shell = False
     if os.name == 'nt':
         shell = True
+    print('> ' + ' '.join(command))
     proc = subprocess.Popen(
         command,
         stdin=subprocess.PIPE,
@@ -370,20 +371,25 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     return output
 
 
-def linters_to_run(install=False,
-                   autorun=False,
+def linters_to_run(autorun=False,
                    ignore_paths=None,
                    enabled_linters=None,
                    disabled_linters=None):
     linters = set()
     enabled_linters = enabled_linters or []
     disabled_linters = disabled_linters or []
+    try:
+        enabled_linters.extend(enabled_linters[0].split(','))
+    except (IndexError, AttributeError):
+        pass
+    try:
+        disabled_linters.extend(disabled_linters[0].split(','))
+    except (IndexError, AttributeError):
+        pass
     if not autorun:
         for linter, config in LINTERS.items():
-            if (installed(config) or install or
-                    linter in enabled_linters) and dotfiles_exist(config):
-                if linter not in disabled_linters:
-                    linters.add(linter)
+            if linter in enabled_linters:
+                linters.add(linter)
     else:
         dotfilefound = {}
         for linter, config in LINTERS.items():
@@ -446,6 +452,7 @@ def install_linter(config):
         PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
         if not installed(config):
             try:
+                print('-' * 80)
                 run_command(install_cmd, log_all=True)
             except OSError:
                 print('Install failed: {0}\n{1}'.format(
@@ -457,6 +464,7 @@ def install_linter(config):
 def install_trusted():
     for install_cmd in TRUSTED_INSTALL:
         try:
+            print('*' * 80)
             run_command(install_cmd, log_all=True)
         except OSError:
             print('Install failed: {0}\n{1}'.format(install_cmd,
@@ -478,6 +486,7 @@ def run_config(config, config_dir):
         config_dir = os.path.abspath(os.path.join(HERE, 'config'))
     return [
         os.path.normpath(item.format(config_dir=config_dir))
+        if '...' not in item else item.format(config_dir=config_dir)
         for item in (config.get('rundefault') or config.get('run'))
     ]
 
@@ -494,7 +503,7 @@ def lint(install=False,
     performance_hacks()
     if trusted and (install or autorun):
         install_trusted()
-    for linter in linters_to_run(install, autorun, ignore_paths,
+    for linter in linters_to_run(autorun, ignore_paths,
                                  enabled_linters, disabled_linters):
         if system.should_stop():
             return messages.get_messages()
