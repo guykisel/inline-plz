@@ -55,7 +55,7 @@ TRUSTED_INSTALL = [
     ['dep', 'ensure'],
     ['dep', 'prune'],
     ['govendor', 'sync'],
-    ['go', 'get', '-t', '-v', ' ./...'],
+    ['go', 'get', '-t', '-v', './...'],
     ['npm', 'install'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
@@ -493,6 +493,16 @@ def run_config(config, config_dir):
     ]
 
 
+def set_gopath():
+    gopath = os.environ.get('GOPATH', '')
+    if gopath:
+        gopath = ':' + gopath
+    gopath = os.getcwd() + gopath
+    print(gopath)
+    # NOTE: str() wrapping necessary for Python 2/3 compat
+    os.environ[str('GOPATH')] = str(gopath)
+
+
 def lint(install=False,
          autorun=False,
          ignore_paths=None,
@@ -502,6 +512,7 @@ def lint(install=False,
          trusted=False):
     messages = message.Messages()
     cleanup()
+    set_gopath()
     performance_hacks()
     if trusted and (install or autorun):
         install_trusted()

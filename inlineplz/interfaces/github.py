@@ -33,7 +33,7 @@ class GitHubInterface(InterfaceBase):
         ignore_paths are paths to ignore comments from
         """
         self.github = None
-        self.ignore_paths = ignore_paths or []
+        self.ignore_paths = set(ignore_paths or [])
         if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
@@ -63,6 +63,8 @@ class GitHubInterface(InterfaceBase):
         self.first_sha = self.commits[0].sha
         self.parent_sha = git.parent_sha(self.first_sha)
         self.diff = git.diff(self.parent_sha, self.last_sha)
+        self.patch = unidiff.PatchSet(self.diff.split('\n'))
+        self.review_comments = list(self.pull_request.review_comments())
 
     @staticmethod
     def pr_commits(pull_request):
@@ -101,35 +103,36 @@ class GitHubInterface(InterfaceBase):
             if not msg.comments:
                 continue
             msg_position = self.position(msg)
-            if msg_position:
-                messages_to_post += 1
-                if not self.is_duplicate(msg, msg_position):
-                    # skip this message if we already have too many comments on this file
-                    # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
-                    if paths.setdefault(msg.path, 0) > max_comments // 5:
-                        continue
-                    for ignore_path in self.ignore_paths:
-                        if msg.path.startswith(ignore_path):
-                            continue
-                    try:
-                        print('Creating review comment: {0}'.format(msg))
-                        self.pull_request.create_review_comment(
-                            self.format_message(msg),
-                            self.last_sha,
-                            msg.path,
-                            msg_position
-                        )
-                    except github3.GitHubError:
-                        pass
-                    paths[msg.path] += 1
-                    messages_posted += 1
-                    if max_comments >= 0 and messages_posted > max_comments:
-                        break
-        print('{} messages posted to Github.'.format(messages_to_post))
+            if not msg_position:
+                continue
+            messages_to_post += 1
+            if self.is_duplicate(msg, msg_position):
+                continue
+            # skip this message if we already have too many comments on this file
+            # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
+            if paths.setdefault(msg.path, 0) > max_comments // 5:
+                continue
+            if msg.path.split('/')[0] in self.ignore_paths:
+                continue
+            try:
+                print('Creating review comment: {0}'.format(msg))
+                self.pull_request.create_review_comment(
+                    self.format_message(msg),
+                    self.last_sha,
+                    msg.path,
+                    msg_position
+                )
+            except github3.GitHubError:
+                pass
+            paths[msg.path] += 1
+            messages_posted += 1
+            if max_comments >= 0 and messages_posted > max_comments:
+                break
+        print('{} messages posted to Github.'.format(messages_posted))
         return messages_to_post
 
     def is_duplicate(self, message, position):
-        for comment in self.pull_request.review_comments():
+        for comment in self.review_comments:
             if (comment.position == position and
                     comment.path == message.path and
                     comment.body.strip() == self.format_message(message).strip()):
@@ -152,8 +155,7 @@ class GitHubInterface(InterfaceBase):
         """Calculate position within the PR, which is not the line number"""
         if not message.line_number:
             message.line_number = 1
-        patch = unidiff.PatchSet(self.diff.split('\n'))
-        for patched_file in patch:
+        for patched_file in self.patch:
             target = patched_file.target_file.lstrip('b/')
             if target == message.path:
                 offset = 1
