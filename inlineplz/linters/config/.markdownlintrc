@@ -16,5 +16,7 @@
   "blanks-around-lists": false,
   "blanks-around-fences": false,
   "header-increment": false,
-  "ol-prefix": false
+  "ol-prefix": false,
+  "no-trailing-punctuation": false,
+  "header-style": false
 }
