@@ -15,7 +15,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None, commit=None):
+    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None, commit=None, ignore_paths=None):
         """
         GitHubInterface lets us post messages to GitHub.
 
@@ -29,8 +29,11 @@ class GitHubInterface(InterfaceBase):
         url is the base URL of your GitHub instance, such as https://github.com
 
         commit is the commit hash we're running against
+
+        ignore_paths are paths to ignore comments from
         """
         self.github = None
+        self.ignore_paths = ignore_paths or []
         if not url or url == 'https://github.com':
             self.github = github3.GitHub(token=token)
         else:
@@ -105,6 +108,9 @@ class GitHubInterface(InterfaceBase):
                     # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
                     if paths.setdefault(msg.path, 0) > max_comments // 5:
                         continue
+                    for ignore_path in self.ignore_paths:
+                        if msg.path.startswith(ignore_path):
+                            continue
                     try:
                         print('Creating review comment: {0}'.format(msg))
                         self.pull_request.create_review_comment(
