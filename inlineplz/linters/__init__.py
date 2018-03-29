@@ -137,11 +137,11 @@ LINTERS = {
                     ['gometalinter', '--install', '--update']],
         'help': ['gometalinter', '--install', '--update'],
         'run': ['gometalinter', '--aggregate', '--enable-all', '--vendor', '--disable=lll',
-                '--json', '-s', 'node_modules', './...'],
+                '--json', '-s', 'node_modules', '-s', 'src', './...'],
         'rundefault':
             ['gometalinter', '--aggregate', '--enable-all', '--vendor', '--disable=lll',
-             '--json', '-s', 'node_modules', './...'],
-        'dotfiles': [],
+             '--json', '-s', 'node_modules', '-s', 'src', './...'],
+        'dotfiles': ['.gometalinter.json'],
         'parser': parsers.GometalinterParser,
         'language': 'go',
         'autorun': True,
@@ -306,7 +306,6 @@ def run_command(command, log_on_fail=False, log_all=False):
     shell = False
     if os.name == 'nt':
         shell = True
-    print('> ' + ' '.join(command))
     proc = subprocess.Popen(
         command,
         stdin=subprocess.PIPE,
@@ -494,13 +493,9 @@ def run_config(config, config_dir):
 
 
 def set_gopath():
-    gopath = os.environ.get('GOPATH', '')
-    if gopath:
-        gopath = ':' + gopath
-    gopath = os.getcwd() + gopath
-    print(gopath)
+    """This is a hack to work around not checking out code to a standard go path."""
     # NOTE: str() wrapping necessary for Python 2/3 compat
-    os.environ[str('GOPATH')] = str(gopath)
+    os.environ[str('GOPATH')] = str(os.getcwd())
 
 
 def lint(install=False,
