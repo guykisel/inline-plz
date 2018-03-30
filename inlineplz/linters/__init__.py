@@ -97,7 +97,7 @@ LINTERS = {
         'run_per_file': True
     },
     'eslint': {
-        'install': [['npm', 'install', '@shinnn/eslint-config-node'], ['npm', 'install', 'eslint']],
+        'install': [['npm', 'install', 'eslint']],
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run':
         [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
