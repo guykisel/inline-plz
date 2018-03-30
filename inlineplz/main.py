@@ -162,6 +162,7 @@ def inline(args):
 
     # TODO: implement dryrun as an interface instead of a special case here
     if args.dryrun:
+        return
         print_messages(messages)
         return 0
     try:

@@ -97,13 +97,13 @@ LINTERS = {
         'run_per_file': True
     },
     'eslint': {
-        'install': [['npm', 'install', 'eslint']],
+        'install': [['npm', 'install', '@shinnn/eslint-config-node'], ['npm', 'install', 'eslint']],
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run':
         [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
         'rundefault': [
             os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json',
-            '-c', '{config_dir}/.eslintrc.js'
+            '-c', '{config_dir}/.eslintrc.js', '--ignore-path', '{config_dir}/.eslintignore'
         ],
         'dotfiles': [
             '.eslintrc.yml', '.eslintrc.yaml', '.eslintignore', '.eslintrc',
