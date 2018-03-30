@@ -6,5 +6,5 @@ tmp/**
 vendor/**
 src/**
 dist/**
-node_modules/*
-**/node_modules/*
+node_modules/**
+**/node_modules/**
