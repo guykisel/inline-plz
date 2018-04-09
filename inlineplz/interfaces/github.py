@@ -65,6 +65,7 @@ class GitHubInterface(InterfaceBase):
         self.diff = git.diff(self.parent_sha, self.last_sha)
         self.patch = unidiff.PatchSet(self.diff.split('\n'))
         self.review_comments = list(self.pull_request.review_comments())
+        self.last_update = time.time()
 
     @staticmethod
     def pr_commits(pull_request):
@@ -132,6 +133,11 @@ class GitHubInterface(InterfaceBase):
         return messages_to_post
 
     def is_duplicate(self, message, position):
+        # update our list of review comments about once a second
+        # to reduce dupes without hitting the API too hard
+        if time.time() - self.last_update > 1:
+            self.review_comments = list(self.pull_request.review_comments())
+            self.last_update = time.time()
         for comment in self.review_comments:
             if (comment.position == position and
                     comment.path == message.path and
