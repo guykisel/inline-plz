@@ -100,9 +100,9 @@ LINTERS = {
         'install': [['npm', 'install', 'eslint']],
         'help': [os.path.normpath('./node_modules/.bin/eslint'), '-h'],
         'run':
-        [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json'],
+        [os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'unix'],
         'rundefault': [
-            os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'json',
+            os.path.normpath('./node_modules/.bin/eslint'), '.', '-f', 'unix',
             '-c', '{config_dir}/.eslintrc.js', '--ignore-path', '{config_dir}/.eslintignore'
         ],
         'dotfiles': [
