@@ -140,8 +140,10 @@ def inline(args):
             url = parsed.resource
             if not url.startswith('https://'):
                 url = 'https://' + url
-            owner = parsed.owner
-            repo = parsed.name
+            if parsed.owner:
+                owner = parsed.owner
+            if parsed.name:
+                repo = parsed.name
         except giturlparse.parser.ParserError:
             pass
     if not args.dryrun and args.interface not in interfaces.INTERFACES:

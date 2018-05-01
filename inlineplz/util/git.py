@@ -13,7 +13,7 @@ def current_sha():
 def diff(start, end):
     return subprocess.check_output(
         ['git', 'diff', '-M', start + '..' + end]
-    ).strip().decode('utf-8', errors='replace')
+    ).decode('utf-8', errors='replace')
 
 
 def parent_sha(sha):
@@ -25,4 +25,10 @@ def parent_sha(sha):
 def current_branch():
     return subprocess.check_output(
         ['git', 'rev-parse', '--abbrev-ref', 'HEAD']
+    ).strip().decode('utf-8', errors='replace')
+
+
+def url():
+    return subprocess.check_output(
+        ['git', 'config', '--get', 'remote.origin.url']
     ).strip().decode('utf-8', errors='replace')
