@@ -12,14 +12,14 @@ class ESLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for filedata in json.loads(lint_data):
-            if filedata.get('messages'):
-                for msgdata in filedata['messages']:
-                    try:
-                        path = filedata['filePath']
-                        line = msgdata['line']
-                        msgbody = msgdata['message']
-                        messages.add((path, line, msgbody))
-                    except (ValueError, KeyError):
-                        print('Invalid message: {0}'.format(msgdata))
+        for line in lint_data.split('\n'):
+            try:
+                parts = line.split(':')
+                if line.strip() and parts:
+                    path = parts[0].strip()
+                    line = int(parts[1].strip())
+                    msgbody = ':'.join(parts[3:]).strip()
+                    messages.add((path, line, msgbody))
+            except (ValueError, IndexError):
+                print('Invalid message: {0}'.format(line))
         return messages
