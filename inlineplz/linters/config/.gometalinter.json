@@ -1,0 +1,3 @@
+{
+  "Enable": ["deadcode", "unconvert", "structcheck", "gotype", "gotypex", "vetshadow", "varcheck", "errcheck", "megacheck", "gocyclo", "golint"]
+}
