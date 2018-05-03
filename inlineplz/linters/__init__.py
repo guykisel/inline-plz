@@ -492,12 +492,6 @@ def run_config(config, config_dir):
     ]
 
 
-def set_gopath():
-    """This is a hack to work around not checking out code to a standard go path."""
-    # NOTE: str() wrapping necessary for Python 2/3 compat
-    os.environ[str('GOPATH')] = str(os.getcwd())
-
-
 def lint(install=False,
          autorun=False,
          ignore_paths=None,
@@ -507,7 +501,6 @@ def lint(install=False,
          trusted=False):
     messages = message.Messages()
     cleanup()
-    set_gopath()
     performance_hacks()
     if trusted and (install or autorun):
         install_trusted()
