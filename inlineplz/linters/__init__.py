@@ -82,7 +82,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'dockerfile_lint': {
+    'dockerfile': {
         'install': [['npm', 'install', 'dockerfile_lint']],
         'help':
         [os.path.normpath('./node_modules/.bin/dockerfile_lint'), '-h'],
@@ -114,7 +114,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'gherkin-lint': {
+    'gherkin': {
         'install': [['npm', 'install', 'gherkin-lint']],
         'help':
         [os.path.normpath('./node_modules/.bin/gherkin-lint'), '--help'],
@@ -244,7 +244,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
-    'rst-lint': {
+    'rst': {
         'install': [['pip', 'install', '-U', 'restructuredtext_lint']],
         'help': ['rst-lint', '-h'],
         'run': ['rst-lint', '--format', 'json'],
@@ -288,7 +288,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'yaml-lint': {
+    'yaml': {
         'install': [['pip', 'install', 'yamllint']],
         'help': ['yamllint', '-h'],
         'run': ['yamllint', '-f', 'parsable', '.'],
