@@ -54,6 +54,19 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
+Requisites
+----------
+
+Linux subsystem on Win 10
+-------------------------
+
+    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
+    python get-pip.py
+    pip install --user virtualenvwrapper
+    echo "source \"/usr/local/bin/virtualenvwrapper.sh\"" >> ~/.bashrc
+    source ~/.bashrc
+    sudo apt-get install python-dev
+
 Get Started!
 ------------
 
