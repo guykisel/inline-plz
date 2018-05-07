@@ -68,8 +68,8 @@ For example:
   enabled_linters:
     - prospector
   disabled_linters:
-    - markdown
-    - gherkin
+    - markdownlint-cli
+    - gherkin-lint
 
 For more see the examples folder in the repo.
 

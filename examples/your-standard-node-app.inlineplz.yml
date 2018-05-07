@@ -9,16 +9,16 @@ enabled_linters:
   - json
 disabled_linters:
   - bandit
-  - dockerfile
-  - gherkin
+  - dockerfile_lint
+  - gherkin-lint
   - gometalinter
   - jscs
   - jshint
-  - markdownlint
+  - markdownlint-cli
   - megacheck
   - prospector
-  - rflint
-  - rst
+  - robotframework-lint
+  - restructuredtext_lint
   - shellcheck
   - stylint
-  - yaml
+  - yamllint
