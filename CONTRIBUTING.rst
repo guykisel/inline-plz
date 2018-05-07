@@ -57,15 +57,10 @@ If you are proposing a feature:
 Requisites
 ----------
 
-Linux subsystem on Win 10
--------------------------
-
-    curl https://bootstrap.pypa.io/get-pip.py -o get-pip.py
-    python get-pip.py
-    pip install --user virtualenvwrapper
-    echo "source \"/usr/local/bin/virtualenvwrapper.sh\"" >> ~/.bashrc
-    source ~/.bashrc
-    sudo apt-get install python-dev
+ - Python 2 or 3
+ - [virtualenvwrapper](https://pypi.org/project/virtualenvwrapper/)
+ - Python development libraries
+  - Debian: `sudo apt-get install python-dev`
 
 Get Started!
 ------------
@@ -92,7 +87,7 @@ Ready to contribute? Here's how to set up `inline-plz` for local development.
 
 5. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
 
-    $ tox
+    $ tox --skip-missing-interpreters
 
 6. Commit your changes and push your branch to GitHub::
 
