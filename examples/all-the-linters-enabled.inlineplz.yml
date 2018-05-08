@@ -1,0 +1,18 @@
+# from linters/__init__.py
+enabled_linters:
+  - bandit
+  - dockerfile_lint
+  - eslint
+  - gherkin-lint
+  - gometalinter
+  - jscs
+  - jshint
+  - jsonlint
+  - markdownlint-cli
+  - megacheck
+  - prospector
+  - robotframework-lint
+  - restructuredtext_lint
+  - shellcheck
+  - stylint
+  - yamllint

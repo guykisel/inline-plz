@@ -193,7 +193,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
-    'markdownlint': {
+    'markdownlint-cli': {
         'install': [['npm', 'install', 'markdownlint-cli']],
         'help': [os.path.normpath('./node_modules/.bin/markdownlint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/markdownlint'), '.'],
@@ -233,7 +233,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'rflint': {
+    'robotframework-lint': {
         'install': [['pip', 'install', '-U', 'robotframework-lint']],
         'help': ['rflint', '--help'],
         'run': ['rflint'],
@@ -244,7 +244,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': True
     },
-    'rst-lint': {
+    'restructuredtext_lint': {
         'install': [['pip', 'install', '-U', 'restructuredtext_lint']],
         'help': ['rst-lint', '-h'],
         'run': ['rst-lint', '--format', 'json'],
@@ -288,7 +288,7 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'yaml-lint': {
+    'yamllint': {
         'install': [['pip', 'install', 'yamllint']],
         'help': ['yamllint', '-h'],
         'run': ['yamllint', '-f', 'parsable', '.'],
