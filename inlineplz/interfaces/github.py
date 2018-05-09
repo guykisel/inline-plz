@@ -98,38 +98,46 @@ class GitHubInterface(InterfaceBase):
             messages = []
         start = time.time()
         for msg in messages:
+            print('\nTrying to post a review comment.')
+            print('{0}'.format(msg))
             if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
                 print('Stopping early.')
                 break
             if not msg.comments:
+                print("Skipping since there is not comment to post.")
                 continue
             msg_position = self.position(msg)
             if not msg_position:
+                print("Skipping since the comment is not part of this PR.")
                 continue
             messages_to_post += 1
             if self.is_duplicate(msg, msg_position):
+                print("Skipping since comment already exist.")
                 continue
             # skip this message if we already have too many comments on this file
             # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
             if paths.setdefault(msg.path, 0) > max_comments // 5:
+                print("Skipping since we reach the maximum number of comments for this file.")
                 continue
             if msg.path.split('/')[0] in self.ignore_paths:
+                print("Skipping since the comment is on an ignored path.")
                 continue
             try:
-                print('Creating review comment: {0}'.format(msg))
                 self.pull_request.create_review_comment(
                     self.format_message(msg),
                     self.last_sha,
                     msg.path,
                     msg_position
                 )
-            except github3.GitHubError:
-                pass
+            except github3.GitHubError as err:
+                print("Posting failed: " + str(err))
+                continue
+            print("Comment posted successfully.")
             paths[msg.path] += 1
             messages_posted += 1
             if max_comments >= 0 and messages_posted > max_comments:
                 break
-        print('{} messages posted to Github.'.format(messages_posted))
+        print('\n{} messages posted to Github.'.format(messages_posted))
         return messages_to_post
 
     def is_duplicate(self, message, position):
@@ -164,11 +172,7 @@ class GitHubInterface(InterfaceBase):
         for patched_file in self.patch:
             target = patched_file.target_file.lstrip('b/')
             if target == message.path:
-                offset = 1
                 for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
-                        if '+' not in hunk_line.line_type:
-                            continue
                         if hunk_line.target_line_no == message.line_number:
-                            return position + offset
-                    offset += len(hunk) + 1
+                            return position +1
