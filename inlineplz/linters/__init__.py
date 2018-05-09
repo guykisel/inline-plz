@@ -132,14 +132,29 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
-    'gometalinter': {
-        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter.v2'],
+    'gometalinter.v2': {
+        'install': [['go', 'get', '-u', 'gopkg.in/alecthomas/gometalinter.v2'],
                     ['gometalinter.v2', '--install', '--update']],
         'help': ['gometalinter.v2', '--install', '--update'],
         'run': ['gometalinter.v2', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor',
                 '--json', '-s', 'node_modules', '-s', 'src', './...'],
         'rundefault':
             ['gometalinter.v2', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor', '--disable=lll',
+             '--json', '-s', 'node_modules', '-s', 'src', '--config={config_dir}/.gometalinter.json', './...'],
+        'dotfiles': ['.gometalinter.json'],
+        'parser': parsers.GometalinterParser,
+        'language': 'go',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'gometalinter': {
+        'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter'],
+                    ['gometalinter', '--install', '--update']],
+        'help': ['gometalinter', '--install', '--update'],
+        'run': ['gometalinter', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor',
+                '--json', '-s', 'node_modules', '-s', 'src', './...'],
+        'rundefault':
+            ['gometalinter', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor', '--disable=lll',
              '--json', '-s', 'node_modules', '-s', 'src', '--config={config_dir}/.gometalinter.json', './...'],
         'dotfiles': ['.gometalinter.json'],
         'parser': parsers.GometalinterParser,
