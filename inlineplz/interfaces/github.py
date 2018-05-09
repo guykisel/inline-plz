@@ -175,4 +175,4 @@ class GitHubInterface(InterfaceBase):
                 for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
                         if hunk_line.target_line_no == message.line_number:
-                            return position +1
+                            return position + 1
