@@ -54,6 +54,14 @@ If you are proposing a feature:
 * Remember that this is a volunteer-driven project, and that contributions
   are welcome :)
 
+Requisites
+----------
+
+ - Python 2 or 3
+ - [virtualenvwrapper](https://pypi.org/project/virtualenvwrapper/)
+ - Python development libraries
+  - Debian: `sudo apt-get install python-dev`
+
 Get Started!
 ------------
 
@@ -79,7 +87,7 @@ Ready to contribute? Here's how to set up `inline-plz` for local development.
 
 5. When you're done making changes, check that your changes pass flake8 and the tests, including testing other Python versions with tox::
 
-    $ tox
+    $ tox --skip-missing-interpreters
 
 6. Commit your changes and push your branch to GitHub::
 

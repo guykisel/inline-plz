@@ -88,6 +88,9 @@ Contribute
 * Report bugs/suggest features
 * Add/update docs
 * Add support for more linters
+* [Requisites](CONTRIBUTING.rst#requisites)
+* [Get Started](CONTRIBUTING.rst#get-started)
+* [PR Guidelines](CONTRIBUTING.rst#pull-request-guidelines)
 
 Credits
 -------
