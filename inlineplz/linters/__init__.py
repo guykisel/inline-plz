@@ -144,7 +144,7 @@ LINTERS = {
         'dotfiles': ['.gometalinter.json'],
         'parser': parsers.GometalinterParser,
         'language': 'go',
-        'autorun': True,
+        'autorun': False,
         'run_per_file': False
     },
     'gometalinter': {
