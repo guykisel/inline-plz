@@ -61,8 +61,7 @@ TRUSTED_INSTALL = [
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['pipenv', 'install'],
-    ['python', 'setup.py', 'develop'],
-    ['mvn', 'install']
+    ['python', 'setup.py', 'develop']
 ]
 
 # these dirs will get deleted after a run
@@ -293,12 +292,12 @@ LINTERS = {
     },
     'spotbugs-maven-plugin': {
         'install': [
-            ['mvn', 'clean', 'install'],
+            ['mvn', 'clean', 'install', '-U'],
             ['mvn', 'dependency:get', '-Dartifact=com.github.spotbugs:spotbugs-maven-plugin:3.1.3']
         ],
         'help': ['mvn', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:help'],
-        'run': ['mvn', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
-        'rundefault': ['mvn', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
+        'run': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
+        'rundefault': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
         'dotfiles': [],
         'parser': parsers.SpotbugsParser,
         'language': 'java',
