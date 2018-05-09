@@ -136,10 +136,10 @@ LINTERS = {
         'install': [['go', 'get', '-u', 'github.com/alecthomas/gometalinter.v2'],
                     ['gometalinter.v2', '--install', '--update']],
         'help': ['gometalinter.v2', '--install', '--update'],
-        'run': ['gometalinter.v2', '--aggregate', '--vendor',
+        'run': ['gometalinter.v2', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor',
                 '--json', '-s', 'node_modules', '-s', 'src', './...'],
         'rundefault':
-            ['gometalinter.v2', '--aggregate', '--vendor', '--disable=lll',
+            ['gometalinter.v2', '--enable-gc', '--deadline=300s', '--aggregate', '--vendor', '--disable=lll',
              '--json', '-s', 'node_modules', '-s', 'src', '--config={config_dir}/.gometalinter.json', './...'],
         'dotfiles': ['.gometalinter.json'],
         'parser': parsers.GometalinterParser,
