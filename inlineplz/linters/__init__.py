@@ -299,7 +299,7 @@ LINTERS = {
         'run': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
         'rundefault': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
         'dotfiles': [],
-        'parser': parsers.SpotbugsParser,
+        'parser': parsers.SpotbugsMavenParser,
         'language': 'java',
         'autorun': True,
         'run_per_file': False
