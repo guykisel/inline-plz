@@ -33,6 +33,7 @@ PATTERNS = {
     'docker': ['*Dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
+    'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
     'markdown': ['*.md'],
@@ -288,6 +289,20 @@ LINTERS = {
         'language': 'shell',
         'autorun': True,
         'run_per_file': True
+    },
+    'spotbugs-maven-plugin': {
+        'install': [
+            ['mvn', 'clean', 'install', '-U'],
+            ['mvn', 'dependency:get', '-Dartifact=com.github.spotbugs:spotbugs-maven-plugin:3.1.3']
+        ],
+        'help': ['mvn', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:help'],
+        'run': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
+        'rundefault': ['mvn', '-Dspotbugs.failOnError=false', 'com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check'],
+        'dotfiles': [],
+        'parser': parsers.SpotbugsMavenParser,
+        'language': 'java',
+        'autorun': True,
+        'run_per_file': False
     },
     'stylint': {
         'install': [['npm', 'install', 'stylint']],
