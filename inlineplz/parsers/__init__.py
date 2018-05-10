@@ -18,5 +18,6 @@ from inlineplz.parsers.prospector import ProspectorParser
 from inlineplz.parsers.rstlint import RSTLintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
 from inlineplz.parsers.shellcheck import ShellcheckParser
+from inlineplz.parsers.spotbugsmaven import SpotbugsMavenParser
 from inlineplz.parsers.stylint import StylintParser
 from inlineplz.parsers.yamllint import YAMLLintParser
