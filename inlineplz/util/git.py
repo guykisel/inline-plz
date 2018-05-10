@@ -12,7 +12,7 @@ def current_sha():
 
 def diff(start, end):
     return subprocess.check_output(
-        ['git', 'diff', '-M', start + '..' + end]
+        ['git', 'diff', '-M', '{}..{}'.format(start, end)]
     )
 
 
