@@ -40,7 +40,7 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
-        
+
         github_repo = self.github.repository(self.owner, self.repo)
         all_commits = self.repo_commits(github_repo)
         self.master_sha = all_commits[0].sha
@@ -80,7 +80,7 @@ class GitHubInterface(InterfaceBase):
             return [c for c in pull_request.commits()]
         except (AttributeError, TypeError):
             return [c for c in pull_request.iter_commits()]
-    
+
     @staticmethod
     def repo_commits(repo):
         # github3 has naming/compatibility issues
@@ -111,7 +111,7 @@ class GitHubInterface(InterfaceBase):
             print('This run is out of date because the PR has been updated.')
             messages = []
         start = time.time()
-        print("Considering "+ str(len(messages)) +" messages for posting.")
+        print("Considering " + str(len(messages)) + " messages for posting.")
         for msg in messages:
             print('\nTrying to post a review comment.')
             print('{0}'.format(msg))
