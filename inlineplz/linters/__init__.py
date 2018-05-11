@@ -350,8 +350,6 @@ def run_command(command, log_on_fail=False, log_all=False):
         popen_kwargs['encoding'] = 'utf-8'
     proc = subprocess.Popen(**popen_kwargs)
     stdout, stderr = proc.communicate()
-    stdout = stdout
-    stderr = stderr
     output = '{}\n{}'.format(stdout, stderr).strip()
     if output and ((log_on_fail and proc.returncode) or log_all):
         print(output)
