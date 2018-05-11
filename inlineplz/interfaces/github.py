@@ -40,6 +40,12 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
         self.owner = owner
         self.repo = repo
+
+        github_repo = self.github.repository(self.owner, self.repo)
+        all_commits = self.repo_commits(github_repo)
+        self.master_sha = all_commits[0].sha
+        print('Master SHA: {0}'.format(self.master_sha))
+
         print('Branch: {0}'.format(branch))
         if branch and not pr:
             github_repo = self.github.repository(self.owner, self.repo)
@@ -47,6 +53,7 @@ class GitHubInterface(InterfaceBase):
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
                     break
+
         # TODO: support non-PR runs
         try:
             pr = int(pr)
@@ -61,8 +68,7 @@ class GitHubInterface(InterfaceBase):
         self.last_sha = commit or git.current_sha()
         print('Last SHA: {0}'.format(self.last_sha))
         self.first_sha = self.commits[0].sha
-        self.parent_sha = git.parent_sha(self.first_sha)
-        self.diff = git.diff(self.parent_sha, self.last_sha)
+        self.diff = git.diff(self.master_sha, self.last_sha)
         self.patch = unidiff.PatchSet(self.diff.split('\n'))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
@@ -74,6 +80,14 @@ class GitHubInterface(InterfaceBase):
             return [c for c in pull_request.commits()]
         except (AttributeError, TypeError):
             return [c for c in pull_request.iter_commits()]
+
+    @staticmethod
+    def repo_commits(repo):
+        # github3 has naming/compatibility issues
+        try:
+            return [c for c in repo.commits()]
+        except (AttributeError, TypeError):
+            return [c for c in repo.iter_commits()]
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
@@ -97,6 +111,7 @@ class GitHubInterface(InterfaceBase):
             print('This run is out of date because the PR has been updated.')
             messages = []
         start = time.time()
+        print("Considering " + str(len(messages)) + " messages for posting.")
         for msg in messages:
             print('\nTrying to post a review comment.')
             print('{0}'.format(msg))
@@ -147,7 +162,7 @@ class GitHubInterface(InterfaceBase):
             self.review_comments = list(self.pull_request.review_comments())
             self.last_update = time.time()
         for comment in self.review_comments:
-            if (comment.position == position and
+            if (comment.original_position == position and
                     comment.path == message.path and
                     comment.body.strip() == self.format_message(message).strip()):
                 return True
@@ -172,7 +187,9 @@ class GitHubInterface(InterfaceBase):
         for patched_file in self.patch:
             target = patched_file.target_file.lstrip('b/')
             if target == message.path:
+                offset = 1
                 for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
                         if hunk_line.target_line_no == message.line_number:
-                            return position + 1
+                            return position + offset
+                    offset += len(hunk) + 1
