@@ -12,14 +12,14 @@ def current_sha():
 
 def diff(start, end):
     return subprocess.check_output(
-        ['git', 'diff', '-M', start + '..' + end]
+        ['git', 'diff', '-M', '{}..{}'.format(start, end)]
     ).decode('utf-8', errors='replace')
 
 
 def parent_sha(sha):
     return subprocess.check_output(
         ['git', 'rev-list', '--parents', '-n', '1', sha]
-    ).strip().decode('utf-8', errors='replace').split()[1]
+    ).strip().split()[1].decode('utf-8', errors='replace')
 
 
 def current_branch():

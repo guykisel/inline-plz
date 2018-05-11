@@ -136,7 +136,7 @@ def inline(args):
             # giturlparse won't parse URLs that don't end in .git
             if not url_to_parse.endswith('.git'):
                 url_to_parse += '.git'
-            parsed = giturlparse.parse(url_to_parse)
+            parsed = giturlparse.parse(str(url_to_parse))
             url = parsed.resource
             if not url.startswith('https://'):
                 url = 'https://' + url

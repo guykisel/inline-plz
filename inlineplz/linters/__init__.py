@@ -57,6 +57,7 @@ TRUSTED_INSTALL = [
     ['dep', 'prune'],
     ['govendor', 'sync'],
     ['go', 'get', '-t', '-v', './...'],
+    ['yarn', 'install', '--non-interactive'],
     ['npm', 'install'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
@@ -263,8 +264,8 @@ LINTERS = {
     'restructuredtext_lint': {
         'install': [['pip', 'install', '-U', 'restructuredtext_lint']],
         'help': ['rst-lint', '-h'],
-        'run': ['rst-lint', '--format', 'json'],
-        'rundefault': ['rst-lint', '--format', 'json'],
+        'run': ['rst-lint', '--format', 'json', '--encoding', 'utf-8'],
+        'rundefault': ['rst-lint', '--format', 'json', '--encoding', 'utf-8'],
         'dotfiles': [],
         'parser': parsers.RSTLintParser,
         'language': 'rst',
@@ -336,19 +337,22 @@ def run_command(command, log_on_fail=False, log_all=False):
     shell = False
     if os.name == 'nt':
         shell = True
-    proc = subprocess.Popen(
-        command,
-        stdin=subprocess.PIPE,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-        shell=shell,
-        env=os.environ)
+    popen_kwargs = {
+        'args': command,
+        'stdin': subprocess.PIPE,
+        'stdout': subprocess.PIPE,
+        'stderr': subprocess.PIPE,
+        'shell': shell,
+        'env': os.environ,
+        'universal_newlines': True
+    }
+    if sys.version_info[0] >= 3 and sys.version_info[1] >= 6:
+        popen_kwargs['encoding'] = 'utf-8'
+    proc = subprocess.Popen(**popen_kwargs)
     stdout, stderr = proc.communicate()
-    stdout = stdout.decode('utf-8', errors='replace')
-    stderr = stderr.decode('utf-8', errors='replace')
     output = '{}\n{}'.format(stdout, stderr).strip()
     if output and ((log_on_fail and proc.returncode) or log_all):
-        print(output.encode('ascii', errors='replace'))
+        print(output)
         sys.stdout.flush()
     return proc.returncode, output
 
@@ -424,7 +428,7 @@ def linters_to_run(autorun=False,
     else:
         dotfilefound = {}
         for linter, config in LINTERS.items():
-            if dotfiles_exist(config):
+            if dotfiles_exist(config) and config.get('autorun'):
                 dotfilefound[config.get('language')] = True
                 if linter not in disabled_linters:
                     linters.add(linter)
@@ -557,8 +561,7 @@ def lint(install=False,
         except Exception:
             print('Running {0} failed:'.format(linter))
             print(traceback.format_exc())
-            print('Failed {0} output: '.format(linter) +
-                  str(output).encode('ascii', errors='replace'))
+            print('Failed {0} output: {1}'.format(linter, output))
         print('Installation and running of {0} took {1} seconds'.format(
             linter, int(time.time() - start)))
         sys.stdout.flush()
@@ -576,7 +579,7 @@ def lint(install=False,
         except Exception:
             print('Parsing {0} output failed:'.format(linter))
             print(traceback.format_exc())
-            print(str(output).encode('ascii', errors='replace'))
+            print(output)
         print('Parsing of {0} took {1} seconds'.format(
             linter, int(time.time() - start)))
     return messages.get_messages()
