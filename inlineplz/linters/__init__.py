@@ -30,7 +30,7 @@ HERE = os.path.dirname(__file__)
 
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
-    'docker': ['*Dockerfile'],
+    'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
     'java': ['*.java'],
@@ -43,6 +43,7 @@ PATTERNS = {
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
     'yaml': ['*.yaml', '*.yml'],
+    'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile']
 }
 
 # these commands will be autorun to try to install dependencies.
