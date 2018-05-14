@@ -66,3 +66,5 @@ node_modules
 
 # pytest
 .pytest_cache/
+
+!inlineplz/bin/**
