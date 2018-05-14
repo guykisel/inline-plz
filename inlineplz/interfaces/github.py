@@ -111,7 +111,7 @@ class GitHubInterface(InterfaceBase):
             print('This run is out of date because the PR has been updated.')
             messages = []
         start = time.time()
-        print("Considering " + str(len(messages)) + " messages for posting.")
+        print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             print('\nTrying to post a review comment.')
             print('{0}'.format(msg))
@@ -145,7 +145,7 @@ class GitHubInterface(InterfaceBase):
                     msg_position
                 )
             except github3.GitHubError as err:
-                print("Posting failed: " + str(err))
+                print("Posting failed: {}".format(err))
                 continue
             print("Comment posted successfully.")
             paths[msg.path] += 1
