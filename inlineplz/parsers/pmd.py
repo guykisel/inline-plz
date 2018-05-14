@@ -15,9 +15,9 @@ class PMDParser(ParserBase):
                 if line.strip():
                     parts = line.split(':')
                     path = parts[0].strip()
-                    line = int(parts[1].strip())
-                    msgbody = parts[3].strip()
-                    messages.add((path, line, msgbody))
+                    line_no = int(parts[1].strip())
+                    msgbody = parts[2].strip()
+                    messages.add((path, line_no, msgbody))
             except (ValueError, IndexError, TypeError):
-                print('Invalid message: {0}'.format(lint_data))
+                print('Invalid message: {0}'.format(line))
         return messages
