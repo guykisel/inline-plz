@@ -28,6 +28,11 @@ from inlineplz.util import system
 
 HERE = os.path.dirname(__file__)
 
+
+def vendored_path(path):
+    return os.path.join(HERE, '..', 'bin', path)
+
+
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
     'docker': ['*Dockerfile', '*.dockerfile'],
@@ -234,6 +239,19 @@ LINTERS = {
         'parser': parsers.MegacheckParser,
         'language': 'go',
         'autorun': False,
+        'run_per_file': False
+    },
+    'pmd': {
+        'install': [],
+        'help': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), '-help'],
+        'run': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), '-d', '.', '-R', 'java-basic',
+                '-f', 'emacs'],
+        'rundefault': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), '-d', '.', '-R',
+                       'java-basic', '-f', 'emacs'],
+        'dotfiles': [],
+        'parser': parsers.PMDParser,
+        'language': 'java',
+        'autorun': True,
         'run_per_file': False
     },
     'prospector': {
