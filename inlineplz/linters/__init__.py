@@ -50,7 +50,7 @@ TRUSTED_INSTALL = [
     ['bundle', 'install'],
     ['cabal', 'update'],
     ['cabal', 'install'],
-    ['glide', 'install'],
+    ['glide', 'install', '--strip-vendor'],
     ['godep', 'get'],
     ['godep', 'restore'],
     ['dep', 'ensure'],
