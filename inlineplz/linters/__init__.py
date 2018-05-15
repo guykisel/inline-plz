@@ -38,6 +38,7 @@ PATTERNS = {
     'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
+    'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
@@ -47,8 +48,7 @@ PATTERNS = {
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
-    'yaml': ['*.yaml', '*.yml'],
-    'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile']
+    'yaml': ['*.yaml', '*.yml']
 }
 
 # these commands will be autorun to try to install dependencies.
@@ -74,6 +74,9 @@ TRUSTED_INSTALL = [
 # these dirs will get deleted after a run
 INSTALL_DIRS = ['node_modules', '.bundle']
 
+GROOVY_PATH = vendored_path(os.path.join('groovy', 'groovy-all-2.4.15.jar'))
+SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-2.0.99.jar'))
+
 # linter configs. add new tools here.
 LINTERS = {
     'bandit': {
@@ -87,6 +90,25 @@ LINTERS = {
         'dotfiles': ['bandit.yaml'],
         'parser': parsers.BanditParser,
         'language': 'python',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'codenarc': {
+        'install': [],
+        'help': [
+            'java',
+            '{};{};{};lib org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-help'
+        ],
+        'run': ['java', vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')), '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'],
+        'rundefault': ['java', vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')), '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'],
+        'dotfiles': [],
+        'parser': parsers.CodenarcParser,
+        'language': 'groovy',
         'autorun': True,
         'run_per_file': False
     },

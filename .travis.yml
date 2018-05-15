@@ -1,5 +1,6 @@
 addons:
   apt:
+    update: true
     packages:
       - python3.5-dev
       - python3.6-dev
