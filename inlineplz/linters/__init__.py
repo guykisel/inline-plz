@@ -75,7 +75,7 @@ TRUSTED_INSTALL = [
 INSTALL_DIRS = ['node_modules', '.bundle']
 
 GROOVY_PATH = vendored_path(os.path.join('groovy', 'groovy-all-2.4.15.jar'))
-SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-2.0.99.jar'))
+SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-1.7.25.jar'))
 
 # linter configs. add new tools here.
 LINTERS = {
@@ -97,15 +97,34 @@ LINTERS = {
         'install': [],
         'help': [
             'java',
-            '{};{};{};lib org.codenarc.CodeNarc'.format(
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
                 GROOVY_PATH,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
                 SLF4J_PATH
             ),
             '-help'
         ],
-        'run': ['java', vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')), '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'],
-        'rundefault': ['java', vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')), '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'],
+        'run': [
+            'java',
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'
+        ],
+        'rundefault': [
+            'java',
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'
+        ],
         'dotfiles': [],
         'parser': parsers.CodenarcParser,
         'language': 'groovy',

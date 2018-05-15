@@ -5,6 +5,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 from inlineplz.parsers.bandit import BanditParser
+from inlineplz.parsers.codenarc import CodenarcParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
 from inlineplz.parsers.eslint import ESLintParser
 from inlineplz.parsers.gherkinlint import GherkinLintParser
