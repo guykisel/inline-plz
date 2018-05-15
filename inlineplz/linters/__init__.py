@@ -28,11 +28,17 @@ from inlineplz.util import system
 
 HERE = os.path.dirname(__file__)
 
+
+def vendored_path(path):
+    return os.path.join(HERE, '..', 'bin', path)
+
+
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
-    'docker': ['*Dockerfile'],
+    'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
+    'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
@@ -42,7 +48,7 @@ PATTERNS = {
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
-    'yaml': ['*.yaml', '*.yml'],
+    'yaml': ['*.yaml', '*.yml']
 }
 
 # these commands will be autorun to try to install dependencies.
@@ -68,6 +74,9 @@ TRUSTED_INSTALL = [
 # these dirs will get deleted after a run
 INSTALL_DIRS = ['node_modules', '.bundle']
 
+GROOVY_PATH = vendored_path(os.path.join('groovy', 'groovy-all-2.4.15.jar'))
+SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-1.7.25.jar'))
+
 # linter configs. add new tools here.
 LINTERS = {
     'bandit': {
@@ -81,6 +90,48 @@ LINTERS = {
         'dotfiles': ['bandit.yaml'],
         'parser': parsers.BanditParser,
         'language': 'python',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'codenarc': {
+        'install': [],
+        'help': [
+            'java',
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-help'
+        ],
+        'run': [
+            'java',
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            '-report=console',
+            '-rulesetfiles=codenarc.xml'
+        ],
+        'rundefault': [
+            'java',
+            '-classpath'
+            '{}:{}:{} org.codenarc.CodeNarc'.format(
+                GROOVY_PATH,
+                vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
+                SLF4J_PATH
+            ),
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            '-report=console',
+            '-rulesetfiles={config_dir}/codenarc.xml'
+        ],
+        'dotfiles': ['codenarc.xml'],
+        'parser': parsers.CodenarcParser,
+        'language': 'groovy',
         'autorun': True,
         'run_per_file': False
     },
@@ -233,6 +284,23 @@ LINTERS = {
         'parser': parsers.MegacheckParser,
         'language': 'go',
         'autorun': False,
+        'run_per_file': False
+    },
+    'pmd': {
+        'install': [],
+        'help': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), '-help'],
+        'run': [
+            vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')),
+            'pmd', '-d', '.', '-R', 'java-basic', '-f', 'emacs'
+        ],
+        'rundefault': [
+            vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')),
+            'pmd', '-d', '.', '-R', 'java-basic', '-f', 'emacs'
+        ],
+        'dotfiles': [],
+        'parser': parsers.PMDParser,
+        'language': 'java',
+        'autorun': True,
         'run_per_file': False
     },
     'prospector': {

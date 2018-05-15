@@ -2,6 +2,9 @@
 
 extends: default
 
+ignore: |
+  */ansible/*
+
 rules:
   braces:
     level: warning
