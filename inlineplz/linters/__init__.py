@@ -113,7 +113,12 @@ LINTERS = {
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
                 SLF4J_PATH
             ),
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            '-report=console',
+            '-rulesetfiles=rulesets/basic.xml,rulesets/braces.xml,rulesets/concurrency.xml,rulesets/convention.xml,'
+            'rulesets/design.xml,rulesets/exceptions.xml,rulesets/formatting.xml,rulesets/generic.xml,'
+            'rulesets/groovyism.xml,rulesets/imports.xml,rulesets/logging.xml,rulesets/naming.xml,'
+            'rulesets/security.xml,rulesets/serialization.xml,rulesets/unnecessary.xml,rulesets/unused.xml'
         ],
         'rundefault': [
             'java',
@@ -123,7 +128,12 @@ LINTERS = {
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
                 SLF4J_PATH
             ),
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile'
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            '-report=console',
+            '-rulesetfiles=rulesets/basic.xml,rulesets/braces.xml,rulesets/concurrency.xml,rulesets/convention.xml,'
+            'rulesets/design.xml,rulesets/exceptions.xml,rulesets/formatting.xml,rulesets/generic.xml,'
+            'rulesets/groovyism.xml,rulesets/imports.xml,rulesets/logging.xml,rulesets/naming.xml,'
+            'rulesets/security.xml,rulesets/serialization.xml,rulesets/unnecessary.xml,rulesets/unused.xml'
         ],
         'dotfiles': [],
         'parser': parsers.CodenarcParser,
