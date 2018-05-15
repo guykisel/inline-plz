@@ -2,5 +2,6 @@ ignore_paths:
     - node_modules
     - .tox
     - .git
+    - inlineplz/bin
 enabled_linters:
     - prospector
