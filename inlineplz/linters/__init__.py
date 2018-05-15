@@ -97,7 +97,7 @@ LINTERS = {
         'install': [],
         'help': [
             'java',
-            '-classpath'
+            '-classpath',
             '{}:{}:{} org.codenarc.CodeNarc'.format(
                 GROOVY_PATH,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
@@ -107,7 +107,7 @@ LINTERS = {
         ],
         'run': [
             'java',
-            '-classpath'
+            '-classpath',
             '{}:{}:{} org.codenarc.CodeNarc'.format(
                 GROOVY_PATH,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
@@ -119,7 +119,7 @@ LINTERS = {
         ],
         'rundefault': [
             'java',
-            '-classpath'
+            '-classpath',
             '{}:{}:{} org.codenarc.CodeNarc'.format(
                 GROOVY_PATH,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
