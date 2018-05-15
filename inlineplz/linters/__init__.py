@@ -289,10 +289,14 @@ LINTERS = {
     'pmd': {
         'install': [],
         'help': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), '-help'],
-        'run': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), 'pmd', '-d', '.', '-R', 'java-basic',
-                '-f', 'emacs'],
-        'rundefault': [vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')), 'pmd', '-d', '.', '-R',
-                       'java-basic', '-f', 'emacs'],
+        'run': [
+            vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')),
+            'pmd', '-d', '.', '-R', 'java-basic', '-f', 'emacs'
+        ],
+        'rundefault': [
+            vendored_path(os.path.join('pmd', 'pmd-bin-6.3.0', 'bin', 'run.sh')),
+            'pmd', '-d', '.', '-R', 'java-basic', '-f', 'emacs'
+        ],
         'dotfiles': [],
         'parser': parsers.PMDParser,
         'language': 'java',
