@@ -115,10 +115,7 @@ LINTERS = {
             ),
             '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
             '-report=console',
-            '-rulesetfiles=rulesets/basic.xml,rulesets/braces.xml,rulesets/concurrency.xml,rulesets/convention.xml,'
-            'rulesets/design.xml,rulesets/exceptions.xml,rulesets/formatting.xml,rulesets/generic.xml,'
-            'rulesets/groovyism.xml,rulesets/imports.xml,rulesets/logging.xml,rulesets/naming.xml,'
-            'rulesets/security.xml,rulesets/serialization.xml,rulesets/unnecessary.xml,rulesets/unused.xml'
+            '-rulesetfiles=codenarc.xml'
         ],
         'rundefault': [
             'java',
@@ -130,12 +127,9 @@ LINTERS = {
             ),
             '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
             '-report=console',
-            '-rulesetfiles=rulesets/basic.xml,rulesets/braces.xml,rulesets/concurrency.xml,rulesets/convention.xml,'
-            'rulesets/design.xml,rulesets/exceptions.xml,rulesets/formatting.xml,rulesets/generic.xml,'
-            'rulesets/groovyism.xml,rulesets/imports.xml,rulesets/logging.xml,rulesets/naming.xml,'
-            'rulesets/security.xml,rulesets/serialization.xml,rulesets/unnecessary.xml,rulesets/unused.xml'
+            '-rulesetfiles={config_dir}/codenarc.xml'
         ],
-        'dotfiles': [],
+        'dotfiles': ['codenarc.xml'],
         'parser': parsers.CodenarcParser,
         'language': 'groovy',
         'autorun': True,
