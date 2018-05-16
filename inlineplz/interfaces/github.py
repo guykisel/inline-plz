@@ -119,7 +119,7 @@ class GitHubInterface(InterfaceBase):
                 print('Stopping early.')
                 break
             if not msg.comments:
-                print("Skipping since there is not comment to post.")
+                print("Skipping since there is no comment to post.")
                 continue
             msg_position = self.position(msg)
             if not msg_position:
@@ -127,12 +127,12 @@ class GitHubInterface(InterfaceBase):
                 continue
             messages_to_post += 1
             if self.is_duplicate(msg, msg_position):
-                print("Skipping since comment already exist.")
+                print("Skipping since this comment already exists.")
                 continue
             # skip this message if we already have too many comments on this file
             # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
-            if paths.setdefault(msg.path, 0) > max_comments // 5:
-                print("Skipping since we reach the maximum number of comments for this file.")
+            if paths.setdefault(msg.path, 0) > max(max_comments // 5, 5):
+                print("Skipping since we reached the maximum number of comments for this file.")
                 continue
             if msg.path.split('/')[0] in self.ignore_paths:
                 print("Skipping since the comment is on an ignored path.")
@@ -150,7 +150,7 @@ class GitHubInterface(InterfaceBase):
             print("Comment posted successfully.")
             paths[msg.path] += 1
             messages_posted += 1
-            if max_comments >= 0 and messages_posted > max_comments:
+            if max_comments and messages_posted > max_comments:
                 break
         print('\n{} messages posted to Github.'.format(messages_posted))
         return messages_to_post
