@@ -97,7 +97,6 @@
     <rule class='org.codenarc.rule.convention.NoTabCharacterRule'/>
     <rule class='org.codenarc.rule.convention.MethodReturnTypeRequiredRule'/>
     <rule class='org.codenarc.rule.convention.ParameterReassignmentRule'/>
-    <rule class='org.codenarc.rule.convention.StaticFieldsBeforeInstanceFieldsRule'/>
     <rule class='org.codenarc.rule.convention.TernaryCouldBeElvisRule'/>
     <rule class='org.codenarc.rule.convention.TrailingCommaRule'/>
     <rule class='org.codenarc.rule.convention.VariableTypeRequiredRule'/>
@@ -295,10 +294,8 @@
     <rule class='org.codenarc.rule.serialization.SerialPersistentFieldsRule'/>
     <rule class='org.codenarc.rule.serialization.SerialVersionUIDRule'/>
 
-    <rule class='org.codenarc.rule.size.AbcMetricRule'/>
     <rule class='org.codenarc.rule.size.ClassSizeRule'/>
     <rule class='org.codenarc.rule.size.CrapMetricRule'/>
-    <rule class='org.codenarc.rule.size.CyclomaticComplexityRule'/>
     <rule class='org.codenarc.rule.size.MethodCountRule'/>
     <rule class='org.codenarc.rule.size.MethodSizeRule'/>
     <rule class='org.codenarc.rule.size.NestedBlockDepthRule'/>
