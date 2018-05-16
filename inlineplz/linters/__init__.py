@@ -133,7 +133,7 @@ LINTERS = {
                 '.'
             ),
             'org.codenarc.CodeNarc',
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...',
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...groovy',
             '-report=console',
             '-rulesetfiles={}'.format(os.path.join(os.getcwd(), 'codenarc.xml'))
         ],
@@ -152,7 +152,7 @@ LINTERS = {
                 '.'
             ),
             'org.codenarc.CodeNarc',
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...',
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...groovy',
             '-report=console',
             '-rulesetfiles=codenarc.xml'
         ],
