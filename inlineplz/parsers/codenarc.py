@@ -20,7 +20,7 @@ class CodenarcParser(ParserBase):
                 if line.startswith('Violation:'):
                     parts = line.split()
                     line_no = int(parts[3].split('=')[-1])
-                    msg = parts[4]
+                    msg = ' '.join(parts[4:-1]).split('Src=')[0]
                     messages.add((path, line_no, msg))
             except (ValueError, IndexError, TypeError):
                 print('Invalid message: {0}'.format(line))

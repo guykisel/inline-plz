@@ -27,7 +27,7 @@ class Messages(object):
         # replace line numbers to improve deduping. we're commenting inline anyway,
         # so line numbers don't really matter
         if line > 1:
-            message = message.replace(str(line), '')
+            message = message.replace(str(line), '_')
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)

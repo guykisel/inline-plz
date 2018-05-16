@@ -29,8 +29,14 @@ from inlineplz.util import system
 HERE = os.path.dirname(__file__)
 
 
+if sys.platform == 'win32':
+    JAVA_SEP = ';'
+else:
+    JAVA_SEP = ':'
+
+
 def vendored_path(path):
-    return os.path.join(HERE, '..', 'bin', path)
+    return os.path.relpath(os.path.join(HERE, '..', 'bin', path))
 
 
 # glob patterns for what language is represented by what type of files.
@@ -98,36 +104,57 @@ LINTERS = {
         'help': [
             'java',
             '-classpath',
-            '{}:{}:{} org.codenarc.CodeNarc'.format(
+            '{}{}{}{}{}{}{}{}{}'.format(
                 GROOVY_PATH,
+                JAVA_SEP,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
-                SLF4J_PATH
+                JAVA_SEP,
+                SLF4J_PATH,
+                JAVA_SEP,
+                vendored_path('codenarc'),
+                JAVA_SEP,
+                '.'
             ),
+            'org.codenarc.CodeNarc',
             '-help'
         ],
         'run': [
             'java',
             '-classpath',
-            '{}:{}:{} org.codenarc.CodeNarc'.format(
+            '{}{}{}{}{}{}{}{}{}'.format(
                 GROOVY_PATH,
+                JAVA_SEP,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
-                SLF4J_PATH
+                JAVA_SEP,
+                SLF4J_PATH,
+                JAVA_SEP,
+                vendored_path('codenarc'),
+                JAVA_SEP,
+                '.'
             ),
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            'org.codenarc.CodeNarc',
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...',
             '-report=console',
-            '-rulesetfiles=codenarc.xml'
+            '-rulesetfiles={}'.format(os.path.join(os.getcwd(), 'codenarc.xml'))
         ],
         'rundefault': [
             'java',
             '-classpath',
-            '{}:{}:{} org.codenarc.CodeNarc'.format(
+            '{}{}{}{}{}{}{}{}{}'.format(
                 GROOVY_PATH,
+                JAVA_SEP,
                 vendored_path(os.path.join('codenarc', 'CodeNarc-1.1.jar')),
-                SLF4J_PATH
+                JAVA_SEP,
+                SLF4J_PATH,
+                JAVA_SEP,
+                vendored_path('codenarc'),
+                JAVA_SEP,
+                '.'
             ),
-            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile',
+            'org.codenarc.CodeNarc',
+            '-includes=**/*.groovy,**/Jenkinsfile,**/jenkinsfile,**/...',
             '-report=console',
-            '-rulesetfiles={config_dir}/codenarc.xml'
+            '-rulesetfiles=codenarc.xml'
         ],
         'dotfiles': ['codenarc.xml'],
         'parser': parsers.CodenarcParser,
@@ -402,6 +429,7 @@ LINTERS = {
 
 
 def run_command(command, log_on_fail=False, log_all=False):
+    print('Running: "{}"'.format(' '.join(command)))
     shell = False
     if os.name == 'nt':
         shell = True
@@ -457,7 +485,6 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     ignore_paths = ignore_paths or []
     path = path or os.getcwd()
     cmd = run_config(config, config_dir)
-    print(cmd)
     run_cmds = []
     patterns = PATTERNS.get(config.get('language'))
     paths = all_filenames_in_dir(path=path, ignore_paths=ignore_paths)
@@ -623,7 +650,6 @@ def lint(install=False,
                 output = run_per_file(config, ignore_paths, config_dir)
             else:
                 cmd = run_config(config, config_dir)
-                print(cmd)
                 _, output = run_command(cmd)
                 output = output.strip()
         except Exception:
