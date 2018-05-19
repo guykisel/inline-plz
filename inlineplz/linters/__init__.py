@@ -41,6 +41,7 @@ def vendored_path(path):
 
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
+    'ansible': ['*.yaml', '*.yml'],
     'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
@@ -85,6 +86,17 @@ SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-1.7.25.jar'))
 
 # linter configs. add new tools here.
 LINTERS = {
+    'ansible-lint': {
+        'install': [['pip', 'install', '-U', 'ansible-lint']],
+        'help': ['ansible-lint', '-h'],
+        'run': ['ansible-lint', '*/*.yaml', '*/*.yml', '-p'],
+        'rundefault': ['ansible-lint', '*/*.yaml', '*/*.yml', '-p'],
+        'dotfiles': ['.ansible-lint'],
+        'parser': parsers.AnsibleLintParser,
+        'language': 'ansible',
+        'autorun': True,
+        'run_per_file': False
+    },
     'bandit': {
         'install': [['pip', 'install', '-U', 'bandit']],
         'help': ['bandit', '-h'],
