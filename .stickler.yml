@@ -3,6 +3,7 @@ linters:
     python: 3
     fixer: true
     max-line-length: 120
+    ignore: 'E1601'
   py3k:
 files:
   ignore:
