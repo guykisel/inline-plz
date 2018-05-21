@@ -4,6 +4,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from inlineplz.parsers.ansiblelint import AnsibleLintParser
 from inlineplz.parsers.bandit import BanditParser
 from inlineplz.parsers.codenarc import CodenarcParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
