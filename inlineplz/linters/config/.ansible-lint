@@ -1,0 +1,7 @@
+parseable: true
+skip_list:
+    - ANSIBLE0002
+    - ANSIBLE0011
+    - ANSIBLE0013
+    - ANSIBLE0016
+
