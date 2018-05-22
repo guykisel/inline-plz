@@ -90,7 +90,7 @@ LINTERS = {
         'install': [['pip', 'install', '-U', 'ansible-lint']],
         'help': ['ansible-lint', '-h'],
         'run': ['ansible-lint', '*/*.yaml', '*/*.yml', '-p'],
-        'rundefault': ['ansible-lint', '*/*.yaml', '*/*.yml', '-p'],
+        'rundefault': ['ansible-lint', '*/*.yaml', '*/*.yml', '-p', '-c', '{config_dir}/.ansible-lint'],
         'dotfiles': ['.ansible-lint'],
         'parser': parsers.AnsibleLintParser,
         'language': 'ansible',
