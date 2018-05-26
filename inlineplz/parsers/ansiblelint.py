@@ -10,14 +10,16 @@ class AnsibleLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for line in lint_data.split('\n'):
-            try:
-                if line.strip():
-                    parts = line.split(':')
-                    path = parts[0].strip()
-                    line_no = int(parts[1].strip())
-                    msgbody = parts[2].strip()
-                    messages.add((path, line_no, msgbody))
-            except (ValueError, IndexError, TypeError):
-                print('Invalid message: {0}'.format(line))
+        for file_path, output in lint_data:
+            if file_path.strip() and output.strip():
+                for line in output.split('\n'):
+                    try:
+                        if line.strip():
+                            parts = line.split(':')
+                            path = parts[0].strip()
+                            line_no = int(parts[1].strip())
+                            msgbody = parts[2].strip()
+                            messages.add((path, line_no, msgbody))
+                    except (ValueError, IndexError, TypeError):
+                        print('Invalid message: {0}'.format(line))
         return messages
