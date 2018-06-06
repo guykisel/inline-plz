@@ -191,5 +191,8 @@ class GitHubInterface(InterfaceBase):
                 for hunk in patched_file:
                     for position, hunk_line in enumerate(hunk):
                         if hunk_line.target_line_no == message.line_number:
+                            if not hunk_line.is_added:
+                                # if the line isn't an added line, we don't want to comment on it
+                                return
                             return position + offset
                     offset += len(hunk) + 1
