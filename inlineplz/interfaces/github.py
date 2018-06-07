@@ -101,9 +101,16 @@ class GitHubInterface(InterfaceBase):
             sha=self.last_sha
         )
 
-    def finish_review(self, success=True):
+    def finish_review(self, success=True, error=False):
         """Mark our review as finished."""
-        if success:
+        if error:
+            self.github_repo.create_status(
+                state='error',
+                description='Static analysis error! inline-plz failed to run.',
+                context='inline-plz',
+                sha=self.last_sha
+            )
+        elif success:
             self.github_repo.create_status(
                 state='success',
                 description='Static analysis complete! No errors found in your PR.',
