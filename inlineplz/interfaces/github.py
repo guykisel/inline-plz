@@ -47,6 +47,7 @@ class GitHubInterface(InterfaceBase):
         print('Master SHA: {0}'.format(self.master_sha))
 
         print('Branch: {0}'.format(branch))
+        self.pr = None
         if branch and not pr:
             for pull_request in self.github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
@@ -71,6 +72,9 @@ class GitHubInterface(InterfaceBase):
         self.patch = unidiff.PatchSet(self.diff.split('\n'))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
+
+    def is_valid(self):
+        return self.pr is not None
 
     @staticmethod
     def pr_commits(pull_request):

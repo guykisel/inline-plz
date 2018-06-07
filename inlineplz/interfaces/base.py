@@ -12,6 +12,9 @@ class InterfaceBase(object):
     def finish_review(self, success=True):
         raise NotImplementedError()
 
+    def is_valid(self):
+        raise NotImplementedError()
+
     def post_messages(self, messages, max_comments):
         """
 

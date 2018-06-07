@@ -161,6 +161,9 @@ def inline(args):
             args.commit,
             args.ignore_paths
         )
+        if not my_interface.is_valid():
+            print('Invalid review. Exiting.')
+            return 0
         my_interface.start_review()
     messages = linters.lint(
         args.install,
