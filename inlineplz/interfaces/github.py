@@ -47,7 +47,7 @@ class GitHubInterface(InterfaceBase):
         print('Master SHA: {0}'.format(self.master_sha))
 
         print('Branch: {0}'.format(branch))
-        self.pr = None
+        self.pull_request_number = None
         if branch and not pr:
             for pull_request in self.github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
@@ -62,7 +62,7 @@ class GitHubInterface(InterfaceBase):
             self.github = None
             return
         print('PR ID: {0}'.format(pr))
-        self.pr = pr
+        self.pull_request_number = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
@@ -74,7 +74,7 @@ class GitHubInterface(InterfaceBase):
         self.last_update = time.time()
 
     def is_valid(self):
-        return self.pr is not None
+        return self.pull_request_number is not None
 
     @staticmethod
     def pr_commits(pull_request):
@@ -112,7 +112,7 @@ class GitHubInterface(InterfaceBase):
             )
         else:
             self.github_repo.create_status(
-                state='success',
+                state='failure',
                 description='Static analysis complete! Found errors in your PR.',
                 context='inline-plz',
                 sha=self.last_sha
@@ -120,7 +120,7 @@ class GitHubInterface(InterfaceBase):
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
-        pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
+        pull_request = self.github.pull_request(self.owner, self.repo, self.pull_request_number)
         latest_remote_sha = self.pr_commits(pull_request)[-1].sha
         return self.last_sha != latest_remote_sha
 
