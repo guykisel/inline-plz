@@ -93,7 +93,8 @@ class GitHubInterface(InterfaceBase):
         self.github_repo.create_status(
             state='pending',
             description='Static analysis in progress.',
-            context='inline-plz'
+            context='inline-plz',
+            sha=self.last_sha
         )
 
     def finish_review(self, success=True):
@@ -102,13 +103,15 @@ class GitHubInterface(InterfaceBase):
             self.github_repo.create_status(
                 state='success',
                 description='Static analysis complete! No errors found in your PR.',
-                context='inline-plz'
+                context='inline-plz',
+                sha=self.last_sha
             )
         else:
             self.github_repo.create_status(
                 state='success',
                 description='Static analysis complete! Found errors in your PR.',
-                context='inline-plz'
+                context='inline-plz',
+                sha=self.last_sha
             )
 
     def out_of_date(self):
