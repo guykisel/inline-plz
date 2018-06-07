@@ -41,15 +41,15 @@ class GitHubInterface(InterfaceBase):
         self.owner = owner
         self.repo = repo
 
-        github_repo = self.github.repository(self.owner, self.repo)
-        all_commits = self.repo_commits(github_repo)
+        self.github_repo = self.github.repository(self.owner, self.repo)
+        all_commits = self.repo_commits(self.github_repo)
         self.master_sha = all_commits[0].sha
         print('Master SHA: {0}'.format(self.master_sha))
 
         print('Branch: {0}'.format(branch))
+        self.pull_request_number = None
         if branch and not pr:
-            github_repo = self.github.repository(self.owner, self.repo)
-            for pull_request in github_repo.iter_pulls():
+            for pull_request in self.github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
                     break
@@ -62,7 +62,7 @@ class GitHubInterface(InterfaceBase):
             self.github = None
             return
         print('PR ID: {0}'.format(pr))
-        self.pr = pr
+        self.pull_request_number = pr
         self.pull_request = self.github.pull_request(owner, repo, pr)
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
@@ -72,6 +72,9 @@ class GitHubInterface(InterfaceBase):
         self.patch = unidiff.PatchSet(self.diff.split('\n'))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
+
+    def is_valid(self):
+        return self.pull_request_number is not None
 
     @staticmethod
     def pr_commits(pull_request):
@@ -89,9 +92,35 @@ class GitHubInterface(InterfaceBase):
         except (AttributeError, TypeError):
             return [c for c in repo.iter_commits()]
 
+    def start_review(self):
+        """Mark our review as started."""
+        self.github_repo.create_status(
+            state='pending',
+            description='Static analysis in progress.',
+            context='inline-plz',
+            sha=self.last_sha
+        )
+
+    def finish_review(self, success=True):
+        """Mark our review as finished."""
+        if success:
+            self.github_repo.create_status(
+                state='success',
+                description='Static analysis complete! No errors found in your PR.',
+                context='inline-plz',
+                sha=self.last_sha
+            )
+        else:
+            self.github_repo.create_status(
+                state='failure',
+                description='Static analysis complete! Found errors in your PR.',
+                context='inline-plz',
+                sha=self.last_sha
+            )
+
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
-        pull_request = self.github.pull_request(self.owner, self.repo, self.pr)
+        pull_request = self.github.pull_request(self.owner, self.repo, self.pull_request_number)
         latest_remote_sha = self.pr_commits(pull_request)[-1].sha
         return self.last_sha != latest_remote_sha
 
