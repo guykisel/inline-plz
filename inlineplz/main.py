@@ -178,7 +178,7 @@ def inline(args):
             args.disabled_linters,
             trusted
         )
-    except Exception:
+    except Exception: # pylint: disable=broad-except
         print('Linting failed:\n{}'.format(traceback.format_exc()))
         print('inline-plz version: {}'.format(__version__))
         print('Python version: {}'.format(sys.version))
