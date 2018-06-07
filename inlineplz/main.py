@@ -149,6 +149,19 @@ def inline(args):
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print('Valid inline-plz config not found')
         return 1
+    print('Using interface: {0}'.format(args.interface))
+    if not args.dryrun:
+        my_interface = interfaces.INTERFACES[args.interface](
+            owner,
+            repo,
+            args.pull_request,
+            args.branch,
+            args.token,
+            url,
+            args.commit,
+            args.ignore_paths
+        )
+        my_interface.start_review()
     messages = linters.lint(
         args.install,
         args.autorun,
@@ -167,19 +180,10 @@ def inline(args):
         print_messages(messages)
         return 0
     try:
-        print('Using interface: {0}'.format(args.interface))
-        my_interface = interfaces.INTERFACES[args.interface](
-            owner,
-            repo,
-            args.pull_request,
-            args.branch,
-            args.token,
-            url,
-            args.commit,
-            args.ignore_paths
-        )
         if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
+            my_interface.finish_review(success=False)
             return 1
+        my_interface.finish_review(success=True)
     except KeyError:
         print('Interface not found: {}'.format(args.interface))
     return 0

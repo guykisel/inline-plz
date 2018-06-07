@@ -41,15 +41,14 @@ class GitHubInterface(InterfaceBase):
         self.owner = owner
         self.repo = repo
 
-        github_repo = self.github.repository(self.owner, self.repo)
-        all_commits = self.repo_commits(github_repo)
+        self.github_repo = self.github.repository(self.owner, self.repo)
+        all_commits = self.repo_commits(self.github_repo)
         self.master_sha = all_commits[0].sha
         print('Master SHA: {0}'.format(self.master_sha))
 
         print('Branch: {0}'.format(branch))
         if branch and not pr:
-            github_repo = self.github.repository(self.owner, self.repo)
-            for pull_request in github_repo.iter_pulls():
+            for pull_request in self.github_repo.iter_pulls():
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
                     break
@@ -88,6 +87,29 @@ class GitHubInterface(InterfaceBase):
             return [c for c in repo.commits()]
         except (AttributeError, TypeError):
             return [c for c in repo.iter_commits()]
+
+    def start_review(self):
+        """Mark our review as started."""
+        self.github_repo.create_status(
+            state='pending',
+            description='Static analysis in progress.',
+            context='inline-plz'
+        )
+
+    def finish_review(self, success=True):
+        """Mark our review as finished."""
+        if success:
+            self.github_repo.create_status(
+                state='success',
+                description='Static analysis complete! No errors found in your PR.',
+                context='inline-plz'
+            )
+        else:
+            self.github_repo.create_status(
+                state='success',
+                description='Static analysis complete! Found errors in your PR.',
+                context='inline-plz'
+            )
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
