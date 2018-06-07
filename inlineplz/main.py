@@ -9,6 +9,7 @@ import argparse
 import os
 import sys
 import time
+import traceback
 
 import giturlparse
 import yaml
@@ -121,6 +122,7 @@ def inline(args):
     # don't load trusted value from config because we don't trust the config
     trusted = args.trusted
     args = load_config(args)
+    ret_code = 0
 
     # TODO: consider moving this git parsing stuff into the github interface
     url = args.url
@@ -150,6 +152,7 @@ def inline(args):
         print('Valid inline-plz config not found')
         return 1
     print('Using interface: {0}'.format(args.interface))
+    my_interface = None
     if not args.dryrun:
         my_interface = interfaces.INTERFACES[args.interface](
             owner,
@@ -165,31 +168,42 @@ def inline(args):
             print('Invalid review. Exiting.')
             return 0
         my_interface.start_review()
-    messages = linters.lint(
-        args.install,
-        args.autorun,
-        args.ignore_paths,
-        args.config_dir,
-        args.enabled_linters,
-        args.disabled_linters,
-        trusted
-    )
+    try:
+        messages = linters.lint(
+            args.install,
+            args.autorun,
+            args.ignore_paths,
+            args.config_dir,
+            args.enabled_linters,
+            args.disabled_linters,
+            trusted
+        )
+    except Exception:
+        print('Linting failed:\n{}'.format(traceback.format_exc()))
+        print('inline-plz version: {}'.format(__version__))
+        print('Python version: {}'.format(sys.version))
+        ret_code = 1
+        my_interface.finish_review(error=True)
+        return ret_code
     print('{} lint messages found'.format(len(messages)))
     print('inline-plz version: {}'.format(__version__))
     print('Python version: {}'.format(sys.version))
 
     # TODO: implement dryrun as an interface instead of a special case here
+
     if args.dryrun:
         print_messages(messages)
-        return 0
+        return ret_code
     try:
-        if my_interface.post_messages(messages, args.max_comments) and not args.zero_exit:
+        if my_interface.post_messages(messages, args.max_comments):
+            if not args.zero_exit:
+                ret_code = 1
             my_interface.finish_review(success=False)
-            return 1
+            return ret_code
         my_interface.finish_review(success=True)
     except KeyError:
         print('Interface not found: {}'.format(args.interface))
-    return 0
+    return ret_code
 
 
 def print_messages(messages):
