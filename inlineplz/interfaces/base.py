@@ -9,7 +9,7 @@ class InterfaceBase(object):
     def start_review(self):
         raise NotImplementedError()
 
-    def finish_review(self, success=True):
+    def finish_review(self, success=True, error=False):
         raise NotImplementedError()
 
     def is_valid(self):
