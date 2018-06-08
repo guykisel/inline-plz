@@ -136,7 +136,7 @@ class GitHubInterface(InterfaceBase):
         if not self.github:
             print('Github connection is invalid.')
             return
-        messages_to_post = 0
+        valid_errors = 0
         messages_posted = 0
         paths = dict()
 
@@ -164,7 +164,7 @@ class GitHubInterface(InterfaceBase):
             if msg.path.split('/')[0] in self.ignore_paths:
                 print("Skipping since the comment is on an ignored path.")
                 continue
-            messages_to_post += 1
+            valid_errors += 1
             if self.is_duplicate(msg, msg_position):
                 print("Skipping since this comment already exists.")
                 continue
@@ -183,7 +183,7 @@ class GitHubInterface(InterfaceBase):
             except github3.GitHubError as err:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
-                messages_to_post -= 1
+                valid_errors -= 1
                 print("Posting failed: {}".format(err))
                 continue
             print("Comment posted successfully.")
@@ -192,7 +192,7 @@ class GitHubInterface(InterfaceBase):
             if max_comments and messages_posted > max_comments:
                 break
         print('\n{} messages posted to Github.'.format(messages_posted))
-        return messages_to_post
+        return valid_errors
 
     def is_duplicate(self, message, position):
         # update our list of review comments about once a second
