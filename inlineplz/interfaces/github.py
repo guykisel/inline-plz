@@ -53,7 +53,7 @@ class GitHubInterface(InterfaceBase):
                 print('Branch: {} - Pull Request Head Ref: {}'.format(
                     branch,
                     pull_request.to_json()['head']['ref']
-                )
+                ))
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr=pull_request.to_json()['number']
                     break
