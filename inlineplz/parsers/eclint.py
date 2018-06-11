@@ -13,7 +13,7 @@ class ECLintParser(ParserBase):
         path = ''
         for line in lint_data.split('\n'):
             try:
-                if line.lstrip() != line:
+                if '❌' not in line:
                     path = line.strip()
                     continue
                 parts = line.split('❌')

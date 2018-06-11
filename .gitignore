@@ -68,3 +68,5 @@ node_modules
 .pytest_cache/
 
 !inlineplz/bin/**
+inlineplz/bin/pmd/pmd-bin-6.3.0/.DS_Store
+testenv/pip-selfcheck.json
