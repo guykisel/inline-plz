@@ -8,6 +8,7 @@ from inlineplz.parsers.ansiblelint import AnsibleLintParser
 from inlineplz.parsers.bandit import BanditParser
 from inlineplz.parsers.codenarc import CodenarcParser
 from inlineplz.parsers.dockerfilelint import DockerfileLintParser
+from inlineplz.parsers.eclint import ECLintParser
 from inlineplz.parsers.eslint import ESLintParser
 from inlineplz.parsers.gherkinlint import GherkinLintParser
 from inlineplz.parsers.gometalinter import GometalinterParser
