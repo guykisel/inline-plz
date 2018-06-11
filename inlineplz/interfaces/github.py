@@ -50,6 +50,10 @@ class GitHubInterface(InterfaceBase):
         self.pull_request_number = None
         if branch and not pr:
             for pull_request in self.github_repo.iter_pulls():
+                print('Branch: {} - Pull Request Head Ref: {}'.format(
+                    branch, 
+                    pull_request.to_json()['head']['ref']
+                )
                 if pull_request.to_json()['head']['ref'] == branch:
                     pr = pull_request.to_json()['number']
                     break
