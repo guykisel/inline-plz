@@ -17,7 +17,7 @@ class ECLintParser(ParserBase):
                     path = line.strip()
                     continue
                 parts = line.split('❌')
-                line_no = int(parts[0].split(':').strip()[0])
+                line_no = int(parts[0].split(':')[0].strip())
                 msg = parts[1].strip()
                 messages.add((path, line_no, msg))
             except (ValueError, IndexError, TypeError):
