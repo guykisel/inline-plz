@@ -51,31 +51,31 @@ class GitHubInterface(InterfaceBase):
         if branch and not pr:
             for pull_request in self.github_repo.iter_pulls():
                 print('Branch: {} - Pull Request Head Ref: {}'.format(
-                    branch, 
+                    branch,
                     pull_request.to_json()['head']['ref']
                 )
                 if pull_request.to_json()['head']['ref'] == branch:
-                    pr = pull_request.to_json()['number']
+                    pr=pull_request.to_json()['number']
                     break
 
         # TODO: support non-PR runs
         try:
-            pr = int(pr)
+            pr=int(pr)
         except (ValueError, TypeError):
             print('{0} is not a valid pull request ID'.format(pr))
-            self.github = None
+            self.github=None
             return
         print('PR ID: {0}'.format(pr))
-        self.pull_request_number = pr
-        self.pull_request = self.github.pull_request(owner, repo, pr)
-        self.commits = self.pr_commits(self.pull_request)
-        self.last_sha = commit or git.current_sha()
+        self.pull_request_number=pr
+        self.pull_request=self.github.pull_request(owner, repo, pr)
+        self.commits=self.pr_commits(self.pull_request)
+        self.last_sha=commit or git.current_sha()
         print('Last SHA: {0}'.format(self.last_sha))
-        self.first_sha = self.commits[0].sha
-        self.diff = git.diff(self.master_sha, self.last_sha)
-        self.patch = unidiff.PatchSet(self.diff.split('\n'))
-        self.review_comments = list(self.pull_request.review_comments())
-        self.last_update = time.time()
+        self.first_sha=self.commits[0].sha
+        self.diff=git.diff(self.master_sha, self.last_sha)
+        self.patch=unidiff.PatchSet(self.diff.split('\n'))
+        self.review_comments=list(self.pull_request.review_comments())
+        self.last_update=time.time()
 
     def is_valid(self):
         return self.pull_request_number is not None
