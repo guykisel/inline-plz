@@ -47,7 +47,7 @@ PATTERNS = {
     'gherkin': ['*.feature'],
     'go': ['*.go'],
     'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
-    'editorconfig': ['.editorconfig']
+    'editorconfig': ['.editorconfig'],
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
