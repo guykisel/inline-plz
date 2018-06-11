@@ -41,11 +41,13 @@ def vendored_path(path):
 
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
+    'all': ['*.*'],
     'ansible': ['*.yaml', '*.yml'],
     'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
     'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
+    'editorconfig': ['.editorconfig']
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
@@ -55,6 +57,7 @@ PATTERNS = {
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
+    'text': [".md", ".txt", ".rtf", ".html", ".tex", ".markdown"],
     'yaml': ['*.yaml', '*.yml']
 }
 
@@ -187,6 +190,19 @@ LINTERS = {
         'language': 'docker',
         'autorun': True,
         'run_per_file': True
+    },
+    'eclint': {
+        'install': [['npm', 'install', 'eclint']],
+        'help': [os.path.normpath('./node_modules/.bin/eclint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
+        'dotfiles': [
+            '.editorconfig'
+        ],
+        'parser': parsers.ECLintParser,
+        'language': 'editorconfig',
+        'autorun': True,
+        'run_per_file': False
     },
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
@@ -339,6 +355,17 @@ LINTERS = {
         'dotfiles': [],
         'parser': parsers.PMDParser,
         'language': 'java',
+        'autorun': True,
+        'run_per_file': False
+    },
+    'proselint': {
+        'install': [['pip', 'install', '-U', 'proselint']],
+        'help': ['proselint', '-h'],
+        'run': ['proselint', '.'],
+        'rundefault': ['proselint', '.'],
+        'dotfiles': [],
+        'parser': parsers.ProselintParser,
+        'language': 'text',
         'autorun': True,
         'run_per_file': False
     },

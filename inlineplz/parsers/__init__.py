@@ -17,6 +17,7 @@ from inlineplz.parsers.jsonlint import JSONLintParser
 from inlineplz.parsers.markdownlint import MarkdownLintParser
 from inlineplz.parsers.megacheck import MegacheckParser
 from inlineplz.parsers.pmd import PMDParser
+from inlineplz.parsers.proselint import ProselintParser
 from inlineplz.parsers.prospector import ProspectorParser
 from inlineplz.parsers.rstlint import RSTLintParser
 from inlineplz.parsers.rflint import RobotFrameworkLintParser
