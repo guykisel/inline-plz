@@ -36,17 +36,22 @@ def main():
     parser.add_argument('--dryrun', action='store_true')
     parser.add_argument('--zero-exit', action='store_true')
     parser.add_argument('--install', action='store_true')
-    parser.add_argument('--trusted', action='store_true', help='allow installing all local dependencies')
-    parser.add_argument('--max-comments', default=25, type=int, help='maximum comments to write')
+    parser.add_argument(
+        '--trusted',
+        action='store_true',
+        help='allow installing all local dependencies')
+    parser.add_argument(
+        '--max-comments',
+        default=25,
+        type=int,
+        help='maximum comments to write')
     parser.add_argument(
         '--autorun',
         action='store_true',
-        help='automatically run linters with reasonable defaults'
-    )
+        help='automatically run linters with reasonable defaults')
     parser.add_argument(
         '--config-dir',
-        help='default directory to search for linter config files'
-    )
+        help='default directory to search for linter config files')
     args = parser.parse_args()
     args = env.update_args(args)
     if args.config_dir:
@@ -91,7 +96,8 @@ def load_config(args, config_path='.inlineplz.yml'):
         pass
     args = update_from_config(args, config)
     args.ignore_paths = args.__dict__.get('ignore_paths') or [
-        'node_modules', '.git', '.tox', 'godeps', 'vendor']
+        'node_modules', '.git', '.tox', 'godeps', 'vendor', 'site-packages'
+    ]
     if config_path != '.inlineplz.yml':
         return args
     # fall back to config_dir inlineplz yaml if we didn't find one locally
@@ -155,29 +161,16 @@ def inline(args):
     my_interface = None
     if not args.dryrun:
         my_interface = interfaces.INTERFACES[args.interface](
-            owner,
-            repo,
-            args.pull_request,
-            args.branch,
-            args.token,
-            url,
-            args.commit,
-            args.ignore_paths
-        )
+            owner, repo, args.pull_request, args.branch, args.token, url,
+            args.commit, args.ignore_paths)
         if not my_interface.is_valid():
             print('Invalid review. Exiting.')
             return 0
         my_interface.start_review()
     try:
-        messages = linters.lint(
-            args.install,
-            args.autorun,
-            args.ignore_paths,
-            args.config_dir,
-            args.enabled_linters,
-            args.disabled_linters,
-            trusted
-        )
+        messages = linters.lint(args.install, args.autorun, args.ignore_paths,
+                                args.config_dir, args.enabled_linters,
+                                args.disabled_linters, trusted)
     except Exception:  # pylint: disable=broad-except
         print('Linting failed:\n{}'.format(traceback.format_exc()))
         print('inline-plz version: {}'.format(__version__))

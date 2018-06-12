@@ -68,3 +68,5 @@ node_modules
 .pytest_cache/
 
 !inlineplz/bin/**
+*.DS_Store
+*/pip-selfcheck.json

@@ -10,10 +10,14 @@ import fnmatch
 from multiprocessing.pool import ThreadPool as Pool
 import os.path
 import shutil
-import subprocess
 import sys
 import time
 import traceback
+
+if sys.version_info >= (3, 5):
+    import subprocess
+else:
+    import subprocess32 as subprocess
 
 # Use the built-in version of scandir/walk if possible, otherwise
 # use the scandir module version
@@ -41,11 +45,13 @@ def vendored_path(path):
 
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {
+    'all': ['*.*'],
     'ansible': ['*.yaml', '*.yml'],
     'docker': ['*Dockerfile', '*.dockerfile'],
     'gherkin': ['*.feature'],
     'go': ['*.go'],
     'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
+    'editorconfig': ['.editorconfig'],
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
@@ -55,6 +61,7 @@ PATTERNS = {
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
+    'text': ['*.md', '*.txt', '*.rtf', '*.html', '*.tex', '*.markdown'],
     'yaml': ['*.yaml', '*.yml']
 }
 
@@ -187,6 +194,19 @@ LINTERS = {
         'language': 'docker',
         'autorun': True,
         'run_per_file': True
+    },
+    'eclint': {
+        'install': [['npm', 'install', 'eclint']],
+        'help': [os.path.normpath('./node_modules/.bin/eclint'), '-h'],
+        'run': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
+        'rundefault': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
+        'dotfiles': [
+            '.editorconfig'
+        ],
+        'parser': parsers.ECLintParser,
+        'language': 'editorconfig',
+        'autorun': True,
+        'run_per_file': False
     },
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
@@ -342,6 +362,18 @@ LINTERS = {
         'autorun': True,
         'run_per_file': False
     },
+    'proselint': {
+        'install': [['pip', 'install', '-U', 'proselint']],
+        'help': ['proselint', '-h'],
+        'run': ['proselint'],
+        'rundefault': ['proselint'],
+        'dotfiles': [],
+        'parser': parsers.ProselintParser,
+        'language': 'text',
+        'autorun': True,
+        'run_per_file': True,
+        'concurrency': 1
+    },
     'prospector': {
         'install': [['pip', 'install', '-U', 'prospector[with_everything]'],
                     ['pip', 'install', '-U', 'prospector']],
@@ -440,7 +472,7 @@ LINTERS = {
 }
 
 
-def run_command(command, log_on_fail=False, log_all=False):
+def run_command(command, log_on_fail=False, log_all=False, timeout=120):
     print('Running: "{}"'.format(' '.join(command)))
     shell = False
     if os.name == 'nt':
@@ -452,12 +484,17 @@ def run_command(command, log_on_fail=False, log_all=False):
         'stderr': subprocess.PIPE,
         'shell': shell,
         'env': os.environ,
-        'universal_newlines': True
+        'universal_newlines': True,
+        'timeout': timeout
     }
     if sys.version_info[0] >= 3 and sys.version_info[1] >= 6:
         popen_kwargs['encoding'] = 'utf-8'
-    proc = subprocess.Popen(**popen_kwargs)
-    stdout, stderr = proc.communicate()
+    try:
+        proc = subprocess.run(**popen_kwargs)
+    except subprocess.TimeoutExpired:
+        print('Timeout: {}'.format(command))
+        return 0, ''
+    stdout, stderr = proc.stdout, proc.stderr
     output = '{}\n{}'.format(stdout, stderr).strip()
     if output and ((log_on_fail and proc.returncode) or log_all):
         print(output)
@@ -488,7 +525,8 @@ def should_ignore_path(path, ignore_paths):
     for ignore_path in ignore_paths:
         if (os.path.relpath(path).startswith(ignore_path) or
                 path.startswith(ignore_path) or
-                fnmatch.fnmatch(path, ignore_path)):
+                fnmatch.fnmatch(path, ignore_path) or
+                ignore_path in path.split(os.path.sep)):
             return True
     return False
 
@@ -499,14 +537,15 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     cmd = run_config(config, config_dir)
     run_cmds = []
     patterns = PATTERNS.get(config.get('language'))
+    concurrency = config.get('concurrency')
     paths = all_filenames_in_dir(path=path, ignore_paths=ignore_paths)
     for pattern in patterns:
         for filepath in fnmatch.filter(paths, pattern):
             run_cmds.append(cmd + [filepath])
-    pool = Pool()
+    pool = Pool(processes=concurrency)
 
     def result(run_cmd):
-        _, out = run_command(run_cmd)
+        _, out = run_command(run_cmd, timeout=5)
         return run_cmd[-1], out.strip()
 
     output = pool.map(result, run_cmds)
