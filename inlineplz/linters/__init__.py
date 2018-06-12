@@ -367,7 +367,7 @@ LINTERS = {
         'parser': parsers.ProselintParser,
         'language': 'text',
         'autorun': True,
-        'run_per_file': False
+        'run_per_file': True
     },
     'prospector': {
         'install': [['pip', 'install', '-U', 'prospector[with_everything]'],

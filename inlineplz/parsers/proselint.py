@@ -10,14 +10,14 @@ class ProselintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for line in lint_data.split('\n'):
+        for file_path, output in lint_data:
             try:
-                parts = line.split(':')
-                if line.strip() and parts:
-                    path = parts[0].strip()
-                    line = int(parts[1].strip())
-                    msgbody = ':'.join(parts[2:]).strip()
-                    messages.add((path, line, msgbody))
+                if file_path.strip() and output.strip():
+                    for line in output.split('\n'):
+                        parts = line.split(':')
+                        line = int(parts[1].strip())
+                        msgbody = ':'.join(parts[2:]).strip()
+                        messages.add((file_path, line, msgbody))
             except (ValueError, IndexError):
-                print('Invalid message: {0}'.format(line))
+                print('Invalid message: {0}'.format(output))
         return messages
