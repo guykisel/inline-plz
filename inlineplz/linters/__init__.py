@@ -57,7 +57,7 @@ PATTERNS = {
     'stylus': ['*.styl'],
     'robotframework': ['*.robot'],
     'rst': ['*.rst'],
-    'text': [".md", ".txt", ".rtf", ".html", ".tex", ".markdown"],
+    'text': ['*.md', '*.txt', '*.rtf', '*.html', '*.tex', '*.markdown'],
     'yaml': ['*.yaml', '*.yml']
 }
 
