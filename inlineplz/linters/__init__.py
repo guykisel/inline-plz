@@ -14,7 +14,7 @@ import sys
 import time
 import traceback
 
-if sys.version_info >= (3, 2):
+if sys.version_info >= (3, 5):
     import subprocess
 else:
     import subprocess32 as subprocess
