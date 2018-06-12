@@ -3,5 +3,6 @@ ignore_paths:
     - .tox
     - .git
     - inlineplz/bin
+    - site-packages
 enabled_linters:
     - prospector

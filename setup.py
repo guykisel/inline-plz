@@ -3,7 +3,6 @@
 
 from setuptools import setup, find_packages
 
-
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
@@ -11,15 +10,9 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'unidiff',
-    'github3.py',
-    'xmltodict',
-    'pyyaml',
-    'scandir',
-    'uritemplate.py',
-    'dirtyjson',
-    'python-dateutil',
-    'git-url-parse'
+    'unidiff', 'github3.py', 'xmltodict', 'pyyaml', 'scandir',
+    'uritemplate.py', 'dirtyjson', 'python-dateutil', 'git-url-parse',
+    'subprocess32'
 ]
 
 test_requirements = [
@@ -56,8 +49,5 @@ setup(
     test_suite='tests',
     tests_require=test_requirements,
     entry_points={
-        'console_scripts': [
-            'inline-plz = inlineplz.main:main'
-        ],
-    }
-)
+        'console_scripts': ['inline-plz = inlineplz.main:main'],
+    })
