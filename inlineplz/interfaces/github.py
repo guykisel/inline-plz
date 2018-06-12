@@ -49,14 +49,18 @@ class GitHubInterface(InterfaceBase):
         print('Branch: {0}'.format(branch))
         self.pull_request_number = None
         if branch and not pr:
-            for pull_request in self.github_repo.iter_pulls():
-                print('Branch: {} - Pull Request Head Ref: {}'.format(
-                    branch,
-                    pull_request.to_json()['head']['ref']
-                ))
-                if pull_request.to_json()['head']['ref'] == branch:
-                    pr = pull_request.to_json()['number']
-                    break
+            for github_repo in [self.github_repo, self.github_repo.parent]:
+                for pull_request in github_repo.iter_pulls():
+                    print('Branch: {} - Pull Request Head Ref: {}'.format(
+                        branch,
+                        pull_request.to_json()['head']['ref']
+                    ))
+                    if pull_request.to_json()['head']['ref'] == branch:
+                        pr = pull_request.to_json()['number']
+                        self.github_repo = github_repo
+                        break
+        self.owner = self.github_repo.owner
+        self.repo = self.github_repo.name
 
         # TODO: support non-PR runs
         try:
@@ -67,7 +71,7 @@ class GitHubInterface(InterfaceBase):
             return
         print('PR ID: {0}'.format(pr))
         self.pull_request_number = pr
-        self.pull_request = self.github.pull_request(owner, repo, pr)
+        self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
         print('Last SHA: {0}'.format(self.last_sha))
