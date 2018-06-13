@@ -50,6 +50,10 @@ class GitHubInterface(InterfaceBase):
         self.pull_request_number = None
         if branch and not pr:
             for github_repo in [self.github_repo, self.github_repo.parent]:
+                if pr:
+                    break
+                if not github_repo:
+                    continue
                 for pull_request in github_repo.iter_pulls():
                     print('Branch: {} - Pull Request Head Ref: {}'.format(
                         branch,
@@ -157,29 +161,29 @@ class GitHubInterface(InterfaceBase):
         start = time.time()
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
-            print('\nTrying to post a review comment.')
-            print('{0}'.format(msg))
+            #print('\nTrying to post a review comment.')
+            #print('{0}'.format(msg))
             if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
-                print('Stopping early.')
+                #print('Stopping early.')
                 break
             if not msg.comments:
-                print("Skipping since there is no comment to post.")
+                #print("Skipping since there is no comment to post.")
                 continue
             msg_position = self.position(msg)
             if not msg_position:
-                print("Skipping since the comment is not part of this PR.")
+                #print("Skipping since the comment is not part of this PR.")
                 continue
             if msg.path.split('/')[0] in self.ignore_paths:
-                print("Skipping since the comment is on an ignored path.")
+                #print("Skipping since the comment is on an ignored path.")
                 continue
             valid_errors += 1
             if self.is_duplicate(msg, msg_position):
-                print("Skipping since this comment already exists.")
+                #print("Skipping since this comment already exists.")
                 continue
             # skip this message if we already have too many comments on this file
             # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
             if paths.setdefault(msg.path, 0) > max(max_comments // 5, 5):
-                print("Skipping since we reached the maximum number of comments for this file.")
+                #print("Skipping since we reached the maximum number of comments for this file.")
                 continue
             try:
                 self.pull_request.create_review_comment(
@@ -192,9 +196,9 @@ class GitHubInterface(InterfaceBase):
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
                 valid_errors -= 1
-                print("Posting failed: {}".format(err))
+                #print("Posting failed: {}".format(err))
                 continue
-            print("Comment posted successfully.")
+            print("Comment posted successfully: {0}".format(msg))
             paths[msg.path] += 1
             messages_posted += 1
             if max_comments and messages_posted > max_comments:

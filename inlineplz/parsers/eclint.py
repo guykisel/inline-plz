@@ -10,16 +10,15 @@ class ECLintParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        path = ''
-        for line in lint_data.split('\n'):
-            try:
-                if '❌' not in line:
-                    path = line.strip()
-                    continue
-                parts = line.split('❌')
-                line_no = int(parts[0].split(':')[0].strip())
-                msg = parts[1].strip()
-                messages.add((path, line_no, msg))
-            except (ValueError, IndexError, TypeError):
-                print('Invalid message: {0}'.format(line))
+        for file_path, output in lint_data:
+            for line in output.split('\n'):
+                try:
+                    if '❌' not in line:
+                        continue
+                    parts = line.split('❌')
+                    line_no = int(parts[0].split(':')[0].strip())
+                    msg = parts[1].strip()
+                    messages.add((file_path, line_no, msg))
+                except (ValueError, IndexError, TypeError):
+                    print('Invalid message: {0}'.format(line))
         return messages

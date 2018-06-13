@@ -12,7 +12,7 @@ with open('HISTORY.rst') as history_file:
 requirements = [
     'unidiff', 'github3.py', 'xmltodict', 'pyyaml', 'scandir',
     'uritemplate.py', 'dirtyjson', 'python-dateutil', 'git-url-parse',
-    'subprocess32'
+    'subprocess32', 'identify'
 ]
 
 test_requirements = [
