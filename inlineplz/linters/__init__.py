@@ -14,6 +14,8 @@ import sys
 import time
 import traceback
 
+from identify import identify
+
 if sys.version_info >= (3, 5):
     import subprocess
 else:
@@ -51,7 +53,6 @@ PATTERNS = {
     'gherkin': ['*.feature'],
     'go': ['*.go'],
     'groovy': ['*.groovy', 'Jenkinsfile', 'jenkinsfile'],
-    'editorconfig': ['.editorconfig'],
     'java': ['*.java'],
     'javascript': ['*.js'],
     'json': ['*.json'],
@@ -200,13 +201,12 @@ LINTERS = {
         'help': [os.path.normpath('./node_modules/.bin/eclint'), '-h'],
         'run': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
         'rundefault': [os.path.normpath('./node_modules/.bin/eclint'), 'check'],
-        'dotfiles': [
-            '.editorconfig'
-        ],
+        'dotfiles': ['.editorconfig'],
         'parser': parsers.ECLintParser,
-        'language': 'editorconfig',
-        'autorun': True,
-        'run_per_file': False
+        'language': 'all',
+        'autorun': False,
+        'run_per_file': True,
+        'run_if_dotfile_in_root': True
     },
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
@@ -541,7 +541,8 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     paths = all_filenames_in_dir(path=path, ignore_paths=ignore_paths)
     for pattern in patterns:
         for filepath in fnmatch.filter(paths, pattern):
-            run_cmds.append(cmd + [filepath])
+            if 'text' in identify.tags_from_path(filepath):
+                run_cmds.append(cmd + [filepath])
     pool = Pool(processes=concurrency)
 
     def result(run_cmd):
@@ -574,8 +575,11 @@ def linters_to_run(autorun=False,
     else:
         dotfilefound = {}
         for linter, config in LINTERS.items():
-            if dotfiles_exist(config) and config.get('autorun'):
+            if dotfiles_exist(config):
                 dotfilefound[config.get('language')] = True
+                if config.get('run_if_dotfile_in_root') and linter not in disabled_linters:
+                    linters.add(linter)
+            if dotfilefound.get(config.get('language')) and config.get('autorun'):
                 if linter not in disabled_linters:
                     linters.add(linter)
         filenames = all_filenames_in_dir(
@@ -602,7 +606,9 @@ def all_filenames_in_dir(path=None, ignore_paths=None):
         if should_ignore_path(root, ignore_paths):
             continue
         for filename in filenames:
-            paths.add(os.path.join(root, filename))
+            full_path = os.path.join(root, filename)
+            if 'text' in identify.tags_from_path(full_path):
+                paths.add(full_path)
     return paths
 
 
@@ -714,12 +720,12 @@ def lint(install=False,
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
-                print('Found {0} messages from {1}'.format(len(linter_messages), linter))
                 # prepend linter name to message content
                 linter_messages = {
                     (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2]))
-                    for msg in linter_messages
+                    for msg in linter_messages if not should_ignore_path(msg[0], ignore_paths)
                 }
+                print('Found {0} messages from {1}'.format(len(linter_messages), linter))
                 messages.add_messages(linter_messages)
         except Exception:
             print('Parsing {0} output failed:'.format(linter))
