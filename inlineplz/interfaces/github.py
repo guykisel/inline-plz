@@ -162,7 +162,7 @@ class GitHubInterface(InterfaceBase):
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             #print('\nTrying to post a review comment.')
-            #print('{0}'.format(msg))
+            # print('{0}'.format(msg))
             if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
                 #print('Stopping early.')
                 break
