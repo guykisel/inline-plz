@@ -720,12 +720,12 @@ def lint(install=False,
         try:
             if output:
                 linter_messages = config.get('parser')().parse(output)
-                print('Found {0} messages from {1}'.format(len(linter_messages), linter))
                 # prepend linter name to message content
                 linter_messages = {
                     (msg[0], msg[1], '{0}: {1}'.format(linter, msg[2]))
-                    for msg in linter_messages
+                    for msg in linter_messages if not should_ignore_path(msg[0], ignore_paths)
                 }
+                print('Found {0} messages from {1}'.format(len(linter_messages), linter))
                 messages.add_messages(linter_messages)
         except Exception:
             print('Parsing {0} output failed:'.format(linter))
