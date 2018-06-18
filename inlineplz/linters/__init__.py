@@ -42,7 +42,10 @@ else:
 
 
 def vendored_path(path):
-    return os.path.relpath(os.path.join(HERE, '..', 'bin', path))
+    # we use a relpath on windows because the colon in windows drive letter paths messes with java classpaths
+    if sys.platform == 'win32':
+        return os.path.normpath(os.path.relpath(os.path.join(os.path.dirname(HERE), 'bin', path), os.getcwd()))
+    return os.path.normpath(os.path.abspath(os.path.join(os.path.dirname(HERE), 'bin', path)))
 
 
 # glob patterns for what language is represented by what type of files.
@@ -80,6 +83,7 @@ TRUSTED_INSTALL = [
     ['go', 'get', '-t', '-v', './...'],
     ['yarn', 'install', '--non-interactive'],
     ['npm', 'install'],
+    ['pip', 'install', '-e', '.'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['pipenv', 'install'],
