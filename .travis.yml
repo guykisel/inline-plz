@@ -1,11 +1,3 @@
-addons:
-  apt:
-    update: true
-    packages:
-      - python3.5-dev
-      - python3.6-dev
-    sources:
-      - deadsnakes
 deploy:
   'on':
     condition: $TRAVIS_PYTHON_VERSION == 2.7
@@ -28,9 +20,9 @@ install:
   - python setup.py develop
 language: python
 python:
-  - '3.6'
-  - '3.5'
-  - '2.7'
+  - "3.6"
+  - "3.5"
+  - "2.7"
 script:
   - tox
   - inline-plz --dryrun --autorun
