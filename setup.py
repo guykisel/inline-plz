@@ -3,7 +3,6 @@
 
 from setuptools import setup, find_packages
 
-
 with open('README.rst') as readme_file:
     readme = readme_file.read()
 
@@ -11,15 +10,9 @@ with open('HISTORY.rst') as history_file:
     history = history_file.read()
 
 requirements = [
-    'unidiff',
-    'github3.py',
-    'xmltodict',
-    'pyyaml',
-    'scandir',
-    'uritemplate.py',
-    'dirtyjson',
-    'python-dateutil',
-    'git-url-parse'
+    'unidiff', 'github3.py', 'xmltodict', 'pyyaml', 'scandir',
+    'uritemplate.py', 'dirtyjson', 'python-dateutil', 'git-url-parse',
+    'subprocess32', 'identify'
 ]
 
 test_requirements = [
@@ -28,7 +21,7 @@ test_requirements = [
 
 setup(
     name='inlineplz',
-    version='0.36.2',
+    version='0.37.3',
     description="Inline your lint messages",
     long_description=readme + '\n\n' + history,
     author="Guy Kisel",
@@ -41,7 +34,7 @@ setup(
     zip_safe=False,
     keywords='inlineplz',
     classifiers=[
-        'Development Status :: 2 - Pre-Alpha',
+        'Development Status :: 4 - Beta',
         'Intended Audience :: Developers',
         'License :: OSI Approved :: ISC License (ISCL)',
         'Natural Language :: English',
@@ -49,15 +42,11 @@ setup(
         'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
-        'Programming Language :: Python :: 3.3',
-        'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
+        'Programming Language :: Python :: 3.6',
     ],
     test_suite='tests',
     tests_require=test_requirements,
     entry_points={
-        'console_scripts': [
-            'inline-plz = inlineplz.main:main'
-        ],
-    }
-)
+        'console_scripts': ['inline-plz = inlineplz.main:main'],
+    })
