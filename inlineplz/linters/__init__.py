@@ -83,6 +83,7 @@ TRUSTED_INSTALL = [
     ['go', 'get', '-t', '-v', './...'],
     ['yarn', 'install', '--non-interactive'],
     ['npm', 'install'],
+    ['pip', 'install', '-e', '.'],
     ['pip', 'install', '-r', 'requirements.txt'],
     ['pip', 'install', '-r', 'requirements_dev.txt'],
     ['pipenv', 'install'],
