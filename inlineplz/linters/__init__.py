@@ -99,7 +99,7 @@ SLF4J_PATH = vendored_path(os.path.join('groovy', 'slf4j-api-1.7.25.jar'))
 # linter configs. add new tools here.
 LINTERS = {
     'ansible-lint': {
-        'install': [['pip', 'install', '-U', 'ansible-lint']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'ansible-lint']],
         'help': ['ansible-lint', '-h'],
         'run': ['ansible-lint', '-p'],
         'rundefault': ['ansible-lint', '-p', '-c', '{config_dir}/.ansible-lint'],
@@ -110,7 +110,7 @@ LINTERS = {
         'run_per_file': True
     },
     'bandit': {
-        'install': [['pip', 'install', '-U', 'bandit']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'bandit']],
         'help': ['bandit', '-h'],
         'run': ['bandit', '-f', 'json', '-iii', '-ll', '-r', '.'],
         'rundefault': [
@@ -367,7 +367,7 @@ LINTERS = {
         'run_per_file': False
     },
     'proselint': {
-        'install': [['pip', 'install', '-U', 'proselint']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'proselint']],
         'help': ['proselint', '-h'],
         'run': ['proselint'],
         'rundefault': ['proselint'],
@@ -379,8 +379,8 @@ LINTERS = {
         'concurrency': 1
     },
     'prospector': {
-        'install': [['pip', 'install', '-U', 'prospector[with_everything]'],
-                    ['pip', 'install', '-U', 'prospector']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'prospector[with_everything]'],
+                    [sys.executable, '-m', 'pip', 'install', '-U', 'prospector']],
         'help': ['prospector', '-h'],
         'run': ['prospector', '--zero-exit', '-o', 'json'],
         'rundefault': [
@@ -394,7 +394,7 @@ LINTERS = {
         'run_per_file': False
     },
     'robotframework-lint': {
-        'install': [['pip', 'install', '-U', 'robotframework-lint']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'robotframework-lint']],
         'help': ['rflint', '--help'],
         'run': ['rflint'],
         'rundefault': ['rflint', '-A', '{config_dir}/.rflint'],
@@ -405,7 +405,7 @@ LINTERS = {
         'run_per_file': True
     },
     'restructuredtext_lint': {
-        'install': [['pip', 'install', '-U', 'restructuredtext_lint']],
+        'install': [[sys.executable, '-m', 'pip', 'install', '-U', 'restructuredtext_lint']],
         'help': ['rst-lint', '-h'],
         'run': ['rst-lint', '--format', 'json', '--encoding', 'utf-8'],
         'rundefault': ['rst-lint', '--format', 'json', '--encoding', 'utf-8'],
@@ -463,7 +463,7 @@ LINTERS = {
         'run_per_file': False
     },
     'yamllint': {
-        'install': [['pip', 'install', 'yamllint']],
+        'install': [[sys.executable, '-m', 'pip', 'install', 'yamllint']],
         'help': ['yamllint', '-h'],
         'run': ['yamllint', '-f', 'parsable', '.'],
         'rundefault': ['yamllint', '-c', '{config_dir}/.yamllint', '-f', 'parsable', '.'],
