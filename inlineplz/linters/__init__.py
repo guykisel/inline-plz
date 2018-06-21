@@ -83,11 +83,11 @@ TRUSTED_INSTALL = [
     ['go', 'get', '-t', '-v', './...'],
     ['yarn', 'install', '--non-interactive'],
     ['npm', 'install'],
-    ['pip', 'install', '-e', '.'],
-    ['pip', 'install', '-r', 'requirements.txt'],
-    ['pip', 'install', '-r', 'requirements_dev.txt'],
+    [sys.executable, '-m', 'pip', 'install', '-e', '.'],
+    [sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'],
+    [sys.executable, '-m', 'pip', 'install', '-r', 'requirements_dev.txt'],
     ['pipenv', 'install'],
-    ['python', 'setup.py', 'develop']
+    [sys.executable, 'setup.py', 'develop']
 ]
 
 # these dirs will get deleted after a run
