@@ -18,5 +18,6 @@
   "header-increment": false,
   "ol-prefix": false,
   "no-trailing-punctuation": false,
-  "header-style": false
+  "header-style": false,
+  "commands-show-output": false
 }
