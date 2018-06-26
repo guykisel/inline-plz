@@ -127,7 +127,7 @@
 
     <rule class='org.codenarc.rule.exceptions.CatchArrayIndexOutOfBoundsExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.CatchErrorRule'/>
-    <rule class='org.codenarc.rule.exceptions.CatchExceptionRule'/>
+<!--     <rule class='org.codenarc.rule.exceptions.CatchExceptionRule'/> -->
     <rule class='org.codenarc.rule.exceptions.CatchIllegalMonitorStateExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.CatchIndexOutOfBoundsExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.CatchNullPointerExceptionRule'/>
