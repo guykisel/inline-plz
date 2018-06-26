@@ -333,7 +333,7 @@
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryModOneRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryNullCheckBeforeInstanceOfRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryNullCheckRule'/>
-    <rule class='org.codenarc.rule.unnecessary.UnnecessaryObjectReferencesRule'/>
+<!--     <rule class='org.codenarc.rule.unnecessary.UnnecessaryObjectReferencesRule'/> -->
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryOverridingMethodRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryPackageReferenceRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryParenthesesForMethodCallWithClosureRule'/>
