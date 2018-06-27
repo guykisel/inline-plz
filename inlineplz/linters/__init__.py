@@ -88,6 +88,7 @@ TRUSTED_INSTALL = [
     [sys.executable, '-m', 'pip', 'install', '-e', '.'],
     [sys.executable, '-m', 'pip', 'install', '-r', 'requirements.txt'],
     [sys.executable, '-m', 'pip', 'install', '-r', 'requirements_dev.txt'],
+    [sys.executable, '-m', 'pip', 'install', '-r', 'requirements-dev.txt'],
     ['pipenv', 'install']
 ]
 
