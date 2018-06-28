@@ -113,7 +113,7 @@
     <rule class='org.codenarc.rule.design.EmptyMethodInAbstractClassRule'/>
     <rule class='org.codenarc.rule.design.FinalClassWithProtectedMemberRule'/>
     <rule class='org.codenarc.rule.design.ImplementationAsTypeRule'/>
-    <rule class='org.codenarc.rule.design.InstanceofRule'/>
+<!--     <rule class='org.codenarc.rule.design.InstanceofRule'/> -->
     <rule class='org.codenarc.rule.design.LocaleSetDefaultRule'/>
     <rule class='org.codenarc.rule.design.PublicInstanceFieldRule'/>
     <rule class='org.codenarc.rule.design.PrivateFieldCouldBeFinalRule'/>
@@ -126,7 +126,7 @@
     <rule class='org.codenarc.rule.design.AssignmentToStaticFieldFromInstanceMethodRule'/>
 
     <rule class='org.codenarc.rule.exceptions.CatchArrayIndexOutOfBoundsExceptionRule'/>
-    <rule class='org.codenarc.rule.exceptions.CatchErrorRule'/>
+<!--     <rule class='org.codenarc.rule.exceptions.CatchErrorRule'/> -->
 <!--     <rule class='org.codenarc.rule.exceptions.CatchExceptionRule'/> -->
     <rule class='org.codenarc.rule.exceptions.CatchIllegalMonitorStateExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.CatchIndexOutOfBoundsExceptionRule'/>
@@ -140,8 +140,8 @@
     <rule class='org.codenarc.rule.exceptions.MissingNewInThrowStatementRule'/>
     <rule class='org.codenarc.rule.exceptions.ReturnNullFromCatchBlockRule'/>
     <rule class='org.codenarc.rule.exceptions.SwallowThreadDeathRule'/>
-    <rule class='org.codenarc.rule.exceptions.ThrowErrorRule'/>
-    <rule class='org.codenarc.rule.exceptions.ThrowExceptionRule'/>
+<!--     <rule class='org.codenarc.rule.exceptions.ThrowErrorRule'/> -->
+<!--     <rule class='org.codenarc.rule.exceptions.ThrowExceptionRule'/> -->
     <rule class='org.codenarc.rule.exceptions.ThrowNullPointerExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.ThrowRuntimeExceptionRule'/>
     <rule class='org.codenarc.rule.exceptions.ThrowThrowableRule'/>
@@ -296,9 +296,9 @@
 
     <rule class='org.codenarc.rule.size.ClassSizeRule'/>
     <rule class='org.codenarc.rule.size.CrapMetricRule'/>
-    <rule class='org.codenarc.rule.size.MethodCountRule'/>
-    <rule class='org.codenarc.rule.size.MethodSizeRule'/>
-    <rule class='org.codenarc.rule.size.NestedBlockDepthRule'/>
+<!--     <rule class='org.codenarc.rule.size.MethodCountRule'/> -->
+<!--     <rule class='org.codenarc.rule.size.MethodSizeRule'/> -->
+<!--     <rule class='org.codenarc.rule.size.NestedBlockDepthRule'/> -->
     <!--<rule class='org.codenarc.rule.size.ParameterCountRule'/>-->
 
     <rule class='org.codenarc.rule.unnecessary.AddEmptyStringRule'/>
@@ -326,7 +326,7 @@
 <!--     <rule class='org.codenarc.rule.unnecessary.UnnecessaryGetterRule'/> -->
     <!--<rule class='org.codenarc.rule.unnecessary.UnnecessaryGStringRule'/>-->
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryIfStatementRule'/>
-    <rule class='org.codenarc.rule.unnecessary.UnnecessaryInstanceOfCheckRule'/>
+<!--     <rule class='org.codenarc.rule.unnecessary.UnnecessaryInstanceOfCheckRule'/> -->
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryInstantiationToGetClassRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryIntegerInstantiationRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryLongInstantiationRule'/>
@@ -338,7 +338,7 @@
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryPackageReferenceRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryParenthesesForMethodCallWithClosureRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessaryPublicModifierRule'/>
-    <rule class='org.codenarc.rule.unnecessary.UnnecessaryReturnKeywordRule'/>
+<!--     <rule class='org.codenarc.rule.unnecessary.UnnecessaryReturnKeywordRule'/> -->
     <rule class='org.codenarc.rule.unnecessary.UnnecessarySafeNavigationOperatorRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessarySelfAssignmentRule'/>
     <rule class='org.codenarc.rule.unnecessary.UnnecessarySemicolonRule'/>
