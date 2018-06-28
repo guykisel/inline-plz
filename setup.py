@@ -21,7 +21,7 @@ test_requirements = [
 
 setup(
     name='inlineplz',
-    version='0.37.9',
+    version='0.37.10',
     description="Inline your lint messages",
     long_description=readme + '\n\n' + history,
     author="Guy Kisel",
