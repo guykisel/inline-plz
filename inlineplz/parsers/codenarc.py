@@ -11,7 +11,10 @@ class CodenarcParser(ParserBase):
     def parse(self, lint_data):
         messages = set()
         path = ''
+        msg = ''
+        line_no = -1
         for line in lint_data.split('\n'):
+            parts = []
             try:
                 line = line.strip()
                 if line.startswith('File:'):
@@ -21,6 +24,9 @@ class CodenarcParser(ParserBase):
                     parts = line.split()
                     line_no = int(parts[3].split('=')[-1])
                     msg = ' '.join(parts[4:-1]).split('Src=')[0]
+                else:
+                    msg += '\n' + line.split('Src=')[0]
+                if 'Src=' in line:
                     messages.add((path, line_no, msg))
             except (ValueError, IndexError, TypeError):
                 print('Invalid message: {0}'.format(line))
