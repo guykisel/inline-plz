@@ -156,7 +156,7 @@
     <rule class='org.codenarc.rule.formatting.BracesForTryCatchFinallyRule'/>
     <rule class='org.codenarc.rule.formatting.ClosureStatementOnOpeningLineOfMultipleLineClosureRule'/>
     <!--<rule class='org.codenarc.rule.formatting.ConsecutiveBlankLinesRule'/>-->
-    <rule class='org.codenarc.rule.formatting.FileEndsWithoutNewlineRule'/>
+    <!--<rule class='org.codenarc.rule.formatting.FileEndsWithoutNewlineRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.IndentationRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.LineLengthRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.MissingBlankLineAfterImportsRule'/>-->
