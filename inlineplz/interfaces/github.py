@@ -223,7 +223,7 @@ class GitHubInterface(InterfaceBase):
     def format_message(message):
         if not message.comments:
             return ''
-        if len(message.comments) > 1:
+        if len(message.comments) > 1 or any('\n' in c for c in message.comments):
             return (
                 '```\n' +
                 '\n'.join(sorted(list(message.comments))) +
