@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import argparse
 import os
+import pprint
 import sys
 import time
 import traceback
@@ -76,6 +77,12 @@ def update_from_config(args, config):
     ]
     for key, value in config.items():
         if not key.startswith('_') and key not in blacklist:
+            if args.__dict__.get(key) and value:
+                try:
+                    args.__dict__[key] = list(set(args.__dict__.get(key).extend(value)))
+                    continue
+                except Exception:
+                    traceback.print_exc()
             args.__dict__[key] = args.__dict__.get(key) or value
     return args
 
@@ -86,14 +93,12 @@ def load_config(args, config_path='.inlineplz.yml'):
     print(config_path)
     try:
         with open(config_path) as configfile:
-            try:
-                config = yaml.safe_load(configfile) or {}
-                if config:
-                    print('Loaded config from {}'.format(config_path))
-            except yaml.parser.ParserError:
-                pass
-    except (IOError, OSError):
-        pass
+            config = yaml.safe_load(configfile) or {}
+            if config:
+                print('Loaded config from {}'.format(config_path))
+                pprint.pprint(config)
+    except (IOError, OSError, yaml.parser.ParserError):
+        traceback.print_exc()
     args = update_from_config(args, config)
     args.ignore_paths = args.__dict__.get('ignore_paths') or [
         'node_modules', '.git', '.tox', 'godeps', 'vendor', 'site-packages'
@@ -128,6 +133,8 @@ def inline(args):
     # don't load trusted value from config because we don't trust the config
     trusted = args.trusted
     args = load_config(args)
+    print('Args:')
+    pprint.pprint(args)
     ret_code = 0
 
     # TODO: consider moving this git parsing stuff into the github interface
