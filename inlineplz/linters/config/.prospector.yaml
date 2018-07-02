@@ -28,6 +28,7 @@ pylint:
     - superfluous-parens
     - too-many-arguments
     - inconsistent-return-statements
+    - broad-except
 
 pep8:
   full: true
