@@ -212,7 +212,7 @@ LINTERS = {
         'language': 'all',
         'autorun': False,
         'run_per_file': True,
-        'run_if_dotfile_in_root': True
+        'run_if_dotfile_in_root': False
     },
     'eslint': {
         'install': [['npm', 'install', 'eslint']],
