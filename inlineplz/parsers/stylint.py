@@ -13,11 +13,11 @@ class StylintParser(ParserBase):
         current_path = None
         current_line = None
         current_message = None
-        for line in lint_data.split('\n'):
-            if line.startswith('File:'):
-                current_path = line.split('File:')[-1].strip()
-            elif line.startswith('Line:'):
-                current_line = int(line.split(':')[1])
+        for line in lint_data.split("\n"):
+            if line.startswith("File:"):
+                current_path = line.split("File:")[-1].strip()
+            elif line.startswith("Line:"):
+                current_line = int(line.split(":")[1])
             elif line:
                 current_message = line.strip()
             if all([current_line, current_path, current_message]):

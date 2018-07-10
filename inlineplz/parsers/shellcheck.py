@@ -19,9 +19,9 @@ class ShellcheckParser(ParserBase):
                     for msgdata in filedata:
                         try:
                             path = file_path
-                            line = msgdata['line']
-                            msgbody = msgdata['message']
+                            line = msgdata["line"]
+                            msgbody = msgdata["message"]
                             messages.add((path, line, msgbody))
                         except (ValueError, KeyError, TypeError):
-                            print('Invalid message: {0}'.format(msgdata))
+                            print("Invalid message: {0}".format(msgdata))
         return messages

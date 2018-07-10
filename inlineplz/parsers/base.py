@@ -2,6 +2,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+
 class ParserBase(object):
     """Abstract base class for parsers"""
 

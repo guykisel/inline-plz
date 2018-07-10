@@ -10,14 +10,14 @@ class PMDParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        for line in lint_data.split('\n'):
+        for line in lint_data.split("\n"):
             try:
                 if line.strip():
-                    parts = line.split(':')
+                    parts = line.split(":")
                     path = parts[0].strip()
                     line_no = int(parts[1].strip())
                     msgbody = parts[2].strip()
                     messages.add((path, line_no, msgbody))
             except (ValueError, IndexError, TypeError):
-                print('Invalid message: {0}'.format(line))
+                print("Invalid message: {0}".format(line))
         return messages

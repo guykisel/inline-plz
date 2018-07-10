@@ -17,9 +17,9 @@ class JSCSParser(ParserBase):
                 for msgdata in msgs:
                     try:
                         path = filename
-                        line = msgdata['line']
-                        msgbody = msgdata['message']
+                        line = msgdata["line"]
+                        msgbody = msgdata["message"]
                         messages.add((path, line, msgbody))
                     except (ValueError, KeyError):
-                        print('Invalid message: {0}'.format(msgdata))
+                        print("Invalid message: {0}".format(msgdata))
         return messages

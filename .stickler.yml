@@ -1,13 +1,18 @@
 linters:
-  flake8:
-    python: 3
-    fixer: true
-    max-line-length: 120
-    ignore: 'E1601'
-  py3k:
+    flake8:
+        python: 3
+        fixer: true
+        max-line-length: 120
+        ignore: 'E1601,W503,E501'
+    pep8:
+        python: 3
+        ignore: 'E1601,W503,E501'
+        max-line-length: 120
+        fixer: true
+    py3k:
 files:
-  ignore:
-    - 'bower_components/*'
-    - 'node_modules/*'
+    ignore:
+        - 'bower_components/*'
+        - 'node_modules/*'
 fixers:
-  enable: true
+    enable: true

@@ -17,11 +17,11 @@ class RSTLintParser(ParserBase):
                 for msgdata in json.loads(output):
                     try:
                         path = file_path
-                        line = msgdata['line']
-                        msgbody = msgdata['message']
+                        line = msgdata["line"]
+                        msgbody = msgdata["message"]
                         messages.add((path, line, msgbody))
                     except (ValueError, KeyError):
-                        print('Invalid message: {0}'.format(msgdata))
+                        print("Invalid message: {0}".format(msgdata))
             except json.error.Error:
-                print('Invalid message: {0}'.format(output))
+                print("Invalid message: {0}".format(output))
         return messages
