@@ -13,7 +13,7 @@ from __future__ import unicode_literals
 import os
 
 
-STOP_FILE_NAME = '.inlineplzstop'
+STOP_FILE_NAME = ".inlineplzstop"
 
 
 def should_stop():

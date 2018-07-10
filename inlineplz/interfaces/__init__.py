@@ -5,6 +5,4 @@ from __future__ import unicode_literals
 
 from inlineplz.interfaces.github import GitHubInterface
 
-INTERFACES = {
-    'github': GitHubInterface
-}
+INTERFACES = {"github": GitHubInterface}

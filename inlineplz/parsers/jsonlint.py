@@ -14,9 +14,9 @@ class JSONLintParser(ParserBase):
             try:
                 if file_path.strip() and output.strip():
                     path = file_path
-                    line = int(output.split(':')[1].split()[1].strip(', '))
+                    line = int(output.split(":")[1].split()[1].strip(", "))
                     msgbody = output
                     messages.add((path, line, msgbody))
             except (ValueError, IndexError):
-                print('Invalid message: {0}'.format(output))
+                print("Invalid message: {0}".format(output))
         return messages

@@ -14,10 +14,10 @@ class GometalinterParser(ParserBase):
         messages = set()
         for msgdata in json.loads(lint_data):
             try:
-                path = msgdata['path']
-                line = msgdata['line']
-                msgbody = msgdata['linter'] + ': ' + msgdata['message']
+                path = msgdata["path"]
+                line = msgdata["line"]
+                msgbody = msgdata["linter"] + ": " + msgdata["message"]
                 messages.add((path, line, msgbody))
             except (ValueError, KeyError):
-                print('Invalid message: {0}'.format(msgdata))
+                print("Invalid message: {0}".format(msgdata))
         return messages

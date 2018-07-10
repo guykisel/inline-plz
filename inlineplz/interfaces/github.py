@@ -15,7 +15,17 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-    def __init__(self, owner, repo, pr=None, branch=None, token=None, url=None, commit=None, ignore_paths=None):
+    def __init__(
+        self,
+        owner,
+        repo,
+        pr=None,
+        branch=None,
+        token=None,
+        url=None,
+        commit=None,
+        ignore_paths=None,
+    ):
         """
         GitHubInterface lets us post messages to GitHub.
 
@@ -34,7 +44,7 @@ class GitHubInterface(InterfaceBase):
         """
         self.github = None
         self.ignore_paths = set(ignore_paths or [])
-        if not url or url == 'https://github.com':
+        if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
@@ -44,9 +54,9 @@ class GitHubInterface(InterfaceBase):
         self.github_repo = self.github.repository(self.owner, self.repo)
         all_commits = self.repo_commits(self.github_repo)
         self.master_sha = all_commits[0].sha
-        print('Master SHA: {0}'.format(self.master_sha))
+        print("Master SHA: {0}".format(self.master_sha))
 
-        print('Branch: {0}'.format(branch))
+        print("Branch: {0}".format(branch))
         self.pull_request_number = None
         if branch and not pr:
             for github_repo in [self.github_repo, self.github_repo.parent]:
@@ -55,12 +65,13 @@ class GitHubInterface(InterfaceBase):
                 if not github_repo:
                     continue
                 for pull_request in github_repo.iter_pulls():
-                    print('Branch: {} - Pull Request Head Ref: {}'.format(
-                        branch,
-                        pull_request.to_json()['head']['ref']
-                    ))
-                    if pull_request.to_json()['head']['ref'] == branch:
-                        pr = pull_request.to_json()['number']
+                    print(
+                        "Branch: {} - Pull Request Head Ref: {}".format(
+                            branch, pull_request.to_json()["head"]["ref"]
+                        )
+                    )
+                    if pull_request.to_json()["head"]["ref"] == branch:
+                        pr = pull_request.to_json()["number"]
                         self.github_repo = github_repo
                         break
         self.owner = self.github_repo.owner
@@ -70,18 +81,18 @@ class GitHubInterface(InterfaceBase):
         try:
             pr = int(pr)
         except (ValueError, TypeError):
-            print('{0} is not a valid pull request ID'.format(pr))
+            print("{0} is not a valid pull request ID".format(pr))
             self.github = None
             return
-        print('PR ID: {0}'.format(pr))
+        print("PR ID: {0}".format(pr))
         self.pull_request_number = pr
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
-        print('Last SHA: {0}'.format(self.last_sha))
+        print("Last SHA: {0}".format(self.last_sha))
         self.first_sha = self.commits[0].sha
         self.diff = git.diff(self.master_sha, self.last_sha)
-        self.patch = unidiff.PatchSet(self.diff.split('\n'))
+        self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
 
@@ -107,46 +118,48 @@ class GitHubInterface(InterfaceBase):
     def start_review(self):
         """Mark our review as started."""
         self.github_repo.create_status(
-            state='pending',
-            description='Static analysis in progress.',
-            context='inline-plz',
-            sha=self.last_sha
+            state="pending",
+            description="Static analysis in progress.",
+            context="inline-plz",
+            sha=self.last_sha,
         )
 
     def finish_review(self, success=True, error=False):
         """Mark our review as finished."""
         if error:
             self.github_repo.create_status(
-                state='error',
-                description='Static analysis error! inline-plz failed to run.',
-                context='inline-plz',
-                sha=self.last_sha
+                state="error",
+                description="Static analysis error! inline-plz failed to run.",
+                context="inline-plz",
+                sha=self.last_sha,
             )
         elif success:
             self.github_repo.create_status(
-                state='success',
-                description='Static analysis complete! No errors found in your PR.',
-                context='inline-plz',
-                sha=self.last_sha
+                state="success",
+                description="Static analysis complete! No errors found in your PR.",
+                context="inline-plz",
+                sha=self.last_sha,
             )
         else:
             self.github_repo.create_status(
-                state='failure',
-                description='Static analysis complete! Found errors in your PR.',
-                context='inline-plz',
-                sha=self.last_sha
+                state="failure",
+                description="Static analysis complete! Found errors in your PR.",
+                context="inline-plz",
+                sha=self.last_sha,
             )
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
-        pull_request = self.github.pull_request(self.owner, self.repo, self.pull_request_number)
+        pull_request = self.github.pull_request(
+            self.owner, self.repo, self.pull_request_number
+        )
         latest_remote_sha = self.pr_commits(pull_request)[-1].sha
         return self.last_sha != latest_remote_sha
 
     def post_messages(self, messages, max_comments):
         # TODO: support non-PR runs
         if not self.github:
-            print('Github connection is invalid.')
+            print("Github connection is invalid.")
             return
         valid_errors = 0
         messages_posted = 0
@@ -156,14 +169,16 @@ class GitHubInterface(InterfaceBase):
         messages = list(messages)
         random.shuffle(messages)
         if self.out_of_date():
-            print('This run is out of date because the PR has been updated.')
+            print("This run is out of date because the PR has been updated.")
             messages = []
         start = time.time()
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             # print('\nTrying to post a review comment.')
             # print('{0}'.format(msg))
-            if system.should_stop() or (time.time() - start > 10 and self.out_of_date()):
+            if system.should_stop() or (
+                time.time() - start > 10 and self.out_of_date()
+            ):
                 # print('Stopping early.')
                 break
             if not msg.comments:
@@ -173,7 +188,7 @@ class GitHubInterface(InterfaceBase):
             if not msg_position:
                 # print("Skipping since the comment is not part of this PR.")
                 continue
-            if msg.path.split('/')[0] in self.ignore_paths:
+            if msg.path.split("/")[0] in self.ignore_paths:
                 # print("Skipping since the comment is on an ignored path.")
                 continue
             valid_errors += 1
@@ -187,10 +202,7 @@ class GitHubInterface(InterfaceBase):
                 continue
             try:
                 self.pull_request.create_review_comment(
-                    self.format_message(msg),
-                    self.last_sha,
-                    msg.path,
-                    msg_position
+                    self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
             except github3.GitHubError as err:
                 # workaround for our diff not entirely matching up with github's diff
@@ -203,7 +215,7 @@ class GitHubInterface(InterfaceBase):
             messages_posted += 1
             if max_comments and messages_posted > max_comments:
                 break
-        print('\n{} messages posted to Github.'.format(messages_posted))
+        print("\n{} messages posted to Github.".format(messages_posted))
         return valid_errors
 
     def is_duplicate(self, message, position):
@@ -213,30 +225,28 @@ class GitHubInterface(InterfaceBase):
             self.review_comments = list(self.pull_request.review_comments())
             self.last_update = time.time()
         for comment in self.review_comments:
-            if (comment.original_position == position and
-                    comment.path == message.path and
-                    comment.body.strip() == self.format_message(message).strip()):
+            if (
+                comment.original_position == position
+                and comment.path == message.path
+                and comment.body.strip() == self.format_message(message).strip()
+            ):
                 return True
         return False
 
     @staticmethod
     def format_message(message):
         if not message.comments:
-            return ''
-        if len(message.comments) > 1 or any('\n' in c for c in message.comments):
-            return (
-                '```\n' +
-                '\n'.join(sorted(list(message.comments))) +
-                '\n```'
-            )
-        return '`{0}`'.format(list(message.comments)[0].strip())
+            return ""
+        if len(message.comments) > 1 or any("\n" in c for c in message.comments):
+            return "```\n" + "\n".join(sorted(list(message.comments))) + "\n```"
+        return "`{0}`".format(list(message.comments)[0].strip())
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
         if not message.line_number:
             message.line_number = 1
         for patched_file in self.patch:
-            target = patched_file.target_file.lstrip('b/')
+            target = patched_file.target_file.lstrip("b/")
             if target == message.path:
                 offset = 1
                 for hunk in patched_file:
