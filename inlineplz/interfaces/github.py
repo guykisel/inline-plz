@@ -94,7 +94,7 @@ class GitHubInterface(InterfaceBase):
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.target_sha = self.pull_request.base.sha
         self.target_branch = self.pull_request.base.label
-        print("Target SHA: {0}".format(self.last_sha))
+        print("Target SHA: {0}".format(self.target_sha))
         print("Target Branch: {0}".format(self.target_branch))
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
