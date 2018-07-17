@@ -87,11 +87,15 @@ class GitHubInterface(InterfaceBase):
         print("PR ID: {0}".format(pr))
         self.pull_request_number = pr
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
+        self.target_sha = self.pull_request.base.sha
+        self.target_branch = self.pull_request.base.label
+        print("Target SHA: {0}".format(self.last_sha))
+        print("Target Branch: {0}".format(self.target_branch))
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
         print("Last SHA: {0}".format(self.last_sha))
         self.first_sha = self.commits[0].sha
-        self.diff = git.diff(self.master_sha, self.last_sha)
+        self.diff = git.diff(self.target_sha, self.last_sha)
         self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
