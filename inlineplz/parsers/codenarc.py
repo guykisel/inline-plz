@@ -14,18 +14,16 @@ class CodenarcParser(ParserBase):
         msg = ""
         line_no = -1
         for line in lint_data.split("\n"):
-            parts = []
             try:
-                line = line.strip()
-                if line.startswith("File:"):
+                if line.strip().startswith("File:"):
                     path = line.split("File:")[-1].strip()
                     continue
                 if line.startswith("Violation:"):
-                    parts = line.split()
+                    parts = line.strip().split()
                     line_no = int(parts[3].split("=")[-1])
-                    msg = " ".join(parts[4:-1]).split("Src=")[0]
+                    msg = line
                 else:
-                    msg += "\n" + line.split("Src=")[0]
+                    msg += line
                 if "Src=" in line:
                     messages.add((path, line_no, msg))
             except (ValueError, IndexError, TypeError):
