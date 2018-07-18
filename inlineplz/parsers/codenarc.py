@@ -18,14 +18,15 @@ class CodenarcParser(ParserBase):
                 if line.strip().startswith("File:"):
                     path = line.split("File:")[-1].strip()
                     continue
-                if line.startswith("Violation:"):
+                if line.strip().startswith("Violation:"):
                     parts = line.strip().split()
                     line_no = int(parts[3].split("=")[-1])
-                    msg = line
+                    msg = line.strip()
                 else:
-                    msg += line
+                    msg += '\n' + line
                 if "Src=" in line:
                     messages.add((path, line_no, msg))
+                    msg = ''
             except (ValueError, IndexError, TypeError):
                 print("Invalid message: {0}".format(line))
         return messages
