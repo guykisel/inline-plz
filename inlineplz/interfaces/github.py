@@ -5,6 +5,7 @@ from __future__ import print_function
 from __future__ import unicode_literals
 
 import random
+import subprocess
 import time
 
 import github3
@@ -70,11 +71,11 @@ class GitHubInterface(InterfaceBase):
                 for pull_request in github_repo.iter_pulls():
                     print(
                         "Branch: {} - Pull Request Head Ref: {}".format(
-                            branch, pull_request.to_json()["head"]["ref"]
+                            branch, pull_request.head.ref
                         )
                     )
-                    if pull_request.to_json()["head"]["ref"] == branch:
-                        pr = pull_request.to_json()["number"]
+                    if pull_request.head.ref == branch:
+                        pr = pull_request.number
                         self.github_repo = github_repo
                         break
 
@@ -94,6 +95,10 @@ class GitHubInterface(InterfaceBase):
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.target_sha = self.pull_request.base.sha
         self.target_branch = self.pull_request.base.label
+        try:
+            git.fetch(self.pull_request.base.repository.as_dict()["clone_url"])
+        except subprocess.CalledProcessError:
+            git.fetch(self.pull_request.base.repository.as_dict()["ssh_url"])
         print("Target SHA: {0}".format(self.target_sha))
         print("Target Branch: {0}".format(self.target_branch))
         self.commits = self.pr_commits(self.pull_request)
