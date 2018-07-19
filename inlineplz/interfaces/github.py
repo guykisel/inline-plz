@@ -94,7 +94,7 @@ class GitHubInterface(InterfaceBase):
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.target_sha = self.pull_request.base.sha
         self.target_branch = self.pull_request.base.label
-        git.fetch(self.pull_request.base.repo.ssh_url)
+        git.fetch(self.pull_request.base.repository.as_dict()["ssh_url"])
         print("Target SHA: {0}".format(self.target_sha))
         print("Target Branch: {0}".format(self.target_branch))
         self.commits = self.pr_commits(self.pull_request)
