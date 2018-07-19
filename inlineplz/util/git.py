@@ -52,9 +52,9 @@ def url():
     )
 
 
-def fetch(url):
+def fetch(git_url):
     return (
-        subprocess.check_output(["git", "fetch", url]).strip().decode(
+        subprocess.check_output(["git", "fetch", git_url]).strip().decode(
             "utf-8", errors="replace"
         )
     )
