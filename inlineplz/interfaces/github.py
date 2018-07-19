@@ -96,9 +96,9 @@ class GitHubInterface(InterfaceBase):
         self.target_sha = self.pull_request.base.sha
         self.target_branch = self.pull_request.base.label
         try:
-            git.fetch(self.pull_request.base.to_json()['repo']['clone_url'])
+            git.fetch(self.pull_request.base.to_json()["repo"]["clone_url"])
         except subprocess.CalledProcessError:
-            git.fetch(self.pull_request.base.to_json()['repo']['ssh_url'])
+            git.fetch(self.pull_request.base.to_json()["repo"]["ssh_url"])
         print("Target SHA: {0}".format(self.target_sha))
         print("Target Branch: {0}".format(self.target_branch))
         self.commits = self.pr_commits(self.pull_request)
