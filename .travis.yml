@@ -1,6 +1,6 @@
 deploy:
-  'on':
-    condition: $TRAVIS_PYTHON_VERSION == 2.7
+  on:
+    condition: $TRAVIS_PYTHON_VERSION == 3.6
     repo: guykisel/inline-plz
     tags: true
   distributions: sdist bdist_wheel
@@ -22,7 +22,6 @@ language: python
 python:
   - "3.6"
   - "3.5"
-  - "2.7"
 script:
   - tox
   - inline-plz --dryrun --autorun
