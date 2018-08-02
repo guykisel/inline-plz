@@ -27,5 +27,7 @@ rules:
   indentation:
     level: warning
     indent-sequences: consistent
+  trailing-spaces: disable
+  new-line-at-end-of-file: disable
   line-length: disable
   truthy: disable
