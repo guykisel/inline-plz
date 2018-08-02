@@ -1,9 +1,8 @@
 output-format: grouped
 
 strictness: veryhigh
-doc-warnings: true
+doc-warnings: false
 test-warnings: false
-max-line-length: 120
 
 ignore-paths:
   - docs/
@@ -29,11 +28,13 @@ pylint:
     - too-many-arguments
     - inconsistent-return-statements
     - broad-except
+    - line-too-long
 
 pep8:
   full: true
   disable:
     - E126
+    - E501
 
 pep257:
   disable:
