@@ -16,7 +16,6 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-
     def __init__(
         self,
         owner,
@@ -27,6 +26,7 @@ class GitHubInterface(InterfaceBase):
         url=None,
         commit=None,
         ignore_paths=None,
+        prefix=None,
     ):
         """
         GitHubInterface lets us post messages to GitHub.
@@ -45,6 +45,7 @@ class GitHubInterface(InterfaceBase):
         ignore_paths are paths to ignore comments from
         """
         self.github = None
+        self.prefix = prefix
         self.ignore_paths = set(ignore_paths or [])
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
@@ -118,6 +119,7 @@ class GitHubInterface(InterfaceBase):
         self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
+        self.messages_in_files = dict()
 
     def is_valid(self):
         return self.pull_request_number is not None
@@ -236,6 +238,9 @@ class GitHubInterface(InterfaceBase):
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
+                self.messages_in_files.setdefault(msg.path, []).append(
+                    (msg, msg_position)
+                )
             except github3.GitHubError as err:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
@@ -268,15 +273,34 @@ class GitHubInterface(InterfaceBase):
 
         return False
 
-    @staticmethod
-    def format_message(message):
+    def format_message(self, message):
         if not message.comments:
             return ""
 
         if len(message.comments) > 1 or any("\n" in c for c in message.comments):
-            return "```\n" + "\n".join(sorted(list(message.comments))) + "\n```"
+            return (
+                "{0}: ```\n".format(self.prefix)
+                + "\n".join(sorted(list(message.comments)))
+                + "\n```"
+            )
 
-        return "`{0}`".format(list(message.comments)[0].strip())
+        return "{0}: `{1}`".format(self.prefix, list(message.comments)[0].strip())
+
+    def clear_outdated_messages(self):
+        for comment in self.pull_request.review_comments():
+            should_delete = True
+            if not comment.body.startswith(self.prefix):
+                continue
+            if comment.path not in self.messages_in_files:
+                continue
+            for msg, msg_position in self.messages_in_files[comment.path]:
+                if msg == comment.body and msg_position == comment.position:
+                    should_delete = False
+            if should_delete:
+                try:
+                    comment.delete()
+                except github3.GitHubError:
+                    pass
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""

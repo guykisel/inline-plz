@@ -23,10 +23,10 @@ class CodenarcParser(ParserBase):
                     line_no = int(parts[3].split("=")[-1])
                     msg = line.strip()
                 else:
-                    msg += '\n' + line
+                    msg += "\n" + line
                 if "Src=" in line:
                     messages.add((path, line_no, msg))
-                    msg = ''
+                    msg = ""
             except (ValueError, IndexError, TypeError):
                 print("Invalid message: {0}".format(line))
         return messages
