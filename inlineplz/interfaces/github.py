@@ -234,14 +234,12 @@ class GitHubInterface(InterfaceBase):
                     self.messages_in_files.setdefault(msg.path, []).append(
                         (msg, msg_position)
                     )
-                except github3.GitHubError:
-                    # workaround for our diff not entirely matching up with github's diff
-                    # we can end up with a mismatched diff if the branch is old
-                    valid_errors -= 1
-                    # print("Posting failed: {}".format(err))
+                    print("Comment edited successfully: {0}".format(msg))
+                    paths[msg.path] += 1
+                    messages_posted += 1
                     continue
-                print("Comment edited successfully: {0}".format(msg))
-                continue
+                except github3.GitHubError:
+                    pass
 
             # skip this message if we already have too many comments on this file
             # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
@@ -309,11 +307,14 @@ class GitHubInterface(InterfaceBase):
             if comment.path not in self.messages_in_files:
                 continue
             for msg, msg_position in self.messages_in_files[comment.path]:
-                print(msg)
+                print(self.format_message(msg))
                 print(comment.body)
                 print(msg_position)
                 print(comment.position)
-                if msg == comment.body and msg_position == comment.position:
+                if (
+                    self.format_message(msg) == comment.body
+                    and msg_position == comment.position
+                ):
                     should_delete = False
             if not should_delete:
                 continue
