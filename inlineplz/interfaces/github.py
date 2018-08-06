@@ -292,17 +292,17 @@ class GitHubInterface(InterfaceBase):
 
         if len(message.comments) > 1 or any("\n" in c for c in message.comments):
             return (
-                "{0}: ```\n".format(self.prefix)
+                "*{0}:* ```\n".format(self.prefix)
                 + "\n".join(sorted(list(message.comments)))
                 + "\n```"
             )
 
-        return "{0}: `{1}`".format(self.prefix, list(message.comments)[0].strip())
+        return "*{0}:* `{1}`".format(self.prefix, list(message.comments)[0].strip())
 
     def clear_outdated_messages(self):
         for comment in self.pull_request.review_comments():
             should_delete = True
-            if not comment.body.startswith(self.prefix):
+            if not comment.body.startswith("*{0}:*".format(self.prefix)):
                 continue
             for msg, msg_position in self.messages_in_files.get(comment.path, []):
                 if (
