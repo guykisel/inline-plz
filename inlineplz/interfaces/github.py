@@ -309,14 +309,19 @@ class GitHubInterface(InterfaceBase):
             if comment.path not in self.messages_in_files:
                 continue
             for msg, msg_position in self.messages_in_files[comment.path]:
+                print(msg)
+                print(comment.body)
+                print(msg_position)
+                print(comment.position)
                 if msg == comment.body and msg_position == comment.position:
                     should_delete = False
-            if should_delete:
-                try:
-                    comment.delete()
-                    print("Deleted comment: {}".format(comment.body))
-                except github3.GitHubError:
-                    traceback.print_exc()
+            if not should_delete:
+                continue
+            try:
+                comment.delete()
+                print("Deleted comment: {}".format(comment.body))
+            except github3.GitHubError:
+                traceback.print_exc()
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
