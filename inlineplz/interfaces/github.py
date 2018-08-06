@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 import random
 import subprocess
 import time
+import traceback
 
 import github3
 import unidiff
@@ -202,6 +203,7 @@ class GitHubInterface(InterfaceBase):
         start = time.time()
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
+            duplicate = None
             # print('\nTrying to post a review comment.')
             # print('{0}'.format(msg))
             if system.should_stop() or (
@@ -224,8 +226,21 @@ class GitHubInterface(InterfaceBase):
                 continue
 
             valid_errors += 1
-            if self.is_duplicate(msg, msg_position):
+            duplicate = self.is_duplicate(msg, msg_position)
+            if duplicate:
                 # print("Skipping since this comment already exists.")
+                try:
+                    duplicate.edit(self.format_message(msg))
+                    self.messages_in_files.setdefault(msg.path, []).append(
+                        (msg, msg_position)
+                    )
+                except github3.GitHubError:
+                    # workaround for our diff not entirely matching up with github's diff
+                    # we can end up with a mismatched diff if the branch is old
+                    valid_errors -= 1
+                    # print("Posting failed: {}".format(err))
+                    continue
+                print("Comment edited successfully: {0}".format(msg))
                 continue
 
             # skip this message if we already have too many comments on this file
@@ -241,7 +256,7 @@ class GitHubInterface(InterfaceBase):
                 self.messages_in_files.setdefault(msg.path, []).append(
                     (msg, msg_position)
                 )
-            except github3.GitHubError as err:
+            except github3.GitHubError:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
                 valid_errors -= 1
@@ -269,9 +284,9 @@ class GitHubInterface(InterfaceBase):
                 and comment.path == message.path
                 and comment.body.strip() == self.format_message(message).strip()
             ):
-                return True
+                return comment
 
-        return False
+        return None
 
     def format_message(self, message):
         if not message.comments:
@@ -299,8 +314,9 @@ class GitHubInterface(InterfaceBase):
             if should_delete:
                 try:
                     comment.delete()
+                    print("Deleted comment: {}".format(comment.body))
                 except github3.GitHubError:
-                    pass
+                    traceback.print_exc()
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""
