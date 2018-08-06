@@ -10,6 +10,7 @@ import traceback
 
 
 class Messages(object):
+
     def __init__(self):
         self.messages = {}
 
@@ -34,6 +35,7 @@ class Messages(object):
                 print("{0} {1} {2}".format(path, line, message))
                 print(traceback.format_exc())
                 return
+
         self.messages[(path, line)].append(message)
 
     def add_messages(self, messages):
@@ -45,6 +47,7 @@ class Messages(object):
 
 
 class Message(object):
+
     def __init__(self, path, line_number):
         self.path = os.path.relpath(path).replace("\\", "/")
         self.line_number = int(line_number)

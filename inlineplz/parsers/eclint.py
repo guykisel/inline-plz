@@ -15,6 +15,7 @@ class ECLintParser(ParserBase):
                 try:
                     if "❌" not in line:
                         continue
+
                     parts = line.split("❌")
                     line_no = int(parts[0].split(":")[0].strip())
                     msg = parts[1].strip()

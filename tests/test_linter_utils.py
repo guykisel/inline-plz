@@ -15,9 +15,7 @@ def test_rundefault_config():
 
 def test_run_config():
     test_config = {
-        "run": ["run"],
-        "rundefault": ["rundefault"],
-        "dotfiles": [".dotfile"],
+        "run": ["run"], "rundefault": ["rundefault"], "dotfiles": [".dotfile"]
     }
     test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
     assert linters.run_config(test_config, test_config_path) == ["rundefault"]
@@ -35,9 +33,7 @@ def test_dotfiles_dont_exist():
 
 def test_dotfiles_exist():
     test_config = {
-        "run": ["run"],
-        "rundefault": ["rundefault"],
-        "dotfiles": [".dotfile"],
+        "run": ["run"], "rundefault": ["rundefault"], "dotfiles": [".dotfile"]
     }
     test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
     assert linters.dotfiles_exist(test_config, test_config_path)

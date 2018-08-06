@@ -9,6 +9,7 @@ import inlineplz.util.git as git
 
 
 class Local(EnvBase):
+
     def __init__(self):
         if os.path.exists(".git"):
             self.interface = "github"

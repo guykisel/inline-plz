@@ -18,6 +18,7 @@ class CodenarcParser(ParserBase):
                 if line.strip().startswith("File:"):
                     path = line.split("File:")[-1].strip()
                     continue
+
                 if line.strip().startswith("Violation:"):
                     parts = line.strip().split()
                     line_no = int(parts[3].split("=")[-1])

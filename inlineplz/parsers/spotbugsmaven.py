@@ -17,6 +17,7 @@ class SpotbugsMavenParser(ParserBase):
                 if "@" in line:
                     project = line.split("@")[1].strip().split()[0]
                     continue
+
                 if "[line" in line:
                     msgbody = line
                     line_number = int(line.split("[line ")[1].split("]")[0])

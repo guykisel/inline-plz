@@ -17,6 +17,7 @@ from inlineplz.env.base import EnvBase
 
 
 class Jenkins(EnvBase):
+
     def __init__(self):
         if os.environ.get("ghprbPullId") or os.environ.get("ghprbActualCommit"):
             self.pull_request = os.environ.get("ghprbPullId")

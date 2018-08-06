@@ -16,9 +16,11 @@ class RobotFrameworkLintParser(ParserBase):
                 try:
                     if not line.strip():
                         continue
+
                     if line.startswith("+"):
                         current_file = line[2:]
                         continue
+
                     else:
                         _, position, message = line.split(":")
                         line_number, _ = position.split(",")

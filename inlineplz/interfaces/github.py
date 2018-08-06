@@ -17,6 +17,7 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
+
     def __init__(
         self,
         owner,
@@ -230,6 +231,7 @@ class GitHubInterface(InterfaceBase):
                     messages_posted += 1
                     time.sleep(.1)
                     continue
+
                 except github3.GitHubError:
                     pass
 
@@ -287,21 +289,23 @@ class GitHubInterface(InterfaceBase):
 
     def clear_outdated_messages(self):
         for comment in self.pull_request.review_comments():
-            should_delete = True
-            if not comment.body.startswith(self.prefix):
-                continue
-            for msg, msg_position in self.messages_in_files.get(comment.path, []):
-                if (
-                    self.format_message(msg).strip() == comment.body.strip()
-                    and msg_position == comment.position
-                ):
-                    should_delete = False
-            if not should_delete:
-                continue
             try:
+                should_delete = True
+                if not comment.body.startswith(self.prefix):
+                    continue
+
+                for msg, msg_position in self.messages_in_files.get(comment.path, []):
+                    if (
+                        self.format_message(msg).strip() == comment.body.strip()
+                        and msg_position == comment.position
+                    ):
+                        should_delete = False
+                if not should_delete:
+                    continue
+
                 comment.delete()
                 print("Deleted comment: {}".format(comment.body))
-            except github3.GitHubError:
+            except Exception:
                 traceback.print_exc()
 
     def position(self, message):
