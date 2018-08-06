@@ -37,6 +37,8 @@ def main():
     parser.add_argument("--dryrun", action="store_true")
     parser.add_argument("--zero-exit", action="store_true")
     parser.add_argument("--install", action="store_true")
+    parser.add_argument("--prefix", type=str, default="[inline-plz]")
+    parser.add_argument("--delete-outdated", action="store_true")
     parser.add_argument(
         "--trusted", action="store_true", help="allow installing all local dependencies"
     )
@@ -188,6 +190,7 @@ def inline(args):
             url,
             args.commit,
             args.ignore_paths,
+            args.prefix,
         )
         if not my_interface.is_valid():
             print("Invalid review. Exiting.")
@@ -223,8 +226,12 @@ def inline(args):
         if my_interface.post_messages(messages, args.max_comments):
             if not args.zero_exit:
                 ret_code = 1
+            if args.delete_outdated:
+                my_interface.clear_outdated_messages()
             my_interface.finish_review(success=False)
             return ret_code
+        if args.delete_outdated:
+            my_interface.clear_outdated_messages()
         my_interface.finish_review(success=True)
     except KeyError:
         print("Interface not found: {}".format(args.interface))

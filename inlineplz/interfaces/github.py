@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 import random
 import subprocess
 import time
+import traceback
 
 import github3
 import unidiff
@@ -16,7 +17,6 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-
     def __init__(
         self,
         owner,
@@ -27,6 +27,7 @@ class GitHubInterface(InterfaceBase):
         url=None,
         commit=None,
         ignore_paths=None,
+        prefix=None,
     ):
         """
         GitHubInterface lets us post messages to GitHub.
@@ -45,6 +46,7 @@ class GitHubInterface(InterfaceBase):
         ignore_paths are paths to ignore comments from
         """
         self.github = None
+        self.prefix = prefix
         self.ignore_paths = set(ignore_paths or [])
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
@@ -118,6 +120,7 @@ class GitHubInterface(InterfaceBase):
         self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
+        self.messages_in_files = dict()
 
     def is_valid(self):
         return self.pull_request_number is not None
@@ -182,7 +185,6 @@ class GitHubInterface(InterfaceBase):
         return self.last_sha != latest_remote_sha
 
     def post_messages(self, messages, max_comments):
-        # TODO: support non-PR runs
         if not self.github:
             print("Github connection is invalid.")
             return
@@ -200,52 +202,54 @@ class GitHubInterface(InterfaceBase):
         start = time.time()
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
-            # print('\nTrying to post a review comment.')
-            # print('{0}'.format(msg))
-            if system.should_stop() or (
-                time.time() - start > 10 and self.out_of_date()
-            ):
-                # print('Stopping early.')
+            # rate limit
+            if system.should_stop() or self.out_of_date():
+                print("Stopping early.")
                 break
 
             if not msg.comments:
-                # print("Skipping since there is no comment to post.")
                 continue
 
             msg_position = self.position(msg)
             if not msg_position:
-                # print("Skipping since the comment is not part of this PR.")
                 continue
 
             if msg.path.split("/")[0] in self.ignore_paths:
-                # print("Skipping since the comment is on an ignored path.")
                 continue
 
             valid_errors += 1
-            if self.is_duplicate(msg, msg_position):
-                # print("Skipping since this comment already exists.")
-                continue
-
-            # skip this message if we already have too many comments on this file
-            # max comments / 5 is an arbitrary number i totally made up. should maybe be configurable.
-            if paths.setdefault(msg.path, 0) > max(max_comments // 5, 5):
-                # print("Skipping since we reached the maximum number of comments for this file.")
-                continue
+            duplicate = self.is_duplicate(msg, msg_position)
+            if duplicate:
+                try:
+                    duplicate.edit(self.format_message(msg))
+                    self.messages_in_files.setdefault(msg.path, []).append(
+                        (msg, msg_position)
+                    )
+                    print("Comment edited successfully: {0}".format(msg))
+                    paths[msg.path] += 1
+                    messages_posted += 1
+                    time.sleep(.1)
+                    continue
+                except github3.GitHubError:
+                    pass
 
             try:
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
-            except github3.GitHubError as err:
+                self.messages_in_files.setdefault(msg.path, []).append(
+                    (msg, msg_position)
+                )
+            except github3.GitHubError:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
                 valid_errors -= 1
-                # print("Posting failed: {}".format(err))
                 continue
 
             print("Comment posted successfully: {0}".format(msg))
             paths[msg.path] += 1
             messages_posted += 1
+            time.sleep(.1)
             if max_comments and messages_posted > max_comments:
                 break
 
@@ -264,19 +268,41 @@ class GitHubInterface(InterfaceBase):
                 and comment.path == message.path
                 and comment.body.strip() == self.format_message(message).strip()
             ):
-                return True
+                return comment
 
-        return False
+        return None
 
-    @staticmethod
-    def format_message(message):
+    def format_message(self, message):
         if not message.comments:
             return ""
 
         if len(message.comments) > 1 or any("\n" in c for c in message.comments):
-            return "```\n" + "\n".join(sorted(list(message.comments))) + "\n```"
+            return (
+                "{0}: ```\n".format(self.prefix)
+                + "\n".join(sorted(list(message.comments)))
+                + "\n```"
+            )
 
-        return "`{0}`".format(list(message.comments)[0].strip())
+        return "{0}: `{1}`".format(self.prefix, list(message.comments)[0].strip())
+
+    def clear_outdated_messages(self):
+        for comment in self.pull_request.review_comments():
+            should_delete = True
+            if not comment.body.startswith(self.prefix):
+                continue
+            for msg, msg_position in self.messages_in_files.get(comment.path, []):
+                if (
+                    self.format_message(msg).strip() == comment.body.strip()
+                    and msg_position == comment.position
+                ):
+                    should_delete = False
+            if not should_delete:
+                continue
+            try:
+                comment.delete()
+                print("Deleted comment: {}".format(comment.body))
+            except github3.GitHubError:
+                traceback.print_exc()
 
     def position(self, message):
         """Calculate position within the PR, which is not the line number"""

@@ -22,3 +22,9 @@ class InterfaceBase(object):
         :return:
         """
         raise NotImplementedError()
+
+    def clear_outdated_messages(self):
+        """
+        :return:
+        """
+        raise NotImplementedError()
