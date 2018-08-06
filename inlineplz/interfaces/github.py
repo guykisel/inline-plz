@@ -304,13 +304,7 @@ class GitHubInterface(InterfaceBase):
             should_delete = True
             if not comment.body.startswith(self.prefix):
                 continue
-            if comment.path not in self.messages_in_files:
-                continue
-            for msg, msg_position in self.messages_in_files[comment.path]:
-                print(self.format_message(msg))
-                print(comment.body)
-                print(msg_position)
-                print(comment.position)
+            for msg, msg_position in self.messages_in_files.get(comment.path, []):
                 if (
                     self.format_message(msg) == comment.body
                     and msg_position == comment.position
