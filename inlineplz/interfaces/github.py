@@ -205,7 +205,6 @@ class GitHubInterface(InterfaceBase):
         if self.out_of_date():
             print("This run is out of date because the PR has been updated.")
             messages = []
-        start = time.time()
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             # rate limit
@@ -222,6 +221,8 @@ class GitHubInterface(InterfaceBase):
 
             if msg.path.split("/")[0] in self.ignore_paths:
                 continue
+
+            paths.setdefault(msg.path, 0)
 
             valid_errors += 1
             duplicate = self.is_duplicate(msg, msg_position)
