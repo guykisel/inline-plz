@@ -207,7 +207,9 @@ LINTERS = {
         "help": [os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-h"],
         "run": [os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"],
         "rundefault": [
-            os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"
+            os.path.normpath("./node_modules/.bin/dockerfile_lint"),
+            "-j",
+            "-f",
         ],
         "dotfiles": [],
         "parser": parsers.DockerfileLintParser,
@@ -258,7 +260,10 @@ LINTERS = {
         "install": [["npm", "install", "gherkin-lint"]],
         "help": [os.path.normpath("./node_modules/.bin/gherkin-lint"), "--help"],
         "run": [
-            os.path.normpath("./node_modules/.bin/gherkin-lint"), ".", "-f", "json"
+            os.path.normpath("./node_modules/.bin/gherkin-lint"),
+            ".",
+            "-f",
+            "json",
         ],
         "rundefault": [
             os.path.normpath("./node_modules/.bin/gherkin-lint"),
@@ -607,7 +612,12 @@ LINTERS = {
         "help": ["yamllint", "-h"],
         "run": ["yamllint", "-f", "parsable", "."],
         "rundefault": [
-            "yamllint", "-c", "{config_dir}/.yamllint", "-f", "parsable", "."
+            "yamllint",
+            "-c",
+            "{config_dir}/.yamllint",
+            "-f",
+            "parsable",
+            ".",
         ],
         "dotfiles": [".yamllint"],
         "parser": parsers.YAMLLintParser,
@@ -834,11 +844,9 @@ def run_config(config, config_dir):
     if not (config_dir and dotfiles_exist(config, config_dir)):
         config_dir = os.path.abspath(os.path.join(HERE, "config"))
     return [
-        os.path.normpath(
-            item.format(config_dir=config_dir)
-        ) if "..." not in item else item.format(
-            config_dir=config_dir
-        )
+        os.path.normpath(item.format(config_dir=config_dir))
+        if "..." not in item
+        else item.format(config_dir=config_dir)
         for item in (config.get("rundefault") or config.get("run"))
     ]
 

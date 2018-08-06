@@ -10,7 +10,6 @@ import traceback
 
 
 class Messages(object):
-
     def __init__(self):
         self.messages = {}
 
@@ -47,7 +46,6 @@ class Messages(object):
 
 
 class Message(object):
-
     def __init__(self, path, line_number):
         self.path = os.path.relpath(path).replace("\\", "/")
         self.line_number = int(line_number)

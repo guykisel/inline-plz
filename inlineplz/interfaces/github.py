@@ -17,7 +17,6 @@ from inlineplz.util import git, system
 
 
 class GitHubInterface(InterfaceBase):
-
     def __init__(
         self,
         owner,

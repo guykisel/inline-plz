@@ -111,7 +111,12 @@ def load_config(args, config_path=".inlineplz.yml"):
         traceback.print_exc()
     args = update_from_config(args, config)
     args.ignore_paths = args.__dict__.get("ignore_paths") or [
-        "node_modules", ".git", ".tox", "godeps", "vendor", "site-packages"
+        "node_modules",
+        ".git",
+        ".tox",
+        "godeps",
+        "vendor",
+        "site-packages",
     ]
     if config_path != ".inlineplz.yml":
         return args

@@ -11,7 +11,6 @@ from inlineplz.env.base import EnvBase
 
 
 class Travis(EnvBase):
-
     def __init__(self):
         self.pull_request = os.environ.get("TRAVIS_PULL_REQUEST")
         self.branch = os.environ.get("TRAVIS_BRANCH")
