@@ -70,7 +70,13 @@ class GitHubInterface(InterfaceBase):
                 if not github_repo:
                     continue
 
-                for pull_request in github_repo.iter_pulls():
+                try:
+                    # github.py == 0.9.6
+                    pulls = github_repo.iter_pulls()
+                except AttributeError:
+                    pulls = github_repo.pull_requests()
+
+                for pull_request in pulls:
                     print(
                         "Branch: {} - Pull Request Head Ref: {}".format(
                             branch, pull_request.head.ref
