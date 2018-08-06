@@ -49,6 +49,7 @@ def vendored_path(path):
                 os.path.join(os.path.dirname(HERE), "bin", path), os.getcwd()
             )
         )
+
     return os.path.normpath(
         os.path.abspath(os.path.join(os.path.dirname(HERE), "bin", path))
     )
@@ -649,6 +650,7 @@ def run_command(command, log_on_fail=False, log_all=False, timeout=120):
     except subprocess.TimeoutExpired:
         print("Timeout: {}".format(command))
         return 0, ""
+
     stdout, stderr = proc.stdout, proc.stderr
     output = "{}\n{}".format(stdout, stderr).strip()
     if output and ((log_on_fail and proc.returncode) or log_all):
@@ -685,6 +687,7 @@ def should_ignore_path(path, ignore_paths):
             or ignore_path in path.split(os.path.sep)
         ):
             return True
+
     return False
 
 
@@ -764,6 +767,7 @@ def all_filenames_in_dir(path=None, ignore_paths=None):
             pass
         if should_ignore_path(root, ignore_paths):
             continue
+
         for filename in filenames:
             full_path = os.path.join(root, filename)
             if "text" in identify.tags_from_path(full_path):
@@ -777,6 +781,7 @@ def should_autorun(config, filenames):
         for pattern in patterns:
             if fnmatch.filter(filenames, pattern):
                 return True
+
     return False
 
 
@@ -796,6 +801,7 @@ def install_linter(config):
     for install_cmd in install_cmds:
         if install_cmd in PREVIOUS_INSTALL_COMMANDS:
             continue
+
         PREVIOUS_INSTALL_COMMANDS.append(install_cmd)
         if not installed(config):
             try:
@@ -826,6 +832,7 @@ def installed(config):
     try:
         returncode, _ = run_command(config.get("help"))
         return returncode == 0
+
     except (subprocess.CalledProcessError, OSError):
         return False
 
@@ -833,6 +840,7 @@ def installed(config):
 def run_config(config, config_dir):
     if dotfiles_exist(config) and config.get("run"):
         return config.get("run")
+
     if not (config_dir and dotfiles_exist(config, config_dir)):
         config_dir = os.path.abspath(os.path.join(HERE, "config"))
     return [
@@ -862,6 +870,7 @@ def lint(
     ):
         if system.should_stop():
             return messages.get_messages()
+
         print("=" * 80)
         print("Running linter: {0}".format(linter))
         sys.stdout.flush()

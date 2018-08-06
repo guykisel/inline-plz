@@ -13,8 +13,10 @@ from inlineplz.env import jenkins, local, travis
 def current_env():
     if os.environ.get("TRAVIS"):
         return travis.Travis()
+
     elif os.environ.get("JENKINS_URL"):
         return jenkins.Jenkins()
+
     return local.Local()
 
 

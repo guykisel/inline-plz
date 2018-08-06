@@ -34,6 +34,7 @@ class Messages(object):
                 print("{0} {1} {2}".format(path, line, message))
                 print(traceback.format_exc())
                 return
+
         self.messages[(path, line)].append(message)
 
     def add_messages(self, messages):

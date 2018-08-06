@@ -90,6 +90,7 @@ def update_from_config(args, config):
                 try:
                     args.__dict__[key] = list(set(args.__dict__.get(key).extend(value)))
                     continue
+
                 except Exception:
                     traceback.print_exc()
             args.__dict__[key] = args.__dict__.get(key) or value
@@ -119,11 +120,13 @@ def load_config(args, config_path=".inlineplz.yml"):
     ]
     if config_path != ".inlineplz.yml":
         return args
+
     # fall back to config_dir inlineplz yaml if we didn't find one locally
     if args.config_dir and not config:
         new_config_path = os.path.join(args.config_dir, config_path)
         if os.path.exists(new_config_path):
             return load_config(args, new_config_path)
+
     return args
 
 
@@ -178,6 +181,7 @@ def inline(args):
     if not args.dryrun and args.interface not in interfaces.INTERFACES:
         print("Valid inline-plz config not found")
         return 1
+
     print("Using interface: {0}".format(args.interface))
     my_interface = None
     if not args.dryrun:
@@ -195,6 +199,7 @@ def inline(args):
         if not my_interface.is_valid():
             print("Invalid review. Exiting.")
             return 0
+
         my_interface.start_review()
     try:
         messages = linters.lint(
@@ -213,6 +218,7 @@ def inline(args):
         ret_code = 1
         my_interface.finish_review(error=True)
         return ret_code
+
     print("{} lint messages found".format(len(messages)))
     print("inline-plz version: {}".format(__version__))
     print("Python version: {}".format(sys.version))
@@ -222,6 +228,7 @@ def inline(args):
     if args.dryrun:
         print_messages(messages)
         return ret_code
+
     try:
         if my_interface.post_messages(messages, args.max_comments):
             if not args.zero_exit:
@@ -230,11 +237,13 @@ def inline(args):
                 my_interface.clear_outdated_messages()
             my_interface.finish_review(success=False)
             return ret_code
+
         if args.delete_outdated:
             my_interface.clear_outdated_messages()
         my_interface.finish_review(success=True)
     except KeyError:
         print("Interface not found: {}".format(args.interface))
+        traceback.print_exc()
     return ret_code
 
 
