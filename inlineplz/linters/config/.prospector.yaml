@@ -29,6 +29,7 @@ pylint:
     - inconsistent-return-statements
     - broad-except
     - line-too-long
+    - logging-format-interpolation
 
 pep8:
   full: true
