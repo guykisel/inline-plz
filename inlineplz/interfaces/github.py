@@ -46,6 +46,7 @@ class GitHubInterface(InterfaceBase):
         ignore_paths are paths to ignore comments from
         """
         self.github = None
+        self.stopped_early = False
         self.prefix = prefix
         self.ignore_paths = set(ignore_paths or [])
         if not url or url == "https://github.com":
@@ -210,6 +211,7 @@ class GitHubInterface(InterfaceBase):
             # rate limit
             if system.should_stop() or self.out_of_date():
                 print("Stopping early.")
+                self.stopped_early = True
                 break
 
             if not msg.comments:
@@ -294,6 +296,8 @@ class GitHubInterface(InterfaceBase):
         return "{0}: `{1}`".format(self.prefix, list(message.comments)[0].strip())
 
     def clear_outdated_messages(self):
+        if self.stopped_early:
+            return
         for comment in self.pull_request.review_comments():
             try:
                 should_delete = True
