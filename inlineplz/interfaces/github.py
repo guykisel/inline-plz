@@ -288,7 +288,7 @@ class GitHubInterface(InterfaceBase):
 
         if len(message.comments) > 1 or any("\n" in c for c in message.comments):
             return (
-                "{0}: ```\n".format(self.prefix)
+                "{0}: \n```\n".format(self.prefix)
                 + "\n".join(sorted(list(message.comments)))
                 + "\n```"
             )
