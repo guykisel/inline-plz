@@ -11,4 +11,4 @@ Sphinx==1.7.6
 py==1.5.3
 pytest==3.7.0
 PyYAML==3.13
-prospector[with_everything]==1.1.1
+prospector[with_everything]==1.1.2
