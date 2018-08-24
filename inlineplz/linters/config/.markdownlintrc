@@ -3,7 +3,7 @@
 
   "default": true,
   "whitespace": false,
-  "line_length": false,
+  "line-length": false,
   "ul-start-left": false,
   "ul-indent": false,
   "ul-style": false,
@@ -19,5 +19,6 @@
   "ol-prefix": false,
   "no-trailing-punctuation": false,
   "header-style": false,
-  "commands-show-output": false
+  "commands-show-output": false,
+  "first-line-h1": false
 }
