@@ -70,3 +70,9 @@ node_modules
 !inlineplz/bin/**
 *.DS_Store
 */pip-selfcheck.json
+
+Pipfile
+Pipfile.lock
+.secrets.baseline
+.vscode/settings.json
+spotbugs.txt

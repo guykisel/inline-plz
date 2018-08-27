@@ -88,7 +88,8 @@ def update_from_config(args, config):
         if not key.startswith("_") and key not in blacklist:
             if args.__dict__.get(key) and value:
                 try:
-                    args.__dict__[key] = list(set(args.__dict__.get(key).extend(value)))
+                    args.__dict__[key].extend(value)
+                    args.__dict__[key] = list(set(args.__dict__[key]))
                     continue
 
                 except Exception:

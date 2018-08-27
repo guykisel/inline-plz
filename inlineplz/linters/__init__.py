@@ -202,6 +202,28 @@ LINTERS = {
         "autorun": True,
         "run_per_file": False,
     },
+    "detect-secrets": {
+        # TODO: switch this to installing from pypi once they release my fix from https://github.com/Yelp/detect-secrets/pull/69
+        # "install": [[sys.executable, "-m", "pip", "install", "-U", "detect-secrets"]],
+        "install": [
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-U",
+                "git+https://github.com/Yelp/detect-secrets.git@49dc1786f20f6d11ca1ce53bda6479f6c0ccea0f",
+            ]
+        ],
+        "help": ["detect-secrets", "-h"],
+        "run": ["detect-secrets", "scan", "--all-files"],
+        "rundefault": ["detect-secrets", "scan", "--all-files"],
+        "dotfiles": [],
+        "parser": parsers.DetectSecretsParser,
+        "language": "all",
+        "autorun": True,
+        "run_per_file": False,
+    },
     "dockerfile_lint": {
         "install": [["npm", "install", "dockerfile_lint"]],
         "help": [os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-h"],

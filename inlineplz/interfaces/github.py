@@ -298,6 +298,7 @@ class GitHubInterface(InterfaceBase):
     def clear_outdated_messages(self):
         if self.stopped_early:
             return
+
         for comment in self.pull_request.review_comments():
             try:
                 should_delete = True
