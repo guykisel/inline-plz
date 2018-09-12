@@ -4,20 +4,20 @@
 
 To get started developing inline-plz, we recommend setting up a `pyenv` `virtualenv` and then running `pip` install the development requirements:
 
-```
+```bash
 $ pyenv virtualenv 3.6.0 inline-plz
 $ pip install -r requirements_dev.txt
 ```
 
 To run `inline-plz` locally
 
-```
+```bash
 $ inline-plz --dryrun --autorun
 ```
 
 To run the unit tests, use the `tox` runner:
 
-```
+```bash
 $ tox
 ```
 
@@ -37,7 +37,7 @@ You've got a new tool for helping improve codebases?  Why let's get 'er supporte
 
 Set up file pattern matchers in [linters/__init__.py](blob/master/inlineplz/linters/__init__.py) (see `PATTERNS`).
 
-```
+```python
 PATTERNS = {
     ...
     "ansible": ["*.yaml", "*.yml"],
@@ -50,7 +50,7 @@ PATTERNS = {
 
 Add configuration for executing your linter [linters/__init__.py](blob/master/inlineplz/linters/__init__.py) (see `LINTERS`).
 
-```
+```python
 LINTERS = {
     "ansible-lint": {
         "install": [[sys.executable, "-m", "pip", "install", "-U", "ansible-lint"]],
@@ -87,12 +87,12 @@ Parsers must return a python `set()`.  Entries in the set must be a 3-tuple of:
 * number: the line number the message referrs to
 * string: message body, the output from the linting tool that refers to this spcific file+line number.
 
-```
+```python
   ('project/supercoder.py', 1, "STRONG WARNING: author is a tool")
 ```
 
 
-```
+```python
 class AnsibleLintParser(ParserBase):
     """Parse Ansible Lint output."""
 
