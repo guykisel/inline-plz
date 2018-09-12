@@ -23,7 +23,7 @@ To run the unit tests, use the `tox` runner:
 $ tox
 ```
 
-This should run a set of tests against both python 3.5 ad 3.6.
+This should run a set of tests against both python 3.5 add 3.6.
 
 
 When you submit Pull Requests, `inline-plz` will kick off a [Travis job](blob/master/.travis.yml) that ... checks itself!   Please help keep `inline-plz` linted as an shining example of what great looks like!
@@ -31,7 +31,7 @@ When you submit Pull Requests, `inline-plz` will kick off a [Travis job](blob/ma
 
 # Adding New Linters
 
-You've got a new tool for helping improve codebases?  Why let's get 'er supported within `inline-plz`.  Here's where you'll need to look to get your awesome new tool added in with all the others:
+You've got a new tool for helping improve code bases?  Why let's get 'er supported within `inline-plz`.  Here's where you'll need to look to get your awesome new tool added in with all the others:
 
 `inline-plz` uses external linters, typically installed as their own command line utilities.  To simplify the use of those linters by `inline-plz` users, we request that you implement an installation process
 
@@ -48,7 +48,7 @@ PATTERNS = {
 ```
 
 
-## Configure Autoinstallation and Create an Execxution Configuration
+## Configure Auto Installation and Create an Execution Configuration
 
 Add configuration for executing your linter [linters/__init__.py](blob/master/inlineplz/linters/__init__.py) (see `LINTERS`).
 
@@ -69,25 +69,25 @@ LINTERS = {
 }
 ```
 
-We'd appreciate it if you keept these in alphabetical order,
+We'd appreciate it if you kept these in alphabetical order,
 
 If your tool is common enough that `inline-plz` should try it out for ever project, consider adding it to `TRUSTED_INSTALL`.
 
-## Optionally Create a Defualt Configuration
+## Optionally Create a Default Configuration
 
-Add a defualt [configuraiton](tree/master/inlineplz/linters/config) for the your linter.  This is only necessary if the tool requires a configuration or if you feel the "out of the box" defualts for the new tool should have those defualts overrideden.
+Add a default [configuration](tree/master/inlineplz/linters/config) for the your linter.  This is only necessary if the tool requires a configuration or if you feel the "out of the box" defaults for the new tool should have those defaults overridden.
 
-## Implemnt your Parser
+## Implement your Parser
 
-Implement a [parser](tree/master/inlineplz/parsers) to adapt the output of the linting tool into the strucutre that `inline-plz` supports.
+Implement a [parser](tree/master/inlineplz/parsers) to adapt the output of the linting tool into the structure that `inline-plz` supports.
 
 Please name your parser's `.py` file with the name of your linting tool.  Note that the class name here must match the class referred to in the `LINTERS` map above, eg: `parsers.AnsibleLintParser`.
 
 Parsers must return a python `set()`.  Entries in the set must be a 3-tuple of:
 
 * string: file path and name
-* number: the line number the message referrs to
-* string: message body, the output from the linting tool that refers to this spcific file+line number.
+* number: the line number the message refers to
+* string: message body, the output from the linting tool that refers to this specific file+line number.
 
 ```python
   ('project/supercoder.py', 1, "STRONG WARNING: author is a tool")
@@ -116,7 +116,7 @@ class AnsibleLintParser(ParserBase):
 
 ```
 
-# Intgrating with Code Review Tools
+# Integrating with Code Review Tools
 
 See `/guykisel/inline-plz/tree/master/inlineplz/interfaces` for more information.
 
@@ -126,7 +126,7 @@ See `/guykisel/inline-plz/tree/master/inlineplz/env` for more information.
 
 # Guidelines and Best Practices
 
-Please perform both a `dryrun` and a full `tox` runthrough before committing your code.
+Please perform both a `dryrun` and a full `tox` run-through before committing your code.
 
 We'd like to keep the code formatting consistent, and are using the defaults from the [black](https://github.com/ambv/black) python formatting tool as our standard.
 
