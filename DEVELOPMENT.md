@@ -2,7 +2,9 @@
 
 `inline-plz` is intended to be compatible with python 3.5 or newer, 3.6 is the recommended version for development.
 
-To get started developing inline-plz, we recommend setting up a `pyenv` `virtualenv` and then running `pip` install the development requirements:
+We recommend following [existing guides](https://docs.python-guide.org/dev/env/) for getting your development environment set up to your liking.
+
+If you're working on Linux or OSX, we recommend setting up a `pyenv` `virtualenv` and then running `pip` install the development requirements:
 
 ```bash
 $ pyenv virtualenv 3.6.0 inline-plz
