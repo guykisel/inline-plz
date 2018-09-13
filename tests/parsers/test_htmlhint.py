@@ -15,6 +15,4 @@ def test_htmlhint():
         messages = sorted(list(htmlhint.HTMLHintParser().parse(inputfile.read())))
         assert messages[0][0] == "./data/executable.html"
         assert messages[0][1] == 8
-        assert (
-            messages[0][2] == "Duplicate of attribute name [ bad ] was found."
-        )
+        assert messages[0][2] == "Duplicate of attribute name [ bad ] was found."

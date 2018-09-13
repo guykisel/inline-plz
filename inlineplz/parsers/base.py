@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 
-class ParserBase(object):
+class ParserBase():
     """Abstract base class for parsers"""
 
     def parse(self, lint_data):

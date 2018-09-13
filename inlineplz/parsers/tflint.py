@@ -2,21 +2,38 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+from inlineplz.decorators import linter
 from inlineplz.parsers.base import ParserBase
 import dirtyjson as json
 
 
+@linter()
 class TFLintParser(ParserBase):
     """Parse tflint output."""
+
+    name = "tflint"
+    language = "terraform"
+    patterns = ["*.tf"]
+    install = [["brew", "install", "tflint"]]
+    help = ["tflint", "--help"]
+    run = ["tflint", "--format=json"]
+    rundefault = ["tflint", "--format=json"]
+    dotfiles = []
+    language = "terraform"
+    autorun = True
+    run_per_file = False
+    patterns = ["*.tf"]
 
     def parse(self, lint_data):
         messages = set()
 
         for error_stanza in json.loads(lint_data):
-            messages.add((
-                error_stanza.get('file', None),
-                error_stanza.get('line', None),
-                error_stanza.get('message', None),
-            ))
+            messages.add(
+                (
+                    error_stanza.get("file", None),
+                    error_stanza.get("line", None),
+                    error_stanza.get("message", None),
+                )
+            )
 
         return messages
