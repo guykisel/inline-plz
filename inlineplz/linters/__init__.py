@@ -73,6 +73,7 @@ PATTERNS = {
     "stylus": ["*.styl"],
     "robotframework": ["*.robot"],
     "rst": ["*.rst"],
+    "terraform": ["*.tf"],
     "text": ["*.md", "*.txt", "*.rtf", "*.html", "*.tex", "*.markdown"],
     "yaml": ["*.yaml", "*.yml"],
 }
@@ -638,6 +639,19 @@ LINTERS = {
         "dotfiles": [".stylintrc"],
         "parser": parsers.StylintParser,
         "language": "stylus",
+        "autorun": True,
+        "run_per_file": False,
+    },
+    "tflint": {
+        "install": [
+            ["brew", "install", "tflint"],
+        ],
+        "help": ["tflint", "--help"],
+        "run": ["tflint", "--format=json"],
+        "rundefault": ["tflint", "--format=json"],
+        "dotfiles": [],
+        "parser": parsers.TFLintParser,
+        "language": "terraform",
         "autorun": True,
         "run_per_file": False,
     },
