@@ -1,0 +1,53 @@
+[{
+	"file": "./data/executable.html",
+	"messages": [{
+		"type": "error",
+		"message": "The value of attribute [ bad ] must be in double quotes.",
+		"raw": " bad=''",
+		"evidence": "  <div bad='' bad=''></div>",
+		"line": 8,
+		"col": 7,
+		"rule": {
+			"id": "attr-value-double-quotes",
+			"description": "Attribute values must be in double quotes.",
+			"link": "https://github.com/thedaviddias/HTMLHint/wiki/attr-value-double-quotes"
+		}
+	}, {
+		"type": "error",
+		"message": "Duplicate of attribute name [ bad ] was found.",
+		"raw": " bad=''",
+		"evidence": "  <div bad='' bad=''></div>",
+		"line": 8,
+		"col": 14,
+		"rule": {
+			"id": "attr-no-duplication",
+			"description": "Elements cannot have duplicate attributes.",
+			"link": "https://github.com/thedaviddias/HTMLHint/wiki/attr-no-duplication"
+		}
+	}, {
+		"type": "error",
+		"message": "Tag must be paired, no start tag: [ </input> ]",
+		"raw": "</input>",
+		"evidence": "  <input type=\"text\"></input>",
+		"line": 25,
+		"col": 22,
+		"rule": {
+			"id": "tag-pair",
+			"description": "Tag must be paired.",
+			"link": "https://github.com/thedaviddias/HTMLHint/wiki/tag-pair"
+		}
+	}, {
+		"type": "error",
+		"message": "Special characters must be escaped : [ < ].",
+		"raw": "\n  <div class\"foo\">\n\n          ",
+		"evidence": "  <div class\"foo\">",
+		"line": 26,
+		"col": 3,
+		"rule": {
+			"id": "spec-char-escape",
+			"description": "Special characters must be escaped.",
+			"link": "https://github.com/thedaviddias/HTMLHint/wiki/spec-char-escape"
+		}
+	}],
+	"time": 2
+}]
