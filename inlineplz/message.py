@@ -9,7 +9,7 @@ import os
 import traceback
 
 
-class Messages(object):
+class Messages():
     def __init__(self):
         self.messages = {}
 
@@ -45,7 +45,7 @@ class Messages(object):
         return self.messages.values()
 
 
-class Message(object):
+class Message():
     def __init__(self, path, line_number):
         self.path = os.path.relpath(path).replace("\\", "/")
         self.line_number = int(line_number)

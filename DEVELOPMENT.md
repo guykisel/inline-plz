@@ -116,6 +116,8 @@ class AnsibleLintParser(ParserBase):
 
 ```
 
+Import your parser in `inlineplz/parser/__init__.py`.
+
 # Integrating with Code Review Tools
 
 See `/guykisel/inline-plz/tree/master/inlineplz/interfaces` for more information.
