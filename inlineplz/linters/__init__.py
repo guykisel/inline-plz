@@ -389,7 +389,7 @@ LINTERS = {
         "rundefault": [os.path.normpath("./node_modules/.bin/htmlhint"), "--format=json", "--config={config_dir}/.htmlhintrc"],
         "dotfiles": [".htmlhintrc"],
         "parser": parsers.HTMLHintParser,
-        "language": "htmlhint",
+        "language": "html",
         "autorun": True,
         "run_per_file": False,
     },
