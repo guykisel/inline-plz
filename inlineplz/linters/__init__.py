@@ -213,7 +213,7 @@ LINTERS = {
                 "pip",
                 "install",
                 "-U",
-                "git+https://github.com/Yelp/detect-secrets.git@49dc1786f20f6d11ca1ce53bda6479f6c0ccea0f",
+                "detect-secrets",
             ]
         ],
         "help": ["detect-secrets", "-h"],
@@ -389,7 +389,7 @@ LINTERS = {
         "rundefault": [os.path.normpath("./node_modules/.bin/htmlhint"), "--format=json", "--config={config_dir}/.htmlhintrc"],
         "dotfiles": [".htmlhintrc"],
         "parser": parsers.HTMLHintParser,
-        "language": "htmlhint",
+        "language": "html",
         "autorun": True,
         "run_per_file": False,
     },
