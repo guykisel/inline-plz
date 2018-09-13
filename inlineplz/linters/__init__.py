@@ -213,7 +213,7 @@ LINTERS = {
                 "pip",
                 "install",
                 "-U",
-                "git+https://github.com/Yelp/detect-secrets.git@49dc1786f20f6d11ca1ce53bda6479f6c0ccea0f",
+                "detect-secrets",
             ]
         ],
         "help": ["detect-secrets", "-h"],
