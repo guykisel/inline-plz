@@ -18,13 +18,13 @@ def test_tflint():
         expected = sorted([
             (
                 "01-testcase.tf",
-                -1,
-                'ERROR:7 "ms1.2xlarge" is invalid instance type. (aws_instance_invalid_type)'
+                7,
+                '"ms1.2xlarge" is invalid instance type.'
             ),
             (
                 "02-testcase.tf",
-                -1,
-                'ERROR:7 "ms2000.2xlarge" is invalid instance type. (aws_instance_invalid_type)'
+                7,
+                '"ms2000.2xlarge" is invalid instance type.'
             ),
         ])
 
