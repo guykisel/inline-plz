@@ -1,0 +1,97 @@
+{
+  "results": {
+    "all": [
+      {
+        "additional_info": "",
+        "affected_code": [
+          {
+            "end": {
+              "column": 99,
+              "file": "./data/test.c",
+              "line": 1
+            },
+            "file": "./data/test.c",
+            "start": {
+              "column": 80,
+              "file": "./data/test.c",
+              "line": 1
+            }
+          }
+        ],
+        "aspect": "NoneType",
+        "confidence": 100,
+        "debug_msg": "",
+        "diffs": null,
+        "id": 187235561638517777582477884877790596867,
+        "message": "Line is longer than allowed. (98 > 79)",
+        "message_arguments": {},
+        "message_base": "Line is longer than allowed. (98 > 79)",
+        "origin": "LineLengthBear",
+        "severity": 1
+      }
+    ],
+    "all.spaces": [
+      {
+        "additional_info": "",
+        "affected_code": [
+          {
+            "end": {
+              "column": null,
+              "file": "./data/test.c",
+              "line": 3
+            },
+            "file": "./data/test.c",
+            "start": {
+              "column": null,
+              "file": "./data/test.c",
+              "line": 3
+            }
+          }
+        ],
+        "aspect": "NoneType",
+        "confidence": 100,
+        "debug_msg": "",
+        "diffs": {
+          "./data/test.c": "--- \n+++ \n@@ -1,6 +1,6 @@\n # This will compile the src/main.c file into a helloworld binary. This binary is the file we want!\n compile:\n-\tgcc src/main.c -o helloworld\n+    gcc src/main.c -o helloworld\n \n run: compile\n \t./helloworld\n"
+        },
+        "id": 339787681670121502469960963645598814673,
+        "message": "Line contains following spacing inconsistencies:\n- Tabs used instead of spaces.",
+        "message_arguments": {},
+        "message_base": "Line contains following spacing inconsistencies:\n- Tabs used instead of spaces.",
+        "origin": "SpaceConsistencyBear",
+        "severity": 1
+      },
+      {
+        "additional_info": "",
+        "affected_code": [
+          {
+            "end": {
+              "column": null,
+              "file": "./data/test.c",
+              "line": 6
+            },
+            "file": "./data/test.c",
+            "start": {
+              "column": null,
+              "file": "./data/test.c",
+              "line": 6
+            }
+          }
+        ],
+        "aspect": "NoneType",
+        "confidence": 100,
+        "debug_msg": "",
+        "diffs": {
+          "./data/test.c": "--- \n+++ \n@@ -3,4 +3,4 @@\n \tgcc src/main.c -o helloworld\n \n run: compile\n-\t./helloworld\n+    ./helloworld\n"
+        },
+        "id": 329510576149004135234976374767891383924,
+        "message": "Line contains following spacing inconsistencies:\n- Tabs used instead of spaces.",
+        "message_arguments": {},
+        "message_base": "Line contains following spacing inconsistencies:\n- Tabs used instead of spaces.",
+        "origin": "SpaceConsistencyBear",
+        "severity": 1
+      }
+    ],
+    "cli": []
+  }
+}
