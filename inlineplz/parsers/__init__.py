@@ -13,6 +13,7 @@ from inlineplz.parsers.eclint import ECLintParser
 from inlineplz.parsers.eslint import ESLintParser
 from inlineplz.parsers.gherkinlint import GherkinLintParser
 from inlineplz.parsers.gometalinter import GometalinterParser
+from inlineplz.parsers.htmlhint import HTMLHintParser
 from inlineplz.parsers.jscs import JSCSParser
 from inlineplz.parsers.jshint import JSHintParser
 from inlineplz.parsers.jsonlint import JSONLintParser
