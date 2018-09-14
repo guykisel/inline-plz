@@ -8,10 +8,13 @@ import dirtyjson as json
 
 
 @linter(
-    name = "tflint",
-    language = "terraform",
-    patterns = ["*.tf"],
-    install=[["brew", "install", "tflint"], ["go", "get", "-u", "github.com/wata727/tflint"]],
+    name="tflint",
+    language="terraform",
+    patterns=["*.tf"],
+    install=[
+        ["brew", "install", "tflint"],
+        ["go", "get", "-u", "github.com/wata727/tflint"],
+    ],
     help_cmd=["tflint", "--help"],
     run=["tflint", "--format=json"],
     rundefault=["tflint", "--format=json"],
