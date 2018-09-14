@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.gometalinter as gometalinter
+import inlineplz.linters.gometalinter as gometalinter
 
 eslint_path = os.path.join("tests", "testdata", "parsers", "gometalinter.txt")
 

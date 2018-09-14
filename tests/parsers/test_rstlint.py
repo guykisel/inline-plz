@@ -2,7 +2,7 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
-import inlineplz.parsers.rstlint as rstlint
+import inlineplz.linters.rstlint as rstlint
 
 
 def test_rstlint():

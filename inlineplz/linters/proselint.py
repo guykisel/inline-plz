@@ -2,9 +2,26 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import sys
+
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "proselint",
+        "install": [[sys.executable, "-m", "pip", "install", "-U", "proselint"]],
+        "help": ["proselint", "-h"],
+        "run": ["proselint"],
+        "rundefault": ["proselint"],
+        "dotfiles": [],
+        "language": "text",
+        "autorun": True,
+        "run_per_file": True,
+        "concurrency": 1,
+    }
+)
 class ProselintParser(ParserBase):
     """Parse proselint output."""
 

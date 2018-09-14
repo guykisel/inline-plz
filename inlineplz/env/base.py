@@ -3,7 +3,7 @@ from __future__ import absolute_import
 from __future__ import unicode_literals
 
 
-class EnvBase():
+class EnvBase:
     """Abstract base class for run environments"""
 
     pass

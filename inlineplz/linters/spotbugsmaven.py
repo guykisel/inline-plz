@@ -4,8 +4,37 @@ from __future__ import unicode_literals
 
 
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "spotbugs-maven-plugin",
+        "install": [
+            ["mvn", "clean", "install", "-U"],
+            [
+                "mvn",
+                "dependency:get",
+                "-Dartifact=com.github.spotbugs:spotbugs-maven-plugin:3.1.3",
+            ],
+        ],
+        "help": ["mvn", "com.github.spotbugs:spotbugs-maven-plugin:3.1.3:help"],
+        "run": [
+            "mvn",
+            "-Dspotbugs.failOnError=false",
+            "com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check",
+        ],
+        "rundefault": [
+            "mvn",
+            "-Dspotbugs.failOnError=false",
+            "com.github.spotbugs:spotbugs-maven-plugin:3.1.3:check",
+        ],
+        "dotfiles": [],
+        "language": "java",
+        "autorun": True,
+        "run_per_file": False,
+    }
+)
 class SpotbugsMavenParser(ParserBase):
     """Parse Spotbugs Maven output."""
 

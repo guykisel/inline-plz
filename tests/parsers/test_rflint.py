@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.rflint as rflint
+import inlineplz.linters.rflint as rflint
 
 rflint_path = os.path.join("tests", "testdata", "parsers", "rflint.txt")
 

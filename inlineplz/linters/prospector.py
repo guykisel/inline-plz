@@ -4,11 +4,43 @@ from __future__ import unicode_literals
 
 import traceback
 
+import sys
 import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "prospector",
+        "install": [
+            [
+                sys.executable,
+                "-m",
+                "pip",
+                "install",
+                "-U",
+                "prospector[with_everything]",
+            ],
+            [sys.executable, "-m", "pip", "install", "-U", "prospector"],
+        ],
+        "help": ["prospector", "-h"],
+        "run": ["prospector", "--zero-exit", "-o", "json"],
+        "rundefault": [
+            "prospector",
+            "--zero-exit",
+            "-o",
+            "json",
+            "-P",
+            "{config_dir}/.prospector.yaml",
+        ],
+        "dotfiles": [".prospector.yaml"],
+        "language": "python",
+        "autorun": True,
+        "run_per_file": False,
+    }
+)
 class ProspectorParser(ParserBase):
     """Parse json prospector output."""
 

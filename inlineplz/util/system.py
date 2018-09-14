@@ -89,3 +89,26 @@ def install_linter(config):
                 )
         else:
             return
+
+
+HERE = os.path.dirname(__file__)
+
+
+if sys.platform == "win32":
+    JAVA_SEP = ";"
+else:
+    JAVA_SEP = ":"
+
+
+def vendored_path(path):
+    # we use a relpath on windows because the colon in windows drive letter paths messes with java classpaths
+    if sys.platform == "win32":
+        return os.path.normpath(
+            os.path.relpath(
+                os.path.join(os.path.dirname(HERE), "bin", path), os.getcwd()
+            )
+        )
+
+    return os.path.normpath(
+        os.path.abspath(os.path.join(os.path.dirname(HERE), "bin", path))
+    )
