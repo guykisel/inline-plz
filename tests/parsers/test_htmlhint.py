@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.htmlhint as htmlhint
+import inlineplz.linters.htmlhint as htmlhint
 
 htmlhint_path = os.path.join("tests", "testdata", "parsers", "htmlhint.txt")
 

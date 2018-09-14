@@ -2,11 +2,28 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import sys
 import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "restructuredtext_lint",
+        "install": [
+            [sys.executable, "-m", "pip", "install", "-U", "restructuredtext_lint"]
+        ],
+        "help": ["rst-lint", "-h"],
+        "run": ["rst-lint", "--format", "json", "--encoding", "utf-8"],
+        "rundefault": ["rst-lint", "--format", "json", "--encoding", "utf-8"],
+        "dotfiles": [],
+        "language": "rst",
+        "autorun": True,
+        "run_per_file": True,
+    }
+)
 class RSTLintParser(ParserBase):
     """Parse json rst-lint output."""
 

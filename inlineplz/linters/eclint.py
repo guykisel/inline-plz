@@ -2,9 +2,25 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import os.path
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "eclint",
+        "install": [["npm", "install", "eclint"]],
+        "help": [os.path.normpath("./node_modules/.bin/eclint"), "-h"],
+        "run": [os.path.normpath("./node_modules/.bin/eclint"), "check"],
+        "rundefault": [os.path.normpath("./node_modules/.bin/eclint"), "check"],
+        "dotfiles": [".editorconfig"],
+        "language": "all",
+        "autorun": False,
+        "run_per_file": True,
+        "run_if_dotfile_in_root": False,
+    }
+)
 class ECLintParser(ParserBase):
     """Parse eclint output."""
 

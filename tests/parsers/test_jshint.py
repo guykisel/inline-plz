@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.jshint as jshint
+import inlineplz.linters.jshint as jshint
 
 jshint_path = os.path.join("tests", "testdata", "parsers", "jshint.txt")
 

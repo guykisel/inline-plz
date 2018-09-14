@@ -6,7 +6,7 @@ from __future__ import unicode_literals
 import codecs
 import os
 
-import inlineplz.parsers.tflint as tflint
+import inlineplz.linters.tflint as tflint
 
 
 tflint_path = os.path.join(

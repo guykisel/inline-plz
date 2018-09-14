@@ -2,9 +2,27 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import sys
+
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "robotframework-lint",
+        "install": [
+            [sys.executable, "-m", "pip", "install", "-U", "robotframework-lint"]
+        ],
+        "help": ["rflint", "--help"],
+        "run": ["rflint"],
+        "rundefault": ["rflint", "-A", "{config_dir}/.rflint"],
+        "dotfiles": [".rflint"],
+        "language": "robotframework",
+        "autorun": True,
+        "run_per_file": True,
+    }
+)
 class RobotFrameworkLintParser(ParserBase):
     """Parse rflint output."""
 

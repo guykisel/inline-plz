@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os
 
-import inlineplz.parsers.stylint as stylint
+import inlineplz.linters.stylint as stylint
 
 
 stylint_path = os.path.join("tests", "testdata", "parsers", "stylint.txt")

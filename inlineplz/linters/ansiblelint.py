@@ -2,9 +2,24 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import sys
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "ansible-lint",
+        "install": [[sys.executable, "-m", "pip", "install", "-U", "ansible-lint"]],
+        "help": ["ansible-lint", "-h"],
+        "run": ["ansible-lint", "-p"],
+        "rundefault": ["ansible-lint", "-p", "-c", "{config_dir}/.ansible-lint"],
+        "dotfiles": [".ansible-lint"],
+        "language": "ansible",
+        "autorun": True,
+        "run_per_file": True,
+    }
+)
 class AnsibleLintParser(ParserBase):
     """Parse Ansible Lint output."""
 

@@ -3,11 +3,38 @@ from __future__ import unicode_literals
 
 import traceback
 
+import os.path
 import dirtyjson as json
 
 from inlineplz.parsers.base import ParserBase
+from inlineplz.decorators import linter
 
 
+@linter(
+    {
+        "name": "gherkin-lint",
+        "install": [["npm", "install", "gherkin-lint"]],
+        "help": [os.path.normpath("./node_modules/.bin/gherkin-lint"), "--help"],
+        "run": [
+            os.path.normpath("./node_modules/.bin/gherkin-lint"),
+            ".",
+            "-f",
+            "json",
+        ],
+        "rundefault": [
+            os.path.normpath("./node_modules/.bin/gherkin-lint"),
+            ".",
+            "-f",
+            "json",
+            "-c",
+            "{config_dir}/.gherkin-lintrc",
+        ],
+        "dotfiles": [".gherkin-lintrc"],
+        "language": "gherkin",
+        "autorun": True,
+        "run_per_file": False,
+    }
+)
 class GherkinLintParser(ParserBase):
     """Parse json gherkin-lint output."""
 

@@ -5,7 +5,7 @@ from __future__ import unicode_literals
 import codecs
 import os.path
 
-import inlineplz.parsers.gherkinlint as gherkinlint
+import inlineplz.linters.gherkinlint as gherkinlint
 
 gherkinlint_path = os.path.join("tests", "testdata", "parsers", "gherkin-lint.txt")
 
