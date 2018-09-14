@@ -9,21 +9,15 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "dockerfile_lint",
-        "install": [["npm", "install", "dockerfile_lint"]],
-        "help": [os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-h"],
-        "run": [os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/dockerfile_lint"),
-            "-j",
-            "-f",
-        ],
-        "dotfiles": [],
-        "language": "docker",
-        "autorun": True,
-        "run_per_file": True,
-    }
+    name="dockerfile_lint",
+    install=[["npm", "install", "dockerfile_lint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-h"],
+    run=[os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"],
+    rundefault=[os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"],
+    dotfiles=[],
+    language="docker",
+    autorun=True,
+    run_per_file=True,
 )
 class DockerfileLintParser(ParserBase):
     """Parse json dockerfile_lint output."""

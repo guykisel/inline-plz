@@ -4,7 +4,6 @@ from __future__ import absolute_import
 from __future__ import print_function
 
 from functools import partial
-import inspect
 from inlineplz.registry import register_linter
 
 
@@ -22,5 +21,35 @@ def _create_linter(klass, config):
     return klass
 
 
-def linter(config):
-    return partial(_create_linter, config=config)
+def linter(
+    name,
+    language,
+    install,
+    help_cmd,
+    run,
+    rundefault,
+    dotfiles,
+    autorun,
+    run_per_file,
+    concurrency=None,
+    run_if_dotfile_in_root=None,
+    patterns=None,
+    url=None,
+):
+    return partial(
+        _create_linter,
+        config={
+            "name": name,
+            "language": language,
+            "install": install,
+            "help_cmd": help_cmd,
+            "run": run,
+            "rundefault": rundefault,
+            "dotfiles": dotfiles,
+            "autorun": autorun,
+            "run_per_file": run_per_file,
+            "concurrency": concurrency,
+            "run_if_dotfile_in_root": run_if_dotfile_in_root,
+            "patterns": patterns,
+        },
+    )

@@ -8,24 +8,15 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "yamllint",
-        "install": [[sys.executable, "-m", "pip", "install", "yamllint"]],
-        "help": ["yamllint", "-h"],
-        "run": ["yamllint", "-f", "parsable", "."],
-        "rundefault": [
-            "yamllint",
-            "-c",
-            "{config_dir}/.yamllint",
-            "-f",
-            "parsable",
-            ".",
-        ],
-        "dotfiles": [".yamllint"],
-        "language": "yaml",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="yamllint",
+    install=[[sys.executable, "-m", "pip", "install", "yamllint"]],
+    help_cmd=["yamllint", "-h"],
+    run=["yamllint", "-f", "parsable", "."],
+    rundefault=["yamllint", "-c", "{config_dir}/.yamllint", "-f", "parsable", "."],
+    dotfiles=[".yamllint"],
+    language="yaml",
+    autorun=True,
+    run_per_file=False,
 )
 class YAMLLintParser(ParserBase):
     """Parse yaml-lint output."""

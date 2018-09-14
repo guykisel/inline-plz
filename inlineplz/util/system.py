@@ -63,7 +63,7 @@ def run_command(command, log_on_fail=False, log_all=False, timeout=120):
 
 def installed(config):
     try:
-        returncode, _ = run_command(config.get("help"))
+        returncode, _ = run_command(config.get("help_cmd"))
         return returncode == 0
 
     except (subprocess.CalledProcessError, OSError):

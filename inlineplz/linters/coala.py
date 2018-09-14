@@ -9,21 +9,17 @@ from inlineplz.parsers.base import ParserBase
 from inlineplz.decorators import linter
 
 
-@linter(
-    {
-        "name": "coala",
-        "install": [
+@linter(name = "coala",
+        install = [
             [sys.executable, "-m", "pip", "install", "-U", "coala-bears"]
         ],
-        "help": ["coala", "-h"],
-        "run": ["coala", "-C"],
-        "rundefault": ["coala", "--json", "-c", "{config_dir}/.coafile"],
-        "dotfiles": [".coafile"],
-        "language": "all",
-        "autorun": True,
-        "run_per_file": False,
-    }
-)
+        help_cmd = ["coala", "-h"],
+        run = ["coala", "-C"],
+        rundefault = ["coala", "--json", "-c", "{config_dir}/.coafile"],
+        dotfiles = [".coafile"],
+        language = "all",
+        autorun = True,
+        run_per_file = False)
 class CoalaParser(ParserBase):
     """Parse json coala output."""
 

@@ -10,29 +10,27 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "jshint",
-        "install": [["npm", "install", "jshint"]],
-        "help": [os.path.normpath("./node_modules/.bin/jshint"), "-h"],
-        "run": [
-            os.path.normpath("./node_modules/.bin/jshint"),
-            ".",
-            "--reporter",
-            "checkstyle",
-        ],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/jshint"),
-            ".",
-            "--reporter",
-            "checkstyle",
-            "-c",
-            "{config_dir}/.jshintrc",
-        ],
-        "dotfiles": [".jshintrc"],
-        "language": "javascript",
-        "autorun": False,
-        "run_per_file": False,
-    }
+    name="jshint",
+    install=[["npm", "install", "jshint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/jshint"), "-h"],
+    run=[
+        os.path.normpath("./node_modules/.bin/jshint"),
+        ".",
+        "--reporter",
+        "checkstyle",
+    ],
+    rundefault=[
+        os.path.normpath("./node_modules/.bin/jshint"),
+        ".",
+        "--reporter",
+        "checkstyle",
+        "-c",
+        "{config_dir}/.jshintrc",
+    ],
+    dotfiles=[".jshintrc"],
+    language="javascript",
+    autorun=False,
+    run_per_file=False,
 )
 class JSHintParser(ParserBase):
     """Parse json jshint output."""

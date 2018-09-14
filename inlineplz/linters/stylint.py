@@ -8,21 +8,19 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "stylint",
-        "install": [["npm", "install", "stylint"]],
-        "help": [os.path.normpath("./node_modules/.bin/stylint"), "-h"],
-        "run": [os.path.normpath("./node_modules/.bin/stylint")],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/stylint"),
-            "-c",
-            "{config_dir}/.stylintrc",
-        ],
-        "dotfiles": [".stylintrc"],
-        "language": "stylus",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="stylint",
+    install=[["npm", "install", "stylint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/stylint"), "-h"],
+    run=[os.path.normpath("./node_modules/.bin/stylint")],
+    rundefault=[
+        os.path.normpath("./node_modules/.bin/stylint"),
+        "-c",
+        "{config_dir}/.stylintrc",
+    ],
+    dotfiles=[".stylintrc"],
+    language="stylus",
+    autorun=True,
+    run_per_file=False,
 )
 class StylintParser(ParserBase):
     """Parse stylint output."""

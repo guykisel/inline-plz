@@ -10,19 +10,15 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "restructuredtext_lint",
-        "install": [
-            [sys.executable, "-m", "pip", "install", "-U", "restructuredtext_lint"]
-        ],
-        "help": ["rst-lint", "-h"],
-        "run": ["rst-lint", "--format", "json", "--encoding", "utf-8"],
-        "rundefault": ["rst-lint", "--format", "json", "--encoding", "utf-8"],
-        "dotfiles": [],
-        "language": "rst",
-        "autorun": True,
-        "run_per_file": True,
-    }
+    name="restructuredtext_lint",
+    install=[[sys.executable, "-m", "pip", "install", "-U", "restructuredtext_lint"]],
+    help_cmd=["rst-lint", "-h"],
+    run=["rst-lint", "--format", "json", "--encoding", "utf-8"],
+    rundefault=["rst-lint", "--format", "json", "--encoding", "utf-8"],
+    dotfiles=[],
+    language="rst",
+    autorun=True,
+    run_per_file=True,
 )
 class RSTLintParser(ParserBase):
     """Parse json rst-lint output."""
