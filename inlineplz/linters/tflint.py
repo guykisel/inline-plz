@@ -12,7 +12,10 @@ import dirtyjson as json
         "name": "tflint",
         "language": "terraform",
         "patterns": ["*.tf"],
-        "install": [["brew", "install", "tflint"]],
+        "install": [
+            ["brew", "install", "tflint"],
+            ["go", "get", "-u", "github.com/wata727/tflint"],
+        ],
         "help": ["tflint", "--help"],
         "run": ["tflint", "--format=json"],
         "rundefault": ["tflint", "--format=json"],
@@ -23,7 +26,6 @@ import dirtyjson as json
 )
 class TFLintParser(ParserBase):
     """Parse tflint output."""
-
 
     def parse(self, lint_data):
         messages = set()
