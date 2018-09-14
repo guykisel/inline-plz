@@ -33,6 +33,7 @@ from inlineplz.util import system
 from inlineplz.linters.ansiblelint import AnsibleLintParser  # NOQA
 from inlineplz.linters.bandit import BanditParser  # NOQA
 from inlineplz.linters.codenarc import CodenarcParser  # NOQA
+from inlineplz.linters.coala import CoalaParser  # NOQA
 from inlineplz.linters.detectsecrets import DetectSecretsParser  # NOQA
 from inlineplz.linters.dockerfilelint import DockerfileLintParser  # NOQA
 from inlineplz.linters.eclint import ECLintParser  # NOQA
