@@ -51,5 +51,6 @@ def linter(
             "concurrency": concurrency,
             "run_if_dotfile_in_root": run_if_dotfile_in_root,
             "patterns": patterns,
+            "url": url,
         },
     )
