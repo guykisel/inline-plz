@@ -15,6 +15,4 @@ def test_coala():
         messages = sorted(list(coala.CoalaParser().parse(inputfile.read())))
         assert messages[0][0] == "./data/test.c"
         assert messages[0][1] == 1
-        assert (
-            messages[0][2] == "Line is longer than allowed. (98 > 79)"
-        )
+        assert messages[0][2] == "Line is longer than allowed. (98 > 79)"

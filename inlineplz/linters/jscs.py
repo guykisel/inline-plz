@@ -10,35 +10,33 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "jscs",
-        "install": [["npm", "install", "jscs"]],
-        "help": [os.path.normpath("./node_modules/.bin/jscs"), "-h"],
-        "run": [
-            os.path.normpath("./node_modules/.bin/jscs"),
-            ".",
-            "-r",
-            "json",
-            "-m",
-            "-1",
-            "-v",
-        ],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/jscs"),
-            ".",
-            "-r",
-            "json",
-            "-m",
-            "-1",
-            "-v",
-            "-c",
-            "{config_dir}/.jscsrc",
-        ],
-        "dotfiles": [".jscsrc", ".jscs.json"],
-        "language": "javascript",
-        "autorun": False,
-        "run_per_file": False,
-    }
+    name="jscs",
+    install=[["npm", "install", "jscs"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/jscs"), "-h"],
+    run=[
+        os.path.normpath("./node_modules/.bin/jscs"),
+        ".",
+        "-r",
+        "json",
+        "-m",
+        "-1",
+        "-v",
+    ],
+    rundefault=[
+        os.path.normpath("./node_modules/.bin/jscs"),
+        ".",
+        "-r",
+        "json",
+        "-m",
+        "-1",
+        "-v",
+        "-c",
+        "{config_dir}/.jscsrc",
+    ],
+    dotfiles=[".jscsrc", ".jscs.json"],
+    language="javascript",
+    autorun=False,
+    run_per_file=False,
 )
 class JSCSParser(ParserBase):
     """Parse json jscs output."""

@@ -11,38 +11,36 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "pmd",
-        "install": [],
-        "help": [
-            vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
-            "-help",
-        ],
-        "run": [
-            vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
-            "pmd",
-            "-d",
-            ".",
-            "-R",
-            "java-basic",
-            "-f",
-            "emacs",
-        ],
-        "rundefault": [
-            vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
-            "pmd",
-            "-d",
-            ".",
-            "-R",
-            "java-basic",
-            "-f",
-            "emacs",
-        ],
-        "dotfiles": [],
-        "language": "java",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="pmd",
+    install=[],
+    help_cmd=[
+        vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
+        "-help",
+    ],
+    run=[
+        vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
+        "pmd",
+        "-d",
+        ".",
+        "-R",
+        "java-basic",
+        "-f",
+        "emacs",
+    ],
+    rundefault=[
+        vendored_path(os.path.join("pmd", "pmd-bin-6.3.0", "bin", "run.sh")),
+        "pmd",
+        "-d",
+        ".",
+        "-R",
+        "java-basic",
+        "-f",
+        "emacs",
+    ],
+    dotfiles=[],
+    language="java",
+    autorun=True,
+    run_per_file=False,
 )
 class PMDParser(ParserBase):
     """Parse PMD output."""

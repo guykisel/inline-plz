@@ -9,18 +9,16 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "proselint",
-        "install": [[sys.executable, "-m", "pip", "install", "-U", "proselint"]],
-        "help": ["proselint", "-h"],
-        "run": ["proselint"],
-        "rundefault": ["proselint"],
-        "dotfiles": [],
-        "language": "text",
-        "autorun": True,
-        "run_per_file": True,
-        "concurrency": 1,
-    }
+    name="proselint",
+    install=[[sys.executable, "-m", "pip", "install", "-U", "proselint"]],
+    help_cmd=["proselint", "-h"],
+    run=["proselint"],
+    rundefault=["proselint"],
+    dotfiles=[],
+    language="text",
+    autorun=True,
+    run_per_file=True,
+    concurrency=1,
 )
 class ProselintParser(ParserBase):
     """Parse proselint output."""

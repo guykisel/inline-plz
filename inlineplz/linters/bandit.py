@@ -10,27 +10,25 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "bandit",
-        "install": [[sys.executable, "-m", "pip", "install", "-U", "bandit"]],
-        "help": ["bandit", "-h"],
-        "run": ["bandit", "-f", "json", "-iii", "-ll", "-r", "."],
-        "rundefault": [
-            "bandit",
-            "-f",
-            "json",
-            "-iii",
-            "-ll",
-            "-r",
-            ".",
-            "-c",
-            "{config_dir}/bandit.yaml",
-        ],
-        "dotfiles": ["bandit.yaml"],
-        "language": "python",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="bandit",
+    install=[[sys.executable, "-m", "pip", "install", "-U", "bandit"]],
+    help_cmd=["bandit", "-h"],
+    run=["bandit", "-f", "json", "-iii", "-ll", "-r", "."],
+    rundefault=[
+        "bandit",
+        "-f",
+        "json",
+        "-iii",
+        "-ll",
+        "-r",
+        ".",
+        "-c",
+        "{config_dir}/bandit.yaml",
+    ],
+    dotfiles=["bandit.yaml"],
+    language="python",
+    autorun=True,
+    run_per_file=False,
 )
 class BanditParser(ParserBase):
     """Parse json bandit output."""

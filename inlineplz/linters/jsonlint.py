@@ -9,17 +9,15 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "jsonlint",
-        "install": [["npm", "install", "jsonlint"]],
-        "help": [os.path.normpath("./node_modules/.bin/jsonlint"), "-h"],
-        "run": [os.path.normpath("./node_modules/.bin/jsonlint"), "-c", "-q"],
-        "rundefault": [os.path.normpath("./node_modules/.bin/jsonlint"), "-c", "-q"],
-        "dotfiles": [],
-        "language": "json",
-        "autorun": True,
-        "run_per_file": True,
-    }
+    name="jsonlint",
+    install=[["npm", "install", "jsonlint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/jsonlint"), "-h"],
+    run=[os.path.normpath("./node_modules/.bin/jsonlint"), "-c", "-q"],
+    rundefault=[os.path.normpath("./node_modules/.bin/jsonlint"), "-c", "-q"],
+    dotfiles=[],
+    language="json",
+    autorun=True,
+    run_per_file=True,
 )
 class JSONLintParser(ParserBase):
     """Parse jsonlint output."""

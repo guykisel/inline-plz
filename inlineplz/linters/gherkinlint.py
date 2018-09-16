@@ -11,29 +11,22 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "gherkin-lint",
-        "install": [["npm", "install", "gherkin-lint"]],
-        "help": [os.path.normpath("./node_modules/.bin/gherkin-lint"), "--help"],
-        "run": [
-            os.path.normpath("./node_modules/.bin/gherkin-lint"),
-            ".",
-            "-f",
-            "json",
-        ],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/gherkin-lint"),
-            ".",
-            "-f",
-            "json",
-            "-c",
-            "{config_dir}/.gherkin-lintrc",
-        ],
-        "dotfiles": [".gherkin-lintrc"],
-        "language": "gherkin",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="gherkin-lint",
+    install=[["npm", "install", "gherkin-lint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/gherkin-lint"), "--help"],
+    run=[os.path.normpath("./node_modules/.bin/gherkin-lint"), ".", "-f", "json"],
+    rundefault=[
+        os.path.normpath("./node_modules/.bin/gherkin-lint"),
+        ".",
+        "-f",
+        "json",
+        "-c",
+        "{config_dir}/.gherkin-lintrc",
+    ],
+    dotfiles=[".gherkin-lintrc"],
+    language="gherkin",
+    autorun=True,
+    run_per_file=False,
 )
 class GherkinLintParser(ParserBase):
     """Parse json gherkin-lint output."""

@@ -9,17 +9,15 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "megacheck",
-        "install": [["go", "get", "-u", "honnef.co/go/tools/cmd/megacheck"]],
-        "help": ["megacheck", "--help"],
-        "run": ["megacheck", "-f", "json", "./..."],
-        "rundefault": ["megacheck", "-f", "json", "./..."],
-        "dotfiles": [],
-        "language": "go",
-        "autorun": False,
-        "run_per_file": False,
-    }
+    name="megacheck",
+    install=[["go", "get", "-u", "honnef.co/go/tools/cmd/megacheck"]],
+    help_cmd=["megacheck", "--help"],
+    run=["megacheck", "-f", "json", "./..."],
+    rundefault=["megacheck", "-f", "json", "./..."],
+    dotfiles=[],
+    language="go",
+    autorun=False,
+    run_per_file=False,
 )
 class MegacheckParser(ParserBase):
     """Parse json megacheck output."""

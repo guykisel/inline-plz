@@ -8,33 +8,31 @@ from inlineplz.decorators import linter
 
 
 @linter(
-    {
-        "name": "eslint",
-        "install": [["npm", "install", "eslint"]],
-        "help": [os.path.normpath("./node_modules/.bin/eslint"), "-h"],
-        "run": [os.path.normpath("./node_modules/.bin/eslint"), ".", "-f", "unix"],
-        "rundefault": [
-            os.path.normpath("./node_modules/.bin/eslint"),
-            ".",
-            "-f",
-            "unix",
-            "-c",
-            "{config_dir}/.eslintrc.js",
-            "--ignore-path",
-            "{config_dir}/.eslintignore",
-        ],
-        "dotfiles": [
-            ".eslintrc.yml",
-            ".eslintrc.yaml",
-            ".eslintignore",
-            ".eslintrc",
-            ".eslintrc.js",
-            ".eslintrc.json",
-        ],
-        "language": "javascript",
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="eslint",
+    install=[["npm", "install", "eslint"]],
+    help_cmd=[os.path.normpath("./node_modules/.bin/eslint"), "-h"],
+    run=[os.path.normpath("./node_modules/.bin/eslint"), ".", "-f", "unix"],
+    rundefault=[
+        os.path.normpath("./node_modules/.bin/eslint"),
+        ".",
+        "-f",
+        "unix",
+        "-c",
+        "{config_dir}/.eslintrc.js",
+        "--ignore-path",
+        "{config_dir}/.eslintignore",
+    ],
+    dotfiles=[
+        ".eslintrc.yml",
+        ".eslintrc.yaml",
+        ".eslintignore",
+        ".eslintrc",
+        ".eslintrc.js",
+        ".eslintrc.json",
+    ],
+    language="javascript",
+    autorun=True,
+    run_per_file=False,
 )
 class ESLintParser(ParserBase):
     """Parse json eslint output."""

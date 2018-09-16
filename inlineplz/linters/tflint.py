@@ -8,21 +8,19 @@ import dirtyjson as json
 
 
 @linter(
-    {
-        "name": "tflint",
-        "language": "terraform",
-        "patterns": ["*.tf"],
-        "install": [
-            ["brew", "install", "tflint"],
-            ["go", "get", "-u", "github.com/wata727/tflint"],
-        ],
-        "help": ["tflint", "--help"],
-        "run": ["tflint", "--format=json"],
-        "rundefault": ["tflint", "--format=json"],
-        "dotfiles": [],
-        "autorun": True,
-        "run_per_file": False,
-    }
+    name="tflint",
+    language="terraform",
+    patterns=["*.tf"],
+    install=[
+        ["brew", "install", "tflint"],
+        ["go", "get", "-u", "github.com/wata727/tflint"],
+    ],
+    help_cmd=["tflint", "--help"],
+    run=["tflint", "--format=json"],
+    rundefault=["tflint", "--format=json"],
+    dotfiles=[],
+    autorun=True,
+    run_per_file=False,
 )
 class TFLintParser(ParserBase):
     """Parse tflint output."""
