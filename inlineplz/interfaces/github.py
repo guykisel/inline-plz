@@ -309,7 +309,7 @@ class GitHubInterface(InterfaceBase):
 
         for comment in self.pull_request.review_comments():
             try:
-                in_reply_to.add(comment.as_dict().get('in_reply_to_id'))
+                in_reply_to.add(comment.as_dict().get("in_reply_to_id"))
                 should_delete = True
                 if not comment.body.startswith(self.prefix):
                     continue
@@ -331,8 +331,8 @@ class GitHubInterface(InterfaceBase):
                 if comment.id not in in_reply_to:
                     comment.delete()
                     print("Deleted comment: {}".format(comment.body))
-                elif '**OBSOLETE**' not in comment.body:
-                    comment.edit(comment.body + '\n**OBSOLETE**')
+                elif "**OBSOLETE**" not in comment.body:
+                    comment.edit(comment.body + "\n**OBSOLETE**")
                     print("Edited obsolete comment: {}".format(comment.body))
             except Exception:
                 traceback.print_exc()
