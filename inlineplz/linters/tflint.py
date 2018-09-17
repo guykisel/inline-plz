@@ -12,6 +12,7 @@ import dirtyjson as json
     language="terraform",
     patterns=["*.tf"],
     install=[
+        ["brew", "tap", "wata727/tflint"],
         ["brew", "install", "tflint"],
         ["go", "get", "-u", "github.com/wata727/tflint"],
     ],
