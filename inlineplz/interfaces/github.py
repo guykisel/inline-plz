@@ -331,7 +331,7 @@ class GitHubInterface(InterfaceBase):
                 if comment.id not in in_reply_to:
                     comment.delete()
                     print("Deleted comment: {}".format(comment.body))
-                else:
+                elif '**OBSOLETE**' not in comment.body:
                     comment.edit(comment.body + '\n**OBSOLETE**')
                     print("Edited obsolete comment: {}".format(comment.body))
             except Exception:
