@@ -227,10 +227,13 @@ class GitHubInterface(InterfaceBase):
             paths.setdefault(msg.path, 0)
 
             valid_errors += 1
-            duplicate = self.is_duplicate(msg, msg_position)
-            if duplicate:
+            if self.is_duplicate(msg, msg_position):
+                continue
+
+            msg_at_position = self.message_at_position(msg, msg_position)
+            if msg_at_position:
                 try:
-                    duplicate.edit(self.format_message(msg))
+                    msg_at_position.edit(self.format_message(msg))
                     self.messages_in_files.setdefault(msg.path, []).append(
                         (msg, msg_position)
                     )
@@ -267,17 +270,19 @@ class GitHubInterface(InterfaceBase):
         return valid_errors
 
     def is_duplicate(self, message, position):
+        msg = self.message_at_position(message, position)
+        if msg.body.strip() == self.format_message(message).strip():
+            return msg
+        return None
+
+    def message_at_position(self, message, position):
         # update our list of review comments about once a second
         # to reduce dupes without hitting the API too hard
         if time.time() - self.last_update > 1:
             self.review_comments = list(self.pull_request.review_comments())
             self.last_update = time.time()
         for comment in self.review_comments:
-            if (
-                comment.original_position == position
-                and comment.path == message.path
-                and comment.body.strip() == self.format_message(message).strip()
-            ):
+            if comment.original_position == position and comment.path == message.path:
                 return comment
 
         return None
