@@ -304,8 +304,12 @@ class GitHubInterface(InterfaceBase):
         if self.stopped_early:
             return
 
+        comments_to_delete = []
+        in_reply_to = set()
+
         for comment in self.pull_request.review_comments():
             try:
+                in_reply_to.add(comment.as_dict().get("in_reply_to_id"))
                 should_delete = True
                 if not comment.body.startswith(self.prefix):
                     continue
@@ -319,8 +323,17 @@ class GitHubInterface(InterfaceBase):
                 if not should_delete:
                     continue
 
-                comment.delete()
-                print("Deleted comment: {}".format(comment.body))
+            except Exception:
+                traceback.print_exc()
+
+        for comment in comments_to_delete:
+            try:
+                if comment.id not in in_reply_to:
+                    comment.delete()
+                    print("Deleted comment: {}".format(comment.body))
+                elif "**OBSOLETE**" not in comment.body:
+                    comment.edit(comment.body + "\n**OBSOLETE**")
+                    print("Edited obsolete comment: {}".format(comment.body))
             except Exception:
                 traceback.print_exc()
 
