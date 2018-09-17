@@ -20,7 +20,7 @@ import dirtyjson as json
     rundefault=["tflint", "--format=json"],
     dotfiles=[],
     autorun=True,
-    run_per_file=False,
+    run_per_file=True,
 )
 class TFLintParser(ParserBase):
     """Parse tflint output."""
@@ -28,13 +28,14 @@ class TFLintParser(ParserBase):
     def parse(self, lint_data):
         messages = set()
 
-        for error_stanza in json.loads(lint_data):
-            messages.add(
-                (
-                    error_stanza.get("file", None),
-                    error_stanza.get("line", None),
-                    error_stanza.get("message", None),
+        for file_path, output in lint_data:
+            for error_stanza in json.loads(output):
+                messages.add(
+                    (
+                        file_path,
+                        error_stanza.get("line", None),
+                        error_stanza.get("message", None),
+                    )
                 )
-            )
 
         return messages
