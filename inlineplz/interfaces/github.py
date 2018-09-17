@@ -271,7 +271,7 @@ class GitHubInterface(InterfaceBase):
 
     def is_duplicate(self, message, position):
         msg = self.message_at_position(message, position)
-        if msg.body.strip() == self.format_message(message).strip():
+        if msg and msg.body.strip() == self.format_message(message).strip():
             return msg
         return None
 
