@@ -4,6 +4,7 @@ from __future__ import division
 from __future__ import print_function
 from __future__ import unicode_literals
 
+import json
 import random
 import subprocess
 import time
@@ -306,7 +307,7 @@ class GitHubInterface(InterfaceBase):
 
         for comment in self.pull_request.review_comments():
             try:
-                in_reply_to.add(comment.as_dict().get("in_reply_to_id"))
+                in_reply_to.add(json.loads(comment.as_json()).get("in_reply_to_id"))
                 should_delete = True
                 if not comment.body.startswith(self.prefix):
                     continue

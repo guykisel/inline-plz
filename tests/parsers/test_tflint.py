@@ -16,7 +16,9 @@ tflint_path = os.path.join(
 
 def test_tflint():
     with codecs.open(tflint_path, encoding="utf-8", errors="replace") as inputfile:
-        messages = sorted(list(tflint.TFLintParser().parse([('01-testcase.tf', inputfile.read())])))
+        messages = sorted(
+            list(tflint.TFLintParser().parse([("01-testcase.tf", inputfile.read())]))
+        )
         expected = sorted(
             [
                 ("01-testcase.tf", 7, '"ms1.2xlarge" is invalid instance type.'),
