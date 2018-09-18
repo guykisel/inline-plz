@@ -309,7 +309,7 @@ class GitHubInterface(InterfaceBase):
             try:
                 # github3 0.9.6 compat
                 try:
-                    in_reply_to.add(json.loads(comment.to_json()).get("in_reply_to_id"))
+                    in_reply_to.add(comment.to_json().get("in_reply_to_id"))
                 except AttributeError:
                     in_reply_to.add(comment.as_dict().get("in_reply_to_id"))
                 should_delete = True
