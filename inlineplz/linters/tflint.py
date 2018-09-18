@@ -2,6 +2,8 @@
 from __future__ import absolute_import
 from __future__ import unicode_literals
 
+import traceback
+
 from inlineplz.decorators import linter
 from inlineplz.parsers.base import ParserBase
 import dirtyjson as json
@@ -30,13 +32,16 @@ class TFLintParser(ParserBase):
         messages = set()
 
         for file_path, output in lint_data:
-            for error_stanza in json.loads(output):
-                messages.add(
-                    (
-                        file_path,
-                        error_stanza.get("line", None),
-                        error_stanza.get("message", None),
+            try:
+                for error_stanza in json.loads(output):
+                    messages.add(
+                        (
+                            file_path,
+                            error_stanza.get("line", None),
+                            error_stanza.get("message", None),
+                        )
                     )
-                )
+            except Exception:
+                traceback.print_exc()
 
         return messages

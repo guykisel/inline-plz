@@ -206,7 +206,11 @@ def run_per_file(config, ignore_paths=None, path=None, config_dir=None):
     pool = Pool(processes=concurrency)
 
     def result(run_cmd):
-        _, out = run_command(run_cmd, timeout=5)
+        try:
+            _, out = run_command(run_cmd, timeout=5)
+        except Exception:
+            traceback.print_exc()
+            out = ""
         return run_cmd[-1], out.strip()
 
     output = pool.map(result, run_cmds)
