@@ -206,6 +206,7 @@ class GitHubInterface(InterfaceBase):
         if self.out_of_date():
             print("This run is out of date because the PR has been updated.")
             messages = []
+            self.stopped_early = True
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             # rate limit
@@ -227,6 +228,7 @@ class GitHubInterface(InterfaceBase):
             paths.setdefault(msg.path, 0)
 
             valid_errors += 1
+            self.messages_in_files.setdefault(msg.path, []).append((msg, msg_position))
             if self.is_duplicate(msg, msg_position):
                 continue
 
@@ -234,9 +236,6 @@ class GitHubInterface(InterfaceBase):
             if msg_at_position:
                 try:
                     msg_at_position.edit(self.format_message(msg))
-                    self.messages_in_files.setdefault(msg.path, []).append(
-                        (msg, msg_position)
-                    )
                     print("Comment edited successfully: {0}".format(msg))
                     paths[msg.path] += 1
                     messages_posted += 1
@@ -250,9 +249,6 @@ class GitHubInterface(InterfaceBase):
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
-                self.messages_in_files.setdefault(msg.path, []).append(
-                    (msg, msg_position)
-                )
             except github3.GitHubError:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
@@ -264,6 +260,7 @@ class GitHubInterface(InterfaceBase):
             messages_posted += 1
             time.sleep(.1)
             if max_comments and messages_posted > max_comments:
+                self.stopped_early = True
                 break
 
         print("\n{} messages posted to Github.".format(messages_posted))
@@ -320,8 +317,8 @@ class GitHubInterface(InterfaceBase):
                         and msg_position == comment.position
                     ):
                         should_delete = False
-                if not should_delete:
-                    continue
+                if should_delete:
+                    comments_to_delete.append(comment)
 
             except Exception:
                 traceback.print_exc()
