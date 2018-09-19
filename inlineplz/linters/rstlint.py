@@ -34,7 +34,7 @@ class RSTLintParser(ParserBase):
                         msgbody = msgdata["message"]
                         messages.add((path, line, msgbody))
                     except (ValueError, KeyError):
-                        print("Invalid message: {0}".format(msgdata))
+                        print("({0}) Invalid message: {1}".format(type(self).__name__, msgdata))
             except json.error.Error:
-                print("Invalid message: {0}".format(output))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, output))
         return messages

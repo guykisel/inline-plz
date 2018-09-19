@@ -47,7 +47,7 @@ class ProspectorParser(ParserBase):
                     )
                     messages.add((path, line, msgbody))
                 except (ValueError, KeyError):
-                    print("Invalid message: {0}".format(msgdata))
+                    print("({0}) Invalid message: {1}".format(type(self).__name__, msgdata))
         except ValueError:
             print(traceback.format_exc())
             print(lint_data)

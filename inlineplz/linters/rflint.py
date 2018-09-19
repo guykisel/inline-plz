@@ -42,5 +42,5 @@ class RobotFrameworkLintParser(ParserBase):
                             (current_file.strip(), int(line_number), message.strip())
                         )
                 except (ValueError, IndexError):
-                    print("Invalid message: {0}".format(line))
+                    print("({0}) Invalid message: {1}".format(type(self).__name__, line))
         return messages

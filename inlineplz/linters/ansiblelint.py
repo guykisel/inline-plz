@@ -34,5 +34,5 @@ class AnsibleLintParser(ParserBase):
                             msgbody = parts[2].strip()
                             messages.add((path, line_no, msgbody))
                     except (ValueError, IndexError, TypeError):
-                        print("Invalid message: {0}".format(line))
+                        print("({0}) Invalid message: {1}".format(type(self).__name__, line))
         return messages

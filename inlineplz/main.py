@@ -17,7 +17,7 @@ import yaml
 
 from inlineplz import interfaces
 from inlineplz import env
-from inlineplz import linters
+from inlineplz.linter_runner import LinterRunner
 from inlineplz import __version__
 
 
@@ -65,6 +65,7 @@ def main():
     result = inline(args)
     print("inline-plz version: {}".format(__version__))
     print("Python version: {}".format(sys.version))
+    # TODO: This time is shorter than the longest running linter task in Travis CI somehow??
     print("inline-plz ran for {} seconds".format(int(time.time() - start)))
     print("inline-plz returned exit code {}".format(result))
     return result
@@ -203,15 +204,16 @@ def inline(args):
 
         my_interface.start_review()
     try:
-        messages = linters.lint(
+        linter_runner = LinterRunner(
             args.install,
             args.autorun,
             args.ignore_paths,
             args.config_dir,
             args.enabled_linters,
             args.disabled_linters,
-            trusted,
+            trusted
         )
+        messages = linter_runner.run_linters()
     except Exception:  # pylint: disable=broad-except
         print("Linting failed:\n{}".format(traceback.format_exc()))
         print("inline-plz version: {}".format(__version__))

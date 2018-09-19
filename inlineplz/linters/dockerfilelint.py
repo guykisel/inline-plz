@@ -39,5 +39,5 @@ class DockerfileLintParser(ParserBase):
                                     msgbody += " ({0})".format(description)
                                 messages.add((path.strip(), line, msgbody.strip()))
                             except (ValueError, KeyError, TypeError):
-                                print("Invalid message: {0}".format(msgdata))
+                                print("({0}) Invalid message: {1}".format(type(self).__name__, msgdata))
         return messages

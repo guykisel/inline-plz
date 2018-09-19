@@ -35,5 +35,5 @@ class ECLintParser(ParserBase):
                     msg = parts[1].strip()
                     messages.add((file_path, line_no, msg))
                 except (ValueError, IndexError, TypeError):
-                    print("Invalid message: {0}".format(line))
+                    print("({0}) Invalid message: {1}".format(type(self).__name__, line))
         return messages
