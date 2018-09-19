@@ -9,7 +9,6 @@ linters:
         ignore: 'E1601,W503,E501'
         max-line-length: 120
         fixer: true
-    py3k:
 files:
     ignore:
         - 'bower_components/*'
