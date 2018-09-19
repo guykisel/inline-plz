@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 
 import codecs
 import os
 
 import inlineplz.linters.tflint as tflint
-
 
 tflint_path = os.path.join(
     "tests", "testdata", "parsers", "tflint.01-testcase.tf.stdout"

@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 
 import codecs
 import os
 
 import inlineplz.linters.todolint as todolint
-
 
 todolint_path = os.path.join("tests", "testdata", "parsers", "todolint.stdout")
 
