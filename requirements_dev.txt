@@ -5,10 +5,12 @@ watchdog==0.9.0
 flake8==3.5.0
 tox==3.3.0
 coverage==4.5.1
-Sphinx==1.7.9
+Sphinx==1.8.0
 # only used for setup script
 # cryptography==1.0.1
 py==1.6.0
 pytest==3.8.0
 PyYAML==3.13
 prospector[with_everything]==1.1.2
+python-dateutil>=2.6.0
+requests>=2.18
