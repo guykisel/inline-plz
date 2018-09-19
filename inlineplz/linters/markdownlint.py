@@ -38,5 +38,5 @@ class MarkdownLintParser(ParserBase):
                     msgbody = ":".join(parts[2:]).strip()
                     messages.add((path, line, msgbody))
             except (ValueError, IndexError):
-                print("Invalid message: {0}".format(line))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, line))
         return messages

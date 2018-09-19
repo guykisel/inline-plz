@@ -23,12 +23,12 @@ def _create_linter(klass, config):
 
 def linter(
     name,
-    language,
     install,
     help_cmd,
     run,
     rundefault,
     dotfiles,
+    language,
     autorun,
     run_per_file,
     concurrency=None,
@@ -40,12 +40,12 @@ def linter(
         _create_linter,
         config={
             "name": name,
-            "language": language,
             "install": install,
             "help_cmd": help_cmd,
             "run": run,
             "rundefault": rundefault,
             "dotfiles": dotfiles,
+            "language": language,
             "autorun": autorun,
             "run_per_file": run_per_file,
             "concurrency": concurrency,

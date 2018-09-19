@@ -34,5 +34,5 @@ class ProselintParser(ParserBase):
                         msgbody = ":".join(parts[2:]).strip()
                         messages.add((file_path, line, msgbody))
             except (ValueError, IndexError):
-                print("Invalid message: {0}".format(output))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, output))
         return messages

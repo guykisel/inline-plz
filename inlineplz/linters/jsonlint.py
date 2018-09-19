@@ -32,5 +32,5 @@ class JSONLintParser(ParserBase):
                     msgbody = output
                     messages.add((path, line, msgbody))
             except (ValueError, IndexError):
-                print("Invalid message: {0}".format(output))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, output))
         return messages

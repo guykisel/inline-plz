@@ -48,5 +48,5 @@ class BanditParser(ParserBase):
                 msgbody = msgdata["issue_text"]
                 messages.add((path.strip(), line, msgbody.strip()))
             except (ValueError, KeyError):
-                print("Invalid message: {0}".format(msgdata))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, msgdata))
         return messages

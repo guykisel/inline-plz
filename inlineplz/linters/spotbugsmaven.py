@@ -57,5 +57,5 @@ class SpotbugsMavenParser(ParserBase):
                     path = "/".join(path_base)
                     messages.add((path, line_number, msgbody))
             except (ValueError, IndexError):
-                print("Invalid message: {0}".format(line))
+                print("({0}) Invalid message: {1}".format(type(self).__name__, line))
         return messages
