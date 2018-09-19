@@ -1,13 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os.path
 
-from inlineplz.util.system import vendored_path
-
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
+from ..decorators import linter
+from ..parsers.base import ParserBase
+from ..util.system import vendored_path
 
 
 @linter(

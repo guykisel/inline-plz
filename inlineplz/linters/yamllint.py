@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
+
 import sys
 
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
+from ..decorators import linter
+from ..parsers.base import ParserBase
 
 
 @linter(
@@ -32,5 +31,7 @@ class YAMLLintParser(ParserBase):
                     msgbody = parts[3].strip()
                     messages.add((path, line, msgbody))
             except (ValueError, IndexError, TypeError):
-                print("({0}) Invalid message: {1}".format(type(self).__name__, lint_data))
+                print(
+                    "({0}) Invalid message: {1}".format(type(self).__name__, lint_data)
+                )
         return messages

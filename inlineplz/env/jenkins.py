@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os
+
+from ..env.base import EnvBase
 
 try:
     import urllib.parse as urlparse
 except ImportError:
     # pylint: disable=F0401
     import urlparse
-
-from inlineplz.env.base import EnvBase
 
 
 # https://wiki.jenkins-ci.org/display/JENKINS/Building+a+software+project#Buildingasoftwareproject-JenkinsSetEnvironmentVariables

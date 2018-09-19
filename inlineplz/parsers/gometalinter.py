@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import dirtyjson as json
 
-from inlineplz.parsers.base import ParserBase
+from ..parsers.base import ParserBase
 
 
 class GometalinterParser(ParserBase):

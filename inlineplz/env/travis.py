@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os
 
-from inlineplz.env.base import EnvBase
-
+from ..env.base import EnvBase
 
 # https://docs.travis-ci.com/user/environment-variables/#Default-Environment-Variables
 

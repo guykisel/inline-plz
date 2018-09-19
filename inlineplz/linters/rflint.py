@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import sys
 
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
+from ..decorators import linter
+from ..parsers.base import ParserBase
 
 
 @linter(
@@ -42,5 +40,7 @@ class RobotFrameworkLintParser(ParserBase):
                             (current_file.strip(), int(line_number), message.strip())
                         )
                 except (ValueError, IndexError):
-                    print("({0}) Invalid message: {1}".format(type(self).__name__, line))
+                    print(
+                        "({0}) Invalid message: {1}".format(type(self).__name__, line)
+                    )
         return messages

@@ -1,10 +1,8 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import dirtyjson as json
 
-from inlineplz.parsers.base import ParserBase
+from ..parsers.base import ParserBase
 
 
 class JSCSParser(ParserBase):
@@ -21,5 +19,9 @@ class JSCSParser(ParserBase):
                         msgbody = msgdata["message"]
                         messages.add((path, line, msgbody))
                     except (ValueError, KeyError):
-                        print("({0}) Invalid message: {1}".format(type(self).__name__, msgdata))
+                        print(
+                            "({0}) Invalid message: {1}".format(
+                                type(self).__name__, msgdata
+                            )
+                        )
         return messages

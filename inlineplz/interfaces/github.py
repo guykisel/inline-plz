@@ -1,10 +1,5 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
-import json
 import random
 import subprocess
 import time
@@ -13,8 +8,8 @@ import traceback
 import github3
 import unidiff
 
-from inlineplz.interfaces.base import InterfaceBase
-from inlineplz.util import git, system
+from ..interfaces.base import InterfaceBase
+from ..util import git, system
 
 
 class GitHubInterface(InterfaceBase):
