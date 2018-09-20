@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os.path
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
+
+from ..decorators import linter
+from ..parsers.base import ParserBase
 
 
 @linter(
@@ -35,5 +34,7 @@ class ECLintParser(ParserBase):
                     msg = parts[1].strip()
                     messages.add((file_path, line_no, msg))
                 except (ValueError, IndexError, TypeError):
-                    print("({0}) Invalid message: {1}".format(type(self).__name__, line))
+                    print(
+                        "({0}) Invalid message: {1}".format(type(self).__name__, line)
+                    )
         return messages

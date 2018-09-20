@@ -4,10 +4,6 @@
 System utilities
 """
 
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import os
 import sys
@@ -23,15 +19,19 @@ else:
 def should_stop():
     return os.path.isfile(os.path.join(os.getcwd(), STOP_FILE_NAME))
 
+
 def vendored_path(path):
     # we use a relpath on windows because the colon in windows drive letter paths messes with java classpaths
     if sys.platform == "win32":
         return os.path.normpath(
             os.path.relpath(
-                os.path.join(os.path.dirname(os.path.dirname(__file__)), "bin", path), os.getcwd()
+                os.path.join(os.path.dirname(os.path.dirname(__file__)), "bin", path),
+                os.getcwd(),
             )
         )
 
     return os.path.normpath(
-        os.path.abspath(os.path.join(os.path.dirname(os.path.dirname(__file__)), "bin", path))
+        os.path.abspath(
+            os.path.join(os.path.dirname(os.path.dirname(__file__)), "bin", path)
+        )
     )

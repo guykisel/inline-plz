@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import print_function
 
 from functools import partial
-from inlineplz.registry import register_linter
 
+from .registry import register_linter
 
 LINTERS_BY_NAME = {}
 ALL_LINTERS = []

@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os
 
-from inlineplz.env.base import EnvBase
-import inlineplz.util.git as git
+from ..env.base import EnvBase
+from ..util import git
 
 
 class Local(EnvBase):

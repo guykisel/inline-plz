@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os.path
+
 import dirtyjson as json
 
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
+from ..decorators import linter
+from ..parsers.base import ParserBase
 
 
 @linter(

@@ -1,10 +1,6 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import argparse
 import os
 import pprint
@@ -15,10 +11,8 @@ import traceback
 import giturlparse
 import yaml
 
-from inlineplz import interfaces
-from inlineplz import env
-from inlineplz.linter_runner import LinterRunner
-from inlineplz import __version__
+from . import __version__, env, interfaces
+from .linter_runner import LinterRunner
 
 
 def main():
@@ -211,7 +205,7 @@ def inline(args):
             args.config_dir,
             args.enabled_linters,
             args.disabled_linters,
-            trusted
+            trusted,
         )
         messages = linter_runner.run_linters()
     except Exception:  # pylint: disable=broad-except
@@ -219,7 +213,8 @@ def inline(args):
         print("inline-plz version: {}".format(__version__))
         print("Python version: {}".format(sys.version))
         ret_code = 1
-        my_interface.finish_review(error=True)
+        if my_interface:
+            my_interface.finish_review(error=True)
         return ret_code
 
     print("{} lint messages found".format(len(messages)))

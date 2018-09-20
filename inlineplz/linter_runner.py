@@ -2,10 +2,6 @@
 # pylint: disable=ungrouped-imports,broad-except,too-many-instance-attributes
 """Linter configurations."""
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import asyncio
 import fnmatch
 import multiprocessing
@@ -17,10 +13,8 @@ import traceback
 
 from identify import identify
 
-import inlineplz.linters
-from inlineplz import message
-from inlineplz import registry
-from inlineplz.util import system
+from . import linters, message, registry
+from .util import system
 
 
 class LinterRunner:
@@ -32,7 +26,7 @@ class LinterRunner:
         config_dir=None,
         enabled_linters=None,
         disabled_linters=None,
-        trusted=False
+        trusted=False,
     ):
         # TODO: Break this class down with composition or something
         self.install = install
@@ -40,7 +34,9 @@ class LinterRunner:
         self.ignore_paths = ignore_paths or []
         self.config_dir = config_dir or os.getcwd()
         self.config_dir = os.path.abspath(self.config_dir)
-        self.fallback_config_dir = os.path.abspath(os.path.join(os.path.dirname(inlineplz.linters.__file__), "config"))
+        self.fallback_config_dir = os.path.abspath(
+            os.path.join(os.path.dirname(linters.__file__), "config")
+        )
         self.enabled_linters = enabled_linters or []
         self.disabled_linters = disabled_linters or []
         self.trusted = trusted
@@ -61,16 +57,18 @@ class LinterRunner:
             self.event_loop = asyncio.get_event_loop()
 
         # Limit the number of concurrent subprocesses we can run to something close to the number of CPUs we have
-        self.process_limiter = asyncio.Semaphore(value=multiprocessing.cpu_count(), loop=self.event_loop)
+        self.process_limiter = asyncio.Semaphore(
+            value=multiprocessing.cpu_count(), loop=self.event_loop
+        )
 
     async def run_command(self, command, timeout=120):  # noqa: MC0001
-        print('Running command: {}'.format(" ".join(command)))
+        print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
         popen_kwargs = {
             "stdout": asyncio.subprocess.PIPE,
             "stderr": asyncio.subprocess.STDOUT,
-            "env": os.environ
+            "env": os.environ,
         }
         # TODO: Figure out why we don't always get utf-8 back, even on 3.6.X without universal_newlines=True
         if sys.version_info[0] >= 3 and sys.version_info[1] >= 6:
@@ -80,13 +78,25 @@ class LinterRunner:
         async with self.process_limiter:
             if sys.platform == "win32":
                 proc = await asyncio.wait_for(
-                    asyncio.create_subprocess_shell(" ".join(command), loop=self.event_loop, **popen_kwargs), timeout)
+                    asyncio.create_subprocess_shell(
+                        " ".join(command), loop=self.event_loop, **popen_kwargs
+                    ),
+                    timeout,
+                )
             else:
                 try:
                     proc = await asyncio.wait_for(
-                        asyncio.create_subprocess_exec(*command, loop=self.event_loop, **popen_kwargs), timeout)
+                        asyncio.create_subprocess_exec(
+                            *command, loop=self.event_loop, **popen_kwargs
+                        ),
+                        timeout,
+                    )
                 except FileNotFoundError:
-                    print("{0} unable to execute because command {1} not found in PATH".format(command, command[0]))
+                    print(
+                        "{0} unable to execute because command {1} not found in PATH".format(
+                            command, command[0]
+                        )
+                    )
                     raise
 
             while True:
@@ -98,14 +108,22 @@ class LinterRunner:
                     output += line.decode("utf-8", "replace")
                     continue
                 except asyncio.TimeoutError:
-                    print("{0} timed out in {1} seconds while reading stdout:\n{2}".format(command, timeout, output))
+                    print(
+                        "{0} timed out in {1} seconds while reading stdout:\n{2}".format(
+                            command, timeout, output
+                        )
+                    )
                     proc.kill()
                     raise
 
         try:
             return_code = await asyncio.wait_for(proc.wait(), timeout)
         except asyncio.TimeoutError:
-            print("{0} timed out in {1} seconds waiting for process to end:\n{2}".format(command, timeout, output))
+            print(
+                "{0} timed out in {1} seconds waiting for process to end:\n{2}".format(
+                    command, timeout, output
+                )
+            )
             proc.kill()
             raise
 
@@ -126,11 +144,15 @@ class LinterRunner:
     @staticmethod
     def cleanup():
         """Delete standard installation directories."""
-        for install_dir in inlineplz.linters.INSTALL_DIRS:
+        for install_dir in linters.INSTALL_DIRS:
             try:
                 shutil.rmtree(install_dir, ignore_errors=True)
             except Exception:
-                print("{0}\nFailed to delete {1}".format(traceback.format_exc(), install_dir))
+                print(
+                    "{0}\nFailed to delete {1}".format(
+                        traceback.format_exc(), install_dir
+                    )
+                )
                 sys.stdout.flush()
 
     def should_ignore_path(self, path):
@@ -152,10 +174,15 @@ class LinterRunner:
         for pattern in registry.PATTERNS.get(config.get("language")):
             for filepath in fnmatch.filter(self.all_filenames, pattern):
                 if "text" in identify.tags_from_path(filepath):
-                    cmds_and_tasks.append((
-                        cmd + [filepath],
-                        asyncio.ensure_future(self.run_command(cmd + [filepath], timeout=60), loop=self.event_loop)
-                    ))
+                    cmds_and_tasks.append(
+                        (
+                            cmd + [filepath],
+                            asyncio.ensure_future(
+                                self.run_command(cmd + [filepath], timeout=60),
+                                loop=self.event_loop,
+                            ),
+                        )
+                    )
 
         output = []
         for run_cmd, file_task in cmds_and_tasks:
@@ -188,7 +215,9 @@ class LinterRunner:
 
             # Get the languages
             for linter, config in registry.LINTERS.items():
-                if self.dotfiles_exist(config) or self.dotfiles_exist(config, self.config_dir):
+                if self.dotfiles_exist(config) or self.dotfiles_exist(
+                    config, self.config_dir
+                ):
                     dotfile_found.add(linter)
                     language_found.add(config.get("language"))
 
@@ -261,18 +290,20 @@ class LinterRunner:
             self.previous_install_commands.append(install_cmd)
             try:
                 await self.run_command(install_cmd)
-            except OSError:
+            except (OSError, asyncio.TimeoutError):
                 continue
 
         return await self.installed(config)
 
     async def install_trusted(self):
-        for install_cmd in inlineplz.linters.TRUSTED_INSTALL:
+        for install_cmd in linters.TRUSTED_INSTALL:
             try:
                 await self.run_command(install_cmd)
             except OSError:
                 print(
-                    "Trusted install failed: {0}\n{1}".format(install_cmd, traceback.format_exc())
+                    "Trusted install failed: {0}\n{1}".format(
+                        install_cmd, traceback.format_exc()
+                    )
                 )
                 sys.stdout.flush()
 
@@ -292,7 +323,9 @@ class LinterRunner:
             config_dir = self.fallback_config_dir
 
             if not (self.dotfiles_exist(config, self.fallback_config_dir)):
-                print("Missing default config dotfile for {0}".format(config.get("name")))
+                print(
+                    "Missing default config dotfile for {0}".format(config.get("name"))
+                )
                 return config.get("run")
 
         return [
@@ -311,7 +344,9 @@ class LinterRunner:
 
         linter_tasks = []
         for linter in self.linters_to_run():
-            linter_tasks.append(asyncio.ensure_future(self.run_linter(linter), loop=self.event_loop))
+            linter_tasks.append(
+                asyncio.ensure_future(self.run_linter(linter), loop=self.event_loop)
+            )
 
         for linter_task in linter_tasks:
             self.event_loop.run_until_complete(linter_task)
@@ -343,9 +378,7 @@ class LinterRunner:
             sys.stdout.flush()
             return
         print(
-            "Installing {0} took {1} seconds".format(
-                linter, int(time.time() - start)
-            )
+            "Installing {0} took {1} seconds".format(linter, int(time.time() - start))
         )
         sys.stdout.flush()
 
@@ -360,9 +393,7 @@ class LinterRunner:
             print("Running {0} failed:\n{1}".format(linter, traceback.format_exc()))
             sys.stdout.flush()
         print(
-            "Running of {0} took {1} seconds".format(
-                linter, int(time.time() - start)
-            )
+            "Running of {0} took {1} seconds".format(linter, int(time.time() - start))
         )
         sys.stdout.flush()
 
@@ -382,7 +413,11 @@ class LinterRunner:
                 sys.stdout.flush()
                 self.messages.add_messages(linter_messages)
         except Exception:
-            print("Parsing {0} output failed:\n{1}\n{2}".format(linter, traceback.format_exc(), output))
+            print(
+                "Parsing {0} output failed:\n{1}\n{2}".format(
+                    linter, traceback.format_exc(), output
+                )
+            )
             sys.stdout.flush()
         print(
             "Parsing of {0} took {1} seconds".format(linter, int(time.time() - start))

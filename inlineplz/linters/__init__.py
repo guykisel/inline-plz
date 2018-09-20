@@ -2,41 +2,38 @@
 # pylint: disable=W0703,C0412
 """Linter configurations."""
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import sys
 
-from inlineplz.registry import register_pattern
+from ..registry import register_pattern
 
 # import your linter here
-from inlineplz.linters.ansiblelint import AnsibleLintParser  # NOQA
-from inlineplz.linters.bandit import BanditParser  # NOQA
-from inlineplz.linters.codenarc import CodenarcParser  # NOQA
-from inlineplz.linters.coala import CoalaParser  # NOQA
-from inlineplz.linters.detectsecrets import DetectSecretsParser  # NOQA
-from inlineplz.linters.dockerfilelint import DockerfileLintParser  # NOQA
-from inlineplz.linters.eclint import ECLintParser  # NOQA
-from inlineplz.linters.eslint import ESLintParser  # NOQA
-from inlineplz.linters.gherkinlint import GherkinLintParser  # NOQA
-from inlineplz.linters.gometalinter import GometalinterParser  # NOQA
-from inlineplz.linters.htmlhint import HTMLHintParser  # NOQA
-from inlineplz.linters.jscs import JSCSParser  # NOQA
-from inlineplz.linters.jshint import JSHintParser  # NOQA
-from inlineplz.linters.jsonlint import JSONLintParser  # NOQA
-from inlineplz.linters.markdownlint import MarkdownLintParser  # NOQA
-from inlineplz.linters.megacheck import MegacheckParser  # NOQA
-from inlineplz.linters.pmd import PMDParser  # NOQA
-from inlineplz.linters.proselint import ProselintParser  # NOQA
-from inlineplz.linters.prospector import ProspectorParser  # NOQA
-from inlineplz.linters.rflint import RobotFrameworkLintParser  # NOQA
-from inlineplz.linters.rstlint import RSTLintParser  # NOQA
-from inlineplz.linters.shellcheck import ShellcheckParser  # NOQA
-from inlineplz.linters.spotbugsmaven import SpotbugsMavenParser  # NOQA
-from inlineplz.linters.stylint import StylintParser  # NOQA
-from inlineplz.linters.tflint import TFLintParser  # NOQA
-from inlineplz.linters.yamllint import YAMLLintParser  # NOQA
+from ..linters.ansiblelint import AnsibleLintParser  # NOQA
+from ..linters.bandit import BanditParser  # NOQA
+from ..linters.codenarc import CodenarcParser  # NOQA
+from ..linters.coala import CoalaParser  # NOQA
+from ..linters.detectsecrets import DetectSecretsParser  # NOQA
+from ..linters.dockerfilelint import DockerfileLintParser  # NOQA
+from ..linters.eclint import ECLintParser  # NOQA
+from ..linters.eslint import ESLintParser  # NOQA
+from ..linters.gherkinlint import GherkinLintParser  # NOQA
+from ..linters.gometalinter import GometalinterParser  # NOQA
+from ..linters.htmlhint import HTMLHintParser  # NOQA
+from ..linters.jscs import JSCSParser  # NOQA
+from ..linters.jshint import JSHintParser  # NOQA
+from ..linters.jsonlint import JSONLintParser  # NOQA
+from ..linters.markdownlint import MarkdownLintParser  # NOQA
+from ..linters.megacheck import MegacheckParser  # NOQA
+from ..linters.pmd import PMDParser  # NOQA
+from ..linters.proselint import ProselintParser  # NOQA
+from ..linters.prospector import ProspectorParser  # NOQA
+from ..linters.rflint import RobotFrameworkLintParser  # NOQA
+from ..linters.rstlint import RSTLintParser  # NOQA
+from ..linters.shellcheck import ShellcheckParser  # NOQA
+from ..linters.spotbugsmaven import SpotbugsMavenParser  # NOQA
+from ..linters.stylint import StylintParser  # NOQA
+from ..linters.tflint import TFLintParser  # NOQA
+from ..linters.yamllint import YAMLLintParser  # NOQA
 
 
 def register_patterns():

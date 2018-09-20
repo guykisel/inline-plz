@@ -1,10 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import re
-from inlineplz.decorators import linter
-from inlineplz.parsers.base import ParserBase
+
+from ..decorators import linter
+from ..parsers.base import ParserBase
 
 
 @linter(

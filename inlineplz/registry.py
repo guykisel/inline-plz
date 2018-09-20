@@ -1,8 +1,5 @@
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import print_function
-
 # glob patterns for what language is represented by what type of files.
 PATTERNS = {}
 # linter configs. add new tools here.

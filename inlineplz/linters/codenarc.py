@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import os.path
-from inlineplz.parsers.base import ParserBase
-from inlineplz.decorators import linter
-from inlineplz.util.system import vendored_path, JAVA_SEP
+
+from ..decorators import linter
+from ..parsers.base import ParserBase
+from ..util.system import JAVA_SEP, vendored_path
 
 GROOVY_PATH = vendored_path(os.path.join("groovy", "groovy-all-2.4.15.jar"))
 SLF4J_PATH = vendored_path(os.path.join("groovy", "slf4j-api-1.7.25.jar"))
