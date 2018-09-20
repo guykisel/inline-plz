@@ -1,12 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import codecs
 import os
 
-import inlineplz.parsers.yamllint as yamllint
-
+import inlineplz.linters.yamllint as yamllint
 
 yamllint_path = os.path.join("tests", "testdata", "parsers", "yamllint.txt")
 

@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -29,13 +29,15 @@ test_requirements = [
 
 setup(
     name="inlineplz",
-    version="0.39.0",
+    version="0.41.1",
     description="Inline your lint messages",
     long_description=readme + "\n\n" + history,
     author="Guy Kisel",
     author_email="guy.kisel@gmail.com",
     url="https://github.com/guykisel/inline-plz",
-    packages=find_packages(".", exclude=("tests*", "testing*")),
+    packages=["inlineplz"],
+    package_dir={"inlineplz": "inlineplz"},
+    package_data={"inlineplz": "linters/config/*"},
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",

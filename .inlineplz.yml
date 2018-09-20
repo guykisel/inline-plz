@@ -4,5 +4,7 @@ ignore_paths:
     - .git
     - inlineplz/bin
     - site-packages
+    - build
+    - dist
 enabled_linters:
     - prospector

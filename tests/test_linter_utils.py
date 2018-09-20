@@ -1,26 +1,27 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
-
 import os
 
-import inlineplz.linters as linters
+from inlineplz.linter_runner import LinterRunner
+
+
+def test_no_dotfile_config():
+    test_config = {"run": ["run"], "rundefault": ["rundefault"], "dotfiles": []}
+    linter_runner = LinterRunner(
+        config_dir=os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
+    )
+    assert linter_runner.run_config(test_config) == ["run"]
 
 
 def test_rundefault_config():
-    test_config = {"run": ["run"], "rundefault": ["rundefault"], "dotfiles": []}
-    test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
-    assert linters.run_config(test_config, test_config_path) == ["rundefault"]
-
-
-def test_run_config():
     test_config = {
         "run": ["run"],
         "rundefault": ["rundefault"],
         "dotfiles": [".dotfile"],
     }
-    test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
-    assert linters.run_config(test_config, test_config_path) == ["rundefault"]
+    linter_runner = LinterRunner(
+        config_dir=os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
+    )
+    assert linter_runner.run_config(test_config) == ["rundefault"]
 
 
 def test_dotfiles_dont_exist():
@@ -29,8 +30,9 @@ def test_dotfiles_dont_exist():
         "rundefault": ["rundefault"],
         "dotfiles": [".dotfile_doesnt_exist"],
     }
-    test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
-    assert not linters.dotfiles_exist(test_config, test_config_path)
+    assert not LinterRunner.dotfiles_exist(
+        test_config, os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
+    )
 
 
 def test_dotfiles_exist():
@@ -39,5 +41,6 @@ def test_dotfiles_exist():
         "rundefault": ["rundefault"],
         "dotfiles": [".dotfile"],
     }
-    test_config_path = os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
-    assert linters.dotfiles_exist(test_config, test_config_path)
+    assert LinterRunner.dotfiles_exist(
+        test_config, os.path.join(os.getcwd(), "tests", "testdata", "linter_configs")
+    )

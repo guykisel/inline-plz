@@ -1,11 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
-
 import argparse
+import json
 import os
 import pprint
 import sys
@@ -15,10 +12,8 @@ import traceback
 import giturlparse
 import yaml
 
-from inlineplz import interfaces
-from inlineplz import env
-from inlineplz import linters
-from inlineplz import __version__
+from . import __version__, env, interfaces
+from .linter_runner import LinterRunner
 
 
 def main():
@@ -65,6 +60,7 @@ def main():
     result = inline(args)
     print("inline-plz version: {}".format(__version__))
     print("Python version: {}".format(sys.version))
+    # TODO: This time is shorter than the longest running linter task in Travis CI somehow??
     print("inline-plz ran for {} seconds".format(int(time.time() - start)))
     print("inline-plz returned exit code {}".format(result))
     return result
@@ -203,7 +199,7 @@ def inline(args):
 
         my_interface.start_review()
     try:
-        messages = linters.lint(
+        linter_runner = LinterRunner(
             args.install,
             args.autorun,
             args.ignore_paths,
@@ -212,12 +208,14 @@ def inline(args):
             args.disabled_linters,
             trusted,
         )
+        messages = linter_runner.run_linters()
     except Exception:  # pylint: disable=broad-except
         print("Linting failed:\n{}".format(traceback.format_exc()))
         print("inline-plz version: {}".format(__version__))
         print("Python version: {}".format(sys.version))
         ret_code = 1
-        my_interface.finish_review(error=True)
+        if my_interface:
+            my_interface.finish_review(error=True)
         return ret_code
 
     print("{} lint messages found".format(len(messages)))
@@ -228,6 +226,7 @@ def inline(args):
 
     if args.dryrun:
         print_messages(messages)
+        write_messages_to_json(messages)
         return ret_code
 
     try:
@@ -245,6 +244,7 @@ def inline(args):
     except KeyError:
         print("Interface not found: {}".format(args.interface))
         traceback.print_exc()
+    write_messages_to_json(messages)
     return ret_code
 
 
@@ -252,6 +252,11 @@ def print_messages(messages):
     for msg in sorted([str(msg) for msg in messages]):
         print(msg)
     print("{} lint messages found".format(len(messages)))
+
+
+def write_messages_to_json(messages, filename="messages.json"):
+    with open(filename, "w") as outfile:
+        json.dump([msg.as_dict() for msg in messages], outfile)
 
 
 if __name__ == "__main__":

@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import codecs
 import os.path
 
-import inlineplz.parsers.jscs as jscs
+import inlineplz.linters.jscs as jscs
 
 jscs_path = os.path.join("tests", "testdata", "parsers", "jscs.txt")
 

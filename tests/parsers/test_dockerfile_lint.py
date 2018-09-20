@@ -1,11 +1,9 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 import codecs
 import os.path
 
-import inlineplz.parsers.dockerfilelint as dockerfilelint
+import inlineplz.linters.dockerfilelint as dockerfilelint
 
 dockerfilelint_path = os.path.join(
     "tests", "testdata", "parsers", "dockerfile_lint.txt"

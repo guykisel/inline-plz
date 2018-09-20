@@ -2,14 +2,12 @@
 
 """Wrap linter messages in a generic Message class that can do some internal cleanup."""
 
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import os
 import traceback
 
 
-class Messages(object):
+class Messages:
     def __init__(self):
         self.messages = {}
 
@@ -45,11 +43,12 @@ class Messages(object):
         return self.messages.values()
 
 
-class Message(object):
+class Message:
     def __init__(self, path, line_number):
         self.path = os.path.relpath(path).replace("\\", "/")
         self.line_number = int(line_number)
         self.comments = set()
+        self.status = "FOUND"
 
     def __str__(self):
         return """
@@ -63,3 +62,11 @@ Message:
 
     def append(self, message):
         self.comments.add(message)
+
+    def as_dict(self):
+        return {
+            "path": self.path,
+            "line_number": self.line_number,
+            "comments": list(self.comments),
+            "status": self.status,
+        }

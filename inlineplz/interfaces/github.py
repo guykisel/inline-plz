@@ -1,8 +1,4 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import division
-from __future__ import print_function
-from __future__ import unicode_literals
 
 import random
 import subprocess
@@ -12,8 +8,8 @@ import traceback
 import github3
 import unidiff
 
-from inlineplz.interfaces.base import InterfaceBase
-from inlineplz.util import git, system
+from ..interfaces.base import InterfaceBase
+from ..util import git, system
 
 
 class GitHubInterface(InterfaceBase):
@@ -206,6 +202,7 @@ class GitHubInterface(InterfaceBase):
         if self.out_of_date():
             print("This run is out of date because the PR has been updated.")
             messages = []
+            self.stopped_early = True
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
             # rate limit
@@ -227,14 +224,17 @@ class GitHubInterface(InterfaceBase):
             paths.setdefault(msg.path, 0)
 
             valid_errors += 1
-            duplicate = self.is_duplicate(msg, msg_position)
-            if duplicate:
+            self.messages_in_files.setdefault(msg.path, []).append((msg, msg_position))
+            if self.is_duplicate(msg, msg_position):
+                msg.status = "DUPLICATE"
+                continue
+
+            msg_at_position = self.message_at_position(msg, msg_position)
+            if msg_at_position:
                 try:
-                    duplicate.edit(self.format_message(msg))
-                    self.messages_in_files.setdefault(msg.path, []).append(
-                        (msg, msg_position)
-                    )
+                    msg_at_position.edit(self.format_message(msg))
                     print("Comment edited successfully: {0}".format(msg))
+                    msg.status = "EDITED"
                     paths[msg.path] += 1
                     messages_posted += 1
                     time.sleep(.1)
@@ -247,9 +247,7 @@ class GitHubInterface(InterfaceBase):
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
-                self.messages_in_files.setdefault(msg.path, []).append(
-                    (msg, msg_position)
-                )
+                msg.status = "POSTED"
             except github3.GitHubError:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
@@ -261,23 +259,26 @@ class GitHubInterface(InterfaceBase):
             messages_posted += 1
             time.sleep(.1)
             if max_comments and messages_posted > max_comments:
+                self.stopped_early = True
                 break
 
         print("\n{} messages posted to Github.".format(messages_posted))
         return valid_errors
 
     def is_duplicate(self, message, position):
+        msg = self.message_at_position(message, position)
+        if msg and msg.body.strip() == self.format_message(message).strip():
+            return msg
+        return None
+
+    def message_at_position(self, message, position):
         # update our list of review comments about once a second
         # to reduce dupes without hitting the API too hard
         if time.time() - self.last_update > 1:
             self.review_comments = list(self.pull_request.review_comments())
             self.last_update = time.time()
         for comment in self.review_comments:
-            if (
-                comment.original_position == position
-                and comment.path == message.path
-                and comment.body.strip() == self.format_message(message).strip()
-            ):
+            if comment.original_position == position and comment.path == message.path:
                 return comment
 
         return None
@@ -299,8 +300,16 @@ class GitHubInterface(InterfaceBase):
         if self.stopped_early:
             return
 
+        comments_to_delete = []
+        in_reply_to = set()
+
         for comment in self.pull_request.review_comments():
             try:
+                # github3 0.9.6 compat
+                try:
+                    in_reply_to.add(comment.to_json().get("in_reply_to_id"))
+                except AttributeError:
+                    in_reply_to.add(comment.as_dict().get("in_reply_to_id"))
                 should_delete = True
                 if not comment.body.startswith(self.prefix):
                     continue
@@ -311,11 +320,20 @@ class GitHubInterface(InterfaceBase):
                         and msg_position == comment.position
                     ):
                         should_delete = False
-                if not should_delete:
-                    continue
+                if should_delete:
+                    comments_to_delete.append(comment)
 
-                comment.delete()
-                print("Deleted comment: {}".format(comment.body))
+            except Exception:
+                traceback.print_exc()
+
+        for comment in comments_to_delete:
+            try:
+                if comment.id not in in_reply_to:
+                    comment.delete()
+                    print("Deleted comment: {}".format(comment.body))
+                elif "**OBSOLETE**" not in comment.body:
+                    comment.edit(comment.body + "\n**OBSOLETE**")
+                    print("Edited obsolete comment: {}".format(comment.body))
             except Exception:
                 traceback.print_exc()
 

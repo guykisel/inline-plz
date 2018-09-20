@@ -1,9 +1,7 @@
 # -*- coding: utf-8 -*-
-from __future__ import absolute_import
-from __future__ import unicode_literals
 
 
-class InterfaceBase(object):
+class InterfaceBase:
     """Abstract base class for review interfaces"""
 
     def start_review(self):

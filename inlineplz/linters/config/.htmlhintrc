@@ -1,0 +1,25 @@
+{
+  "attr-value-double-quotes": true,
+  "doctype-first": true,
+  "tag-pair": true,
+  "spec-char-escape": true,
+  "id-unique": true,
+  "src-not-empty": true,
+  "attr-no-duplication": true,
+  "title-require": true,
+  "csslint": {
+    "display-property-grouping": true,
+    "known-properties": true
+  },
+  "jshint": {
+    "undef": true,
+    "unused": true,
+    "node": true,
+    "expr": true,
+    "globals": {}
+  },
+  "attr-value-not-empty": true,
+  "head-script-disabled": true,
+  "id-class-ad-disabled": true,
+  "alt-require": true
+}
