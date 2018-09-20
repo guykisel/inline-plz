@@ -97,7 +97,7 @@ class LinterRunner:
                             command, command[0]
                         )
                     )
-                    raise
+                    return 1, ""
 
             while True:
                 try:
@@ -114,7 +114,8 @@ class LinterRunner:
                         )
                     )
                     proc.kill()
-                    raise
+                    output = output or ""
+                    return 1, output
 
         try:
             return_code = await asyncio.wait_for(proc.wait(), timeout)
@@ -125,7 +126,8 @@ class LinterRunner:
                 )
             )
             proc.kill()
-            raise
+            output = output or ""
+            return 1, output
 
         # TODO: Enable this in verbose logging only
         print("{0}\n{1}\n{0}\n{2}".format("-" * 80, command, output))

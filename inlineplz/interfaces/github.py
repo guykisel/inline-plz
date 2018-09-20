@@ -226,6 +226,7 @@ class GitHubInterface(InterfaceBase):
             valid_errors += 1
             self.messages_in_files.setdefault(msg.path, []).append((msg, msg_position))
             if self.is_duplicate(msg, msg_position):
+                msg.status = "DUPLICATE"
                 continue
 
             msg_at_position = self.message_at_position(msg, msg_position)
@@ -233,6 +234,7 @@ class GitHubInterface(InterfaceBase):
                 try:
                     msg_at_position.edit(self.format_message(msg))
                     print("Comment edited successfully: {0}".format(msg))
+                    msg.status = "EDITED"
                     paths[msg.path] += 1
                     messages_posted += 1
                     time.sleep(.1)
@@ -245,6 +247,7 @@ class GitHubInterface(InterfaceBase):
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
+                msg.status = "POSTED"
             except github3.GitHubError:
                 # workaround for our diff not entirely matching up with github's diff
                 # we can end up with a mismatched diff if the branch is old
