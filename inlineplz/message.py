@@ -48,6 +48,7 @@ class Message:
         self.path = os.path.relpath(path).replace("\\", "/")
         self.line_number = int(line_number)
         self.comments = set()
+        self.status = "FOUND"
 
     def __str__(self):
         return """
@@ -60,4 +61,12 @@ Message:
         ).strip()
 
     def append(self, message):
-        self.comments.add(message)
+        self.comments.add(str(message))
+
+    def as_dict(self):
+        return {
+            "path": self.path,
+            "line_number": self.line_number,
+            "comments": list(self.comments),
+            "status": self.status,
+        }
