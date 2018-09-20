@@ -290,7 +290,7 @@ class LinterRunner:
             self.previous_install_commands.append(install_cmd)
             try:
                 await self.run_command(install_cmd)
-            except OSError:
+            except (OSError, asyncio.TimeoutError):
                 continue
 
         return await self.installed(config)

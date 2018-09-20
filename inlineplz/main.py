@@ -213,7 +213,8 @@ def inline(args):
         print("inline-plz version: {}".format(__version__))
         print("Python version: {}".format(sys.version))
         ret_code = 1
-        my_interface.finish_review(error=True)
+        if my_interface:
+            my_interface.finish_review(error=True)
         return ret_code
 
     print("{} lint messages found".format(len(messages)))
