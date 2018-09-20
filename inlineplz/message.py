@@ -61,7 +61,7 @@ Message:
         ).strip()
 
     def append(self, message):
-        self.comments.add(str(message))
+        self.comments.add(message)
 
     def as_dict(self):
         return {
