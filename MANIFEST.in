@@ -1,12 +1,11 @@
-include AUTHORS.rst
+include AUTHORS.md
 include CONTRIBUTING.rst
+include DEVELOPMENT.md
 include HISTORY.rst
 include LICENSE
 include README.rst
 
-recursive-include inlineplz/linters/config *
-recursive-include tests *
-recursive-include inlineplz/bin *
+recursive-include inlineplz *
 recursive-exclude * __pycache__
 recursive-exclude * *.py[co]
 
