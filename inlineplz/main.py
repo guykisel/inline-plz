@@ -2,6 +2,7 @@
 # -*- coding: utf-8 -*-
 
 import argparse
+import json
 import os
 import pprint
 import sys
@@ -225,6 +226,7 @@ def inline(args):
 
     if args.dryrun:
         print_messages(messages)
+        write_messages_to_json(messages)
         return ret_code
 
     try:
@@ -242,6 +244,7 @@ def inline(args):
     except KeyError:
         print("Interface not found: {}".format(args.interface))
         traceback.print_exc()
+    write_messages_to_json(messages)
     return ret_code
 
 
@@ -249,6 +252,11 @@ def print_messages(messages):
     for msg in sorted([str(msg) for msg in messages]):
         print(msg)
     print("{} lint messages found".format(len(messages)))
+
+
+def write_messages_to_json(messages, filename="messages.json"):
+    with open(filename, "w") as outfile:
+        json.dump([msg.as_dict() for msg in messages], outfile)
 
 
 if __name__ == "__main__":
