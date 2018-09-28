@@ -237,7 +237,7 @@ class GitHubInterface(InterfaceBase):
                     msg.status = "EDITED"
                     paths[msg.path] += 1
                     messages_posted += 1
-                    time.sleep(.1)
+                    time.sleep(0.1)
                     continue
 
                 except github3.GitHubError:
@@ -257,7 +257,7 @@ class GitHubInterface(InterfaceBase):
             print("Comment posted successfully: {0}".format(msg))
             paths[msg.path] += 1
             messages_posted += 1
-            time.sleep(.1)
+            time.sleep(0.1)
             if max_comments and messages_posted > max_comments:
                 self.stopped_early = True
                 break
