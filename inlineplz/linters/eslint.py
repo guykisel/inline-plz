@@ -10,10 +10,10 @@ from ..parsers.base import ParserBase
     name="eslint",
     install=[["npm", "install", "eslint"]],
     help_cmd=[os.path.normpath("./node_modules/.bin/eslint"), "-h"],
-    run=[os.path.normpath("./node_modules/.bin/eslint"), ".", "-f", "unix"],
+    run=[os.path.normpath("./node_modules/.bin/eslint"), "**/*.js", "-f", "unix"],
     rundefault=[
         os.path.normpath("./node_modules/.bin/eslint"),
-        ".",
+        "**/*.js",
         "-f",
         "unix",
         "-c",

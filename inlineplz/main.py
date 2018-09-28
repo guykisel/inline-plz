@@ -236,6 +236,7 @@ def inline(args):
             if args.delete_outdated:
                 my_interface.clear_outdated_messages()
             my_interface.finish_review(success=False)
+            write_messages_to_json(messages)
             return ret_code
 
         if args.delete_outdated:

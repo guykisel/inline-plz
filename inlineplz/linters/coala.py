@@ -19,6 +19,7 @@ from ..parsers.base import ParserBase
     language="all",
     autorun=True,
     run_per_file=False,
+    concurrency=1,
 )
 class CoalaParser(ParserBase):
     """Parse json coala output."""

@@ -359,9 +359,16 @@ class LinterRunner:
 
         linter_tasks = []
         for linter in self.linters_to_run():
-            linter_tasks.append(
-                asyncio.ensure_future(self.run_linter(linter), loop=self.event_loop)
-            )
+            config = registry.LINTERS.get(linter)
+            # if the linter can't be run concurrently, just run it immediately
+            if config.get("concurrency", 0) == 1 and not config.get(
+                "run_per_file", False
+            ):
+                self.run_linter(linter)
+            else:
+                linter_tasks.append(
+                    asyncio.ensure_future(self.run_linter(linter), loop=self.event_loop)
+                )
 
         for linter_task in linter_tasks:
             self.event_loop.run_until_complete(linter_task)
@@ -377,6 +384,7 @@ class LinterRunner:
         sys.stdout.flush()
         output = ""
         config = registry.LINTERS.get(linter)
+
         start = time.time()
         try:
             if (self.install or self.autorun) and config.get("install"):
