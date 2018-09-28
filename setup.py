@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-from setuptools import setup, find_packages
+from setuptools import setup
 
 with open("README.rst") as readme_file:
     readme = readme_file.read()
@@ -29,7 +29,7 @@ test_requirements = [
 
 setup(
     name="inlineplz",
-    version="0.40.5",
+    version="0.42.1",
     description="Inline your lint messages",
     long_description=readme + "\n\n" + history,
     author="Guy Kisel",
