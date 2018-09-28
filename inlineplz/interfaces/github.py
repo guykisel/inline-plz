@@ -237,7 +237,7 @@ class GitHubInterface(InterfaceBase):
                     msg.status = "EDITED"
                     paths[msg.path] += 1
                     messages_posted += 1
-                    time.sleep(.1)
+                    time.sleep(0.1)
                     continue
 
                 except github3.GitHubError:
@@ -257,7 +257,7 @@ class GitHubInterface(InterfaceBase):
             print("Comment posted successfully: {0}".format(msg))
             paths[msg.path] += 1
             messages_posted += 1
-            time.sleep(.1)
+            time.sleep(0.1)
             if max_comments and messages_posted > max_comments:
                 self.stopped_early = True
                 break
@@ -297,6 +297,9 @@ class GitHubInterface(InterfaceBase):
         return "{0}: `{1}`".format(self.prefix, list(message.comments)[0].strip())
 
     def clear_outdated_messages(self):
+        obsolete_message = (
+            "*This message is obsolete but is preserved because it has replies.*"
+        )
         if self.stopped_early:
             return
 
@@ -331,8 +334,8 @@ class GitHubInterface(InterfaceBase):
                 if comment.id not in in_reply_to:
                     comment.delete()
                     print("Deleted comment: {}".format(comment.body))
-                elif "**OBSOLETE**" not in comment.body:
-                    comment.edit(comment.body + "\n**OBSOLETE**")
+                elif obsolete_message not in comment.body:
+                    comment.edit(comment.body + "\n" + obsolete_message)
                     print("Edited obsolete comment: {}".format(comment.body))
             except Exception:
                 traceback.print_exc()
