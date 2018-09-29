@@ -302,7 +302,7 @@ class LinterRunner:
         except AttributeError:
             pass
         for install_cmd in install_cmds:
-            if await self.installed(config) and not config.get('always_install'):
+            if await self.installed(config) and not config.get("always_install"):
                 return True
             if install_cmd in self.previous_install_commands:
                 continue

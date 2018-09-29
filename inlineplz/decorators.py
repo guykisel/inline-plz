@@ -35,7 +35,7 @@ def linter(
     run_if_dotfile_in_root=None,
     patterns=None,
     url=None,
-    always_install=False
+    always_install=False,
 ):
     return partial(
         _create_linter,
@@ -53,6 +53,6 @@ def linter(
             "run_if_dotfile_in_root": run_if_dotfile_in_root,
             "patterns": patterns,
             "url": url,
-            "always_install": always_install
+            "always_install": always_install,
         },
     )

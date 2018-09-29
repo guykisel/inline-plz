@@ -22,16 +22,24 @@ from ..parsers.base import ParserBase
     autorun=True,
     run_per_file=False,
     concurrency=1,
-    always_install=True
+    always_install=True,
 )
 class CoalaParser(ParserBase):
     """Parse json coala output."""
 
     def install(self):
-        if not any(dotfile.strip() in os.listdir(os.getcwd()) for dotfile in self.config.get("dotfiles")):
-            config_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "config"))
+        if not any(
+            dotfile.strip() in os.listdir(os.getcwd())
+            for dotfile in self.config.get("dotfiles")
+        ):
+            config_dir = os.path.abspath(
+                os.path.join(os.path.dirname(__file__), "config")
+            )
             dotfile_name = self.config.get("dotfiles")[0]
-            shutil.copyfile(os.path.join(config_dir, dotfile_name), os.path.join(os.getcwd(), dotfile_name))
+            shutil.copyfile(
+                os.path.join(config_dir, dotfile_name),
+                os.path.join(os.getcwd(), dotfile_name),
+            )
 
     def parse(self, output):
         messages = set()
