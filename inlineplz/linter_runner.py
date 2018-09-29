@@ -360,7 +360,7 @@ class LinterRunner:
         self.event_loop.run_until_complete(self.performance_hacks())
 
         if self.trusted and (self.install or self.autorun):
-            self.install_trusted()
+            self.event_loop.run_until_complete(self.install_trusted())
 
         linter_tasks = []
         for linter in self.linters_to_run():
