@@ -364,7 +364,6 @@ class LinterRunner:
 
         linter_tasks = []
         for linter in self.linters_to_run():
-            print(linter)
             config = registry.LINTERS.get(linter)
             # if the linter can't be run concurrently, just run it immediately
             if config.get("concurrency", 0) == 1 and not config.get(
