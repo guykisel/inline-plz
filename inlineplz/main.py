@@ -97,7 +97,6 @@ def update_from_config(args, config):
 def load_config(args, config_path=".inlineplz.yml"):
     """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
-    print(config_path)
     try:
         with open(config_path) as configfile:
             config = yaml.safe_load(configfile) or {}
@@ -114,6 +113,8 @@ def load_config(args, config_path=".inlineplz.yml"):
         "godeps",
         "vendor",
         "site-packages",
+        "venv",
+        ".env",
     ]
     if config_path != ".inlineplz.yml":
         return args
