@@ -8,7 +8,7 @@ coverage==4.5.1
 Sphinx==1.8.1
 # only used for setup script
 # cryptography==1.0.1
-py==1.5.3
+py==1.6.0
 pytest==3.7.0
 PyYAML==3.13
 prospector[with_everything]==1.1.1
