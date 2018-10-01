@@ -97,7 +97,6 @@ def update_from_config(args, config):
 def load_config(args, config_path=".inlineplz.yml"):
     """Load inline-plz config from yaml config file with reasonable defaults."""
     config = {}
-    print(config_path)
     try:
         with open(config_path) as configfile:
             config = yaml.safe_load(configfile) or {}
@@ -114,6 +113,8 @@ def load_config(args, config_path=".inlineplz.yml"):
         "godeps",
         "vendor",
         "site-packages",
+        "venv",
+        ".env",
     ]
     if config_path != ".inlineplz.yml":
         return args
@@ -236,6 +237,7 @@ def inline(args):
             if args.delete_outdated:
                 my_interface.clear_outdated_messages()
             my_interface.finish_review(success=False)
+            write_messages_to_json(messages)
             return ret_code
 
         if args.delete_outdated:

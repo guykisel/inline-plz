@@ -13,6 +13,8 @@ def _create_linter(klass, config):
     if "name" not in config:
         config["name"] = klass.__class__.__name__
     config["parser"] = klass
+    config["class"] = klass
+    klass.config = config
     register_linter(config["name"], config)
     LINTERS_BY_NAME[config["name"]] = config
     ALL_LINTERS.append(klass)
@@ -33,6 +35,7 @@ def linter(
     run_if_dotfile_in_root=None,
     patterns=None,
     url=None,
+    always_install=False,
 ):
     return partial(
         _create_linter,
@@ -50,5 +53,6 @@ def linter(
             "run_if_dotfile_in_root": run_if_dotfile_in_root,
             "patterns": patterns,
             "url": url,
+            "always_install": always_install,
         },
     )

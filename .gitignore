@@ -76,3 +76,6 @@ Pipfile.lock
 .secrets.baseline
 .vscode/settings.json
 spotbugs.txt
+.coafile
+messages.json
+!/inlineplz/linters/config/.coafile

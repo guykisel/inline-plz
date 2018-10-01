@@ -1,3 +1,38 @@
 [all]
-bears = LineLengthBear
-files = *
+ignore = venv/**,.env/**,.tox/**,.git/**,node_modules/**,godeps/**,vendor/**,site-packages/**
+
+[all.python]
+files = **.py
+language = python
+
+[all.rst]
+bear = reSTLintBear
+language = rest
+files = **.rst
+
+[all.yml]
+bears = YAMLLintBear
+files = **.yml, **.yaml
+language = yaml
+
+[all.bash]
+bears = ShellCheckBear
+files = **.sh
+shell = bash
+language = shell
+shellcheck_ignore = SC2046, SC2154, SC2155
+
+[all.jinja2]
+bears = Jinja2Bear
+files = **.jj2
+language = jinja2
+
+[all.csharp]
+bears = CSharpLintBear
+files = **.cs
+language = c_languages
+
+[all.xml]
+bears = XMLBear
+files = **.xml
+language = xml2
