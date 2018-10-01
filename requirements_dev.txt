@@ -1,6 +1,6 @@
 -e .
 bump2version==0.5.10
-wheel==0.31.1
+wheel==0.32.0
 watchdog==0.8.3
 flake8==3.5.0
 tox==3.4.0
