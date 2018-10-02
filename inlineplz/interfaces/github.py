@@ -127,9 +127,14 @@ class GitHubInterface(InterfaceBase):
         self.messages_in_files = dict()
         self.filenames = []
         try:
+            pr_files = self.pull_request.files()
+        except AttributeError:
+            # github.py == 0.9.6
+            pr_files = self.pull_request.iter_files()
+        try:
             self.filenames = set(
                 os.path.normpath(os.path.normcase(pr_file.filename))
-                for pr_file in self.pull_request.files()
+                for pr_file in pr_files
             )
             print("Files in PR: {}".format(self.filenames))
         except Exception:
