@@ -2,37 +2,55 @@
 ignore = venv/**,.env/**,.tox/**,.git/**,node_modules/**,godeps/**,vendor/**,site-packages/**
 
 [all.python]
+bears = BanditBear
 files = **.py
-language = python
 
 [all.rst]
-bear = reSTLintBear
-language = rest
+bears = reSTLintBear
 files = **.rst
 
 [all.yml]
 bears = YAMLLintBear
 files = **.yml, **.yaml
-language = yaml
 
 [all.bash]
-bears = ShellCheckBear
+bears = ShellCheckBear, BashateBear
 files = **.sh
 shell = bash
-language = shell
 shellcheck_ignore = SC2046, SC2154, SC2155
 
 [all.jinja2]
 bears = Jinja2Bear
 files = **.jj2
-language = jinja2
 
 [all.csharp]
 bears = CSharpLintBear
 files = **.cs
-language = c_languages
 
 [all.xml]
 bears = XMLBear
 files = **.xml
-language = xml2
+
+[all.html]
+bears = HTMLLintBear, BootLintBear, HTMLHintBear
+files = **.html
+
+[all.csv]
+bears = CSVLintBear
+files = **.csv
+
+[all.text]
+bears = ProseLintBear, InvalidLinkBear, WriteGoodLintBear, AlexBear, LanguageToolBear, SpellCheckBear, DocumentationStyleBear, DocGrammarBear, TextLintBear, HTTPSBear
+files = **.txt, **.md, **.rst, **.text
+
+[all.sql]
+bears = SQLintBear
+files = **.sql
+
+[all.java]
+bears = InferBear, CheckstyleBear, JavaPMDBear
+files = **.java
+
+[all.css]
+bears = CSSLintBear
+files = **.css
