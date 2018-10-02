@@ -61,7 +61,7 @@ class LinterRunner:
             value=multiprocessing.cpu_count(), loop=self.event_loop
         )
 
-    async def run_command(self, command, timeout=240, semaphore=None):  # noqa: MC0001
+    async def run_command(self, command, timeout=600, semaphore=None):  # noqa: MC0001
         print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
