@@ -5,6 +5,8 @@ extends: default
 ignore: |
   */ansible/*
   */playbooks/*
+  */cassettes/*
+  */fixtures/*
 
 rules:
   braces:
