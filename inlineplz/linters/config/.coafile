@@ -9,10 +9,6 @@ files = **.py
 bears = reSTLintBear
 files = **.rst
 
-[all.yml]
-bears = YAMLLintBear
-files = **.yml, **.yaml
-
 [all.bash]
 bears = ShellCheckBear, BashateBear
 files = **.sh
