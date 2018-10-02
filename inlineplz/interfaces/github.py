@@ -126,12 +126,13 @@ class GitHubInterface(InterfaceBase):
         self.last_update = time.time()
         self.messages_in_files = dict()
         self.filenames = []
+
         try:
-            pr_files = self.pull_request.files()
-        except AttributeError:
-            # github.py == 0.9.6
-            pr_files = self.pull_request.iter_files()
-        try:
+            try:
+                pr_files = self.pull_request.files()
+            except AttributeError:
+                # github.py == 0.9.6
+                pr_files = self.pull_request.iter_files()
             self.filenames = set(
                 os.path.normpath(os.path.normcase(pr_file.filename))
                 for pr_file in pr_files
