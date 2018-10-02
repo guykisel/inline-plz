@@ -1,5 +1,5 @@
 [all]
-ignore = venv/**,.env/**,.tox/**,.git/**,node_modules/**,godeps/**,vendor/**,site-packages/**,**/bin/**
+ignore = **/venv/**,**/.env/**,**/.tox/**,**/.git/**,**/node_modules/**,**/godeps/**,**/vendor/**,**/site-packages/**,**/bin/**,**/spec/**,**/migrate/**
 
 [all.python]
 bears = BanditBear

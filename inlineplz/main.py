@@ -115,6 +115,9 @@ def load_config(args, config_path=".inlineplz.yml"):
         "site-packages",
         "venv",
         ".env",
+        "spec",
+        "migrate",
+        "bin",
     ]
     if config_path != ".inlineplz.yml":
         return args
