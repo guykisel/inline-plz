@@ -118,6 +118,8 @@ def load_config(args, config_path=".inlineplz.yml"):
         "spec",
         "migrate",
         "bin",
+        "fixtures",
+        "cassettes",
     ]
     if config_path != ".inlineplz.yml":
         return args
