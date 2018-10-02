@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 import random
+import os
 import subprocess
 import time
 import traceback
@@ -126,7 +127,10 @@ class GitHubInterface(InterfaceBase):
         self.messages_in_files = dict()
         self.filenames = []
         try:
-            self.filenames = [pr_file.filename for pr_file in self.pull_request.files()]
+            self.filenames = set(
+                os.path.normpath(os.path.normcase(pr_file.filename))
+                for pr_file in self.pull_request.files()
+            )
             print("Files in PR: {}".format(self.filenames))
         except Exception:
             traceback.print_exc()
