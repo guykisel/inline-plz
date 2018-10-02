@@ -61,7 +61,7 @@ class LinterRunner:
             value=multiprocessing.cpu_count(), loop=self.event_loop
         )
 
-    async def run_command(self, command, timeout=240, semaphore=None):  # noqa: MC0001
+    async def run_command(self, command, timeout=600, semaphore=None):  # noqa: MC0001
         print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
@@ -362,15 +362,22 @@ class LinterRunner:
         if self.trusted and (self.install or self.autorun):
             self.event_loop.run_until_complete(self.install_trusted())
 
-        linter_tasks = []
+        # if the linter can't be run concurrently, just run it immediately
         for linter in self.linters_to_run():
             config = registry.LINTERS.get(linter)
-            # if the linter can't be run concurrently, just run it immediately
             if config.get("concurrency", 0) == 1 and not config.get(
                 "run_per_file", False
             ):
                 self.event_loop.run_until_complete(self.run_linter(linter))
-            else:
+
+        # now start the rest of the linters
+        linter_tasks = []
+        for linter in self.linters_to_run():
+            config = registry.LINTERS.get(linter)
+            if not (
+                config.get("concurrency", 0) == 1
+                and not config.get("run_per_file", False)
+            ):
                 linter_tasks.append(
                     asyncio.ensure_future(self.run_linter(linter), loop=self.event_loop)
                 )
