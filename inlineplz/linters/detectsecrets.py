@@ -16,7 +16,7 @@ from ..parsers.base import ParserBase
     rundefault=["detect-secrets", "scan", "--all-files"],
     dotfiles=[],
     language="all",
-    autorun=True,
+    autorun=False,
     run_per_file=False,
 )
 class DetectSecretsParser(ParserBase):
