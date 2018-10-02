@@ -27,6 +27,7 @@ class LinterRunner:
         enabled_linters=None,
         disabled_linters=None,
         trusted=False,
+        filenames=None,
     ):
         # TODO: Break this class down with composition or something
         self.install = install
@@ -41,7 +42,7 @@ class LinterRunner:
         self.disabled_linters = disabled_linters or []
         self.trusted = trusted
 
-        self.all_filenames = self.all_filenames_in_dir()
+        self.all_filenames = filenames or self.all_filenames_in_dir()
 
         # Keep track of the parsed messages from all of the linters we're running
         self.messages = message.Messages()

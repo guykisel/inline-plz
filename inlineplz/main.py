@@ -187,6 +187,7 @@ def inline(args):
 
     print("Using interface: {0}".format(args.interface))
     my_interface = None
+    filenames = None
     if not args.dryrun:
         my_interface = interfaces.INTERFACES[args.interface](
             owner,
@@ -202,7 +203,7 @@ def inline(args):
         if not my_interface.is_valid():
             print("Invalid review. Exiting.")
             return 0
-
+        filenames = my_interface.filenames
         my_interface.start_review()
     try:
         linter_runner = LinterRunner(
@@ -213,6 +214,7 @@ def inline(args):
             args.enabled_linters,
             args.disabled_linters,
             trusted,
+            filenames,
         )
         messages = linter_runner.run_linters()
     except Exception:  # pylint: disable=broad-except
