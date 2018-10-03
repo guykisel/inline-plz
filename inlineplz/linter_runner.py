@@ -260,9 +260,9 @@ class LinterRunner:
         print("Running with linters: {0}".format(linters))
         return linters
 
-    def all_filenames_in_dir(self, filenames=None):
+    def all_filenames_in_dir(self, changed_filenames=None):
         # http://stackoverflow.com/a/2186565
-        filenames = filenames or set()
+        changed_filenames = changed_filenames or set()
         paths = set()
         for root, dirnames, filenames in os.walk(os.getcwd(), topdown=True):
             try:
@@ -276,7 +276,7 @@ class LinterRunner:
             for filename in filenames:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
-                    if filenames and filename not in filenames:
+                    if changed_filenames and filename not in changed_filenames:
                         continue
                     paths.add(full_path)
         return paths
