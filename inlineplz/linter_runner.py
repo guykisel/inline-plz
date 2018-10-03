@@ -27,6 +27,7 @@ class LinterRunner:
         enabled_linters=None,
         disabled_linters=None,
         trusted=False,
+        filenames=None,
     ):
         # TODO: Break this class down with composition or something
         self.install = install
@@ -41,7 +42,7 @@ class LinterRunner:
         self.disabled_linters = disabled_linters or []
         self.trusted = trusted
 
-        self.all_filenames = self.all_filenames_in_dir()
+        self.all_filenames = self.all_filenames_in_dir(filenames)
 
         # Keep track of the parsed messages from all of the linters we're running
         self.messages = message.Messages()
@@ -259,8 +260,9 @@ class LinterRunner:
         print("Running with linters: {0}".format(linters))
         return linters
 
-    def all_filenames_in_dir(self):
+    def all_filenames_in_dir(self, filenames=None):
         # http://stackoverflow.com/a/2186565
+        filenames = filenames or set()
         paths = set()
         for root, dirnames, filenames in os.walk(os.getcwd(), topdown=True):
             try:
@@ -274,6 +276,8 @@ class LinterRunner:
             for filename in filenames:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
+                    if filenames and filename not in filenames:
+                        continue
                     paths.add(full_path)
         return paths
 
