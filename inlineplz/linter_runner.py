@@ -285,6 +285,7 @@ class LinterRunner:
                     elif changed_filenames:
                         print("Path matched: {} - {}".format(full_path, filename))
                     paths.add(full_path)
+        print("Filenames in dir count: {}".format(len(paths)))
         return paths
 
     def should_autorun(self, config):
