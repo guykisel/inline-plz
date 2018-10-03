@@ -13,7 +13,20 @@ from ..parsers.base import ParserBase
 
 @linter(
     name="coala",
-    install=[[sys.executable, "-m", "pip", "install", "-U", "coala-bears"]],
+    install=[
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "uninstall",
+            "-y",
+            "pylint",
+            "astroid",
+            "pydocstyle",
+            "pyroma",
+        ],
+        [sys.executable, "-m", "pip", "install", "-U", "coala-bears"],
+    ],
     help_cmd=["coala", "-h"],
     run=["coala", "-C", "--json", "--log-json", "--limit-files", "5000"],
     rundefault=["coala", "-C", "--json", "--log-json", "--limit-files", "5000"],
