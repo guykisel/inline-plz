@@ -278,6 +278,8 @@ class LinterRunner:
                 if "text" in identify.tags_from_path(full_path):
                     if changed_filenames and filename not in changed_filenames:
                         continue
+                    elif changed_filenames:
+                        print("Path matched: {} - {}".format(full_path, filename))
                     paths.add(full_path)
         return paths
 
