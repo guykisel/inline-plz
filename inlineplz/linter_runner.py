@@ -277,8 +277,7 @@ class LinterRunner:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
                     # TODO delete this temp stuff for testing
-                    if "linter_runner" in full_path:
-                        print(full_path)
+                    print(full_path)
                     if (
                         changed_filenames
                         and os.path.abspath(os.path.normcase(full_path))
