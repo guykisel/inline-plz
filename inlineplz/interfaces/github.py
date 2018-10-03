@@ -134,7 +134,7 @@ class GitHubInterface(InterfaceBase):
                 # github.py == 0.9.6
                 pr_files = self.pull_request.iter_files()
             self.filenames = set(
-                os.path.normpath(os.path.normcase(pr_file.filename))
+                os.path.abspath(os.path.normcase(pr_file.filename))
                 for pr_file in pr_files
             )
             print("Files in PR: {}".format(self.filenames))
