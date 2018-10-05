@@ -137,7 +137,7 @@ class LinterRunner:
         # TODO: Enable this in verbose logging only
         print("{0}\n{1}\n{0}\n{2}".format("-" * 80, command, output))
         sys.stdout.flush()
-
+        print("{0} returned code {1}".format(command, return_code))
         return return_code, output
 
     async def performance_hacks(self):
@@ -263,7 +263,6 @@ class LinterRunner:
     def all_filenames_in_dir(self, changed_filenames=None):
         # http://stackoverflow.com/a/2186565
         changed_filenames = changed_filenames or set()
-        print(changed_filenames)
         paths = set()
         for root, dirnames, filenames in os.walk(os.getcwd(), topdown=True):
             for ignore in self.ignore_paths:
@@ -277,17 +276,12 @@ class LinterRunner:
             for filename in filenames:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
-                    # TODO delete this temp stuff for testing
-
                     if (
                         changed_filenames
                         and os.path.abspath(os.path.normcase(full_path))
                         not in changed_filenames
                     ):
                         continue
-                    elif changed_filenames:
-                        print("Path matched: {} - {}".format(full_path, filename))
-                    print(full_path)
                     paths.add(full_path)
         print("Filenames in dir count: {}".format(len(paths)))
         return paths
