@@ -12,6 +12,17 @@ from ..parsers.base import ParserBase
 @linter(
     name="prospector",
     install=[
+        [
+            sys.executable,
+            "-m",
+            "pip",
+            "uninstall",
+            "-y",
+            "pylint",
+            "astroid",
+            "pydocstyle",
+            "pyroma",
+        ],
         [sys.executable, "-m", "pip", "install", "-U", "prospector[with_everything]"],
         [sys.executable, "-m", "pip", "install", "-U", "prospector"],
     ],

@@ -1,10 +1,2 @@
-ignore_paths:
-    - node_modules
-    - .tox
-    - .git
-    - inlineplz/bin
-    - site-packages
-    - build
-    - dist
 enabled_linters:
     - prospector

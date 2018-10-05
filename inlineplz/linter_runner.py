@@ -137,7 +137,7 @@ class LinterRunner:
         # TODO: Enable this in verbose logging only
         print("{0}\n{1}\n{0}\n{2}".format("-" * 80, command, output))
         sys.stdout.flush()
-
+        print("{0} returned code {1}".format(command, return_code))
         return return_code, output
 
     async def performance_hacks(self):
@@ -265,20 +265,25 @@ class LinterRunner:
         changed_filenames = changed_filenames or set()
         paths = set()
         for root, dirnames, filenames in os.walk(os.getcwd(), topdown=True):
-            try:
-                for ignore in self.ignore_paths:
+            for ignore in self.ignore_paths:
+                try:
                     dirnames.remove(ignore)
-            except ValueError:
-                pass
+                except ValueError:
+                    pass
             if self.should_ignore_path(root):
                 continue
 
             for filename in filenames:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
-                    if changed_filenames and filename not in changed_filenames:
+                    if (
+                        changed_filenames
+                        and os.path.abspath(os.path.normcase(full_path))
+                        not in changed_filenames
+                    ):
                         continue
                     paths.add(full_path)
+        print("Filenames in dir count: {}".format(len(paths)))
         return paths
 
     def should_autorun(self, config):

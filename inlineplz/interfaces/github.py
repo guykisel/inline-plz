@@ -134,7 +134,7 @@ class GitHubInterface(InterfaceBase):
                 # github.py == 0.9.6
                 pr_files = self.pull_request.iter_files()
             self.filenames = set(
-                os.path.normpath(os.path.normcase(pr_file.filename))
+                os.path.abspath(os.path.normcase(pr_file.filename))
                 for pr_file in pr_files
             )
             print("Files in PR: {}".format(self.filenames))
@@ -295,6 +295,8 @@ class GitHubInterface(InterfaceBase):
             self.last_update = time.time()
         for comment in self.review_comments:
             if comment.original_position == position and comment.path == message.path:
+                if not comment.body.startswith(self.prefix):
+                    continue
                 return comment
 
         return None
