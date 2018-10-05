@@ -295,6 +295,8 @@ class GitHubInterface(InterfaceBase):
             self.last_update = time.time()
         for comment in self.review_comments:
             if comment.original_position == position and comment.path == message.path:
+                if not comment.body.startswith(self.prefix):
+                    continue
                 return comment
 
         return None

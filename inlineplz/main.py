@@ -120,6 +120,11 @@ def load_config(args, config_path=".inlineplz.yml"):
         "bin",
         "fixtures",
         "cassettes",
+        ".cache",
+        ".idea",
+        ".pytest_cache",
+        "__pycache__",
+        "dist"
     ]
     if config_path != ".inlineplz.yml":
         return args

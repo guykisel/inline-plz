@@ -263,13 +263,14 @@ class LinterRunner:
     def all_filenames_in_dir(self, changed_filenames=None):
         # http://stackoverflow.com/a/2186565
         changed_filenames = changed_filenames or set()
+        print(changed_filenames)
         paths = set()
         for root, dirnames, filenames in os.walk(os.getcwd(), topdown=True):
-            try:
-                for ignore in self.ignore_paths:
+            for ignore in self.ignore_paths:
+                try:
                     dirnames.remove(ignore)
-            except ValueError:
-                pass
+                except ValueError:
+                    pass
             if self.should_ignore_path(root):
                 continue
 
@@ -277,7 +278,7 @@ class LinterRunner:
                 full_path = os.path.join(root, filename)
                 if "text" in identify.tags_from_path(full_path):
                     # TODO delete this temp stuff for testing
-                    print(full_path)
+
                     if (
                         changed_filenames
                         and os.path.abspath(os.path.normcase(full_path))
@@ -286,6 +287,7 @@ class LinterRunner:
                         continue
                     elif changed_filenames:
                         print("Path matched: {} - {}".format(full_path, filename))
+                    print(full_path)
                     paths.add(full_path)
         print("Filenames in dir count: {}".format(len(paths)))
         return paths
