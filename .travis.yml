@@ -18,7 +18,7 @@ before_install:
 install:
   - pip install -U pip
   - curl https://raw.githubusercontent.com/mitsuhiko/pipsi/master/get-pipsi.py | python
-  - curl https://raw.githubusercontent.com/cs01/pipx/master/get-pipx.py | python3
+  - curl https://raw.githubusercontent.com/cs01/pipx/master/get-pipx.py | python
   - pip install tox-travis
   - pip install -r requirements_dev.txt
   - python setup.py develop
