@@ -189,7 +189,7 @@
 
     <rule class='org.codenarc.rule.groovyism.AssignCollectionSortRule'/>
     <rule class='org.codenarc.rule.groovyism.AssignCollectionUniqueRule'/>
-    <rule class='org.codenarc.rule.groovyism.ClosureAsLastMethodParameterRule'/>
+    <!--<rule class='org.codenarc.rule.groovyism.ClosureAsLastMethodParameterRule'/>-->
     <rule class='org.codenarc.rule.groovyism.CollectAllIsDeprecatedRule'/>
     <rule class='org.codenarc.rule.groovyism.ConfusingMultipleReturnsRule'/>
     <rule class='org.codenarc.rule.groovyism.ExplicitArrayListInstantiationRule'/>

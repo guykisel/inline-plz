@@ -12,17 +12,6 @@ from ..parsers.base import ParserBase
 @linter(
     name="prospector",
     install=[
-        [
-            sys.executable,
-            "-m",
-            "pip",
-            "uninstall",
-            "-y",
-            "pylint",
-            "astroid",
-            "pydocstyle",
-            "pyroma",
-        ],
         [sys.executable, "-m", "pip", "install", "-U", "prospector[with_everything]"],
         [sys.executable, "-m", "pip", "install", "-U", "prospector"],
     ],
@@ -47,6 +36,7 @@ class ProspectorParser(ParserBase):
     def parse(self, lint_data):
         messages = set()
         try:
+            lint_data = "{" + lint_data.split("{\n", 1)[1]
             for msgdata in json.loads(lint_data).get("messages"):
                 try:
                     path = msgdata["location"]["path"]

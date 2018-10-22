@@ -449,7 +449,7 @@ class LinterRunner:
                 linter_messages = {
                     (msg[0], msg[1], "{0}: {1}".format(linter, msg[2]))
                     for msg in linter_messages
-                    if not self.should_ignore_path(msg[0])
+                    if not self.should_ignore_path(msg[0]) and msg[2].strip()
                 }
                 print(
                     "Found {0} messages from {1}".format(len(linter_messages), linter)

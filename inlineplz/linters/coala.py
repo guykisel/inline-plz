@@ -14,17 +14,7 @@ from ..parsers.base import ParserBase
 @linter(
     name="coala",
     install=[
-        [
-            sys.executable,
-            "-m",
-            "pip",
-            "uninstall",
-            "-y",
-            "pylint",
-            "astroid",
-            "pydocstyle",
-            "pyroma",
-        ],
+        ["pipx", "install", "--spec", "coala-bears", "coala"],
         [sys.executable, "-m", "pip", "install", "-U", "coala-bears"],
     ],
     help_cmd=["coala", "-h"],
@@ -35,7 +25,6 @@ from ..parsers.base import ParserBase
     autorun=True,
     run_per_file=False,
     concurrency=1,
-    always_install=True,
 )
 class CoalaParser(ParserBase):
     """Parse json coala output."""
