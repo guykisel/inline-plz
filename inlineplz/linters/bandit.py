@@ -40,6 +40,7 @@ class BanditParser(ParserBase):
             if line.strip().startswith("[main]"):
                 lint_data_lines.remove(line)
         lint_data_cleaned = "\n".join(lint_data_lines).strip()
+        lint_data_cleaned = "{" + lint_data_cleaned.split("{\n", 1)[1]
         for msgdata in json.loads(lint_data_cleaned).get("results"):
             try:
                 path = msgdata["filename"]
