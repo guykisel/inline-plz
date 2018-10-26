@@ -12,6 +12,8 @@ class Messages:
         self.messages = {}
 
     def add_message(self, path, line, message):
+        if not message or not path:
+            return
         path = os.path.relpath(path).replace("\\", "/").strip()
         # replace backticks with single quotes to avoid markdown escaping issues
         message = message.replace("`", "'").strip()

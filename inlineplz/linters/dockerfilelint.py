@@ -16,7 +16,7 @@ from ..parsers.base import ParserBase
     rundefault=[os.path.normpath("./node_modules/.bin/dockerfile_lint"), "-j", "-f"],
     dotfiles=[],
     language="docker",
-    autorun=True,
+    autorun=False,
     run_per_file=True,
 )
 class DockerfileLintParser(ParserBase):

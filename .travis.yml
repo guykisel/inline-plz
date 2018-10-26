@@ -17,6 +17,8 @@ before_install:
   - python -c "import fcntl; fcntl.fcntl(1, fcntl.F_SETFL, 0)" # https://github.com/travis-ci/travis-ci/issues/8920
 install:
   - pip install -U pip
+  # temporarily ignore failure for installing pipx https://github.com/cs01/pipx/issues/25
+  - curl https://raw.githubusercontent.com/cs01/pipx/master/get-pipx.py | python || true
   - pip install tox-travis
   - pip install -r requirements_dev.txt
   - python setup.py develop
