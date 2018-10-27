@@ -366,13 +366,14 @@ class LinterRunner:
 
     def run_linters(self):  # noqa: MC0001
         self.cleanup()
+        linters_to_run = self.linters_to_run()
         self.event_loop.run_until_complete(self.performance_hacks())
 
-        if self.trusted and (self.install or self.autorun):
+        if self.trusted and linters_to_run and (self.install or self.autorun):
             self.event_loop.run_until_complete(self.install_trusted())
 
         # if the linter can't be run concurrently, just run it immediately
-        for linter in self.linters_to_run():
+        for linter in linters_to_run:
             config = registry.LINTERS.get(linter)
             if config.get("concurrency", 0) == 1 and not config.get(
                 "run_per_file", False
@@ -381,7 +382,7 @@ class LinterRunner:
 
         # now start the rest of the linters
         linter_tasks = []
-        for linter in self.linters_to_run():
+        for linter in linters_to_run:
             config = registry.LINTERS.get(linter)
             if not (
                 config.get("concurrency", 0) == 1
