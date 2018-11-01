@@ -8,6 +8,7 @@ from ..util.system import JAVA_SEP, vendored_path
 
 GROOVY_PATH = vendored_path(os.path.join("groovy", "groovy-all-2.4.15.jar"))
 SLF4J_PATH = vendored_path(os.path.join("groovy", "slf4j-api-1.7.25.jar"))
+CODENARC_PATH = vendored_path(os.path.join("codenarc", "CodeNarc-1.2.1.jar"))
 
 
 @linter(
@@ -19,7 +20,7 @@ SLF4J_PATH = vendored_path(os.path.join("groovy", "slf4j-api-1.7.25.jar"))
         "{}{}{}{}{}{}{}{}{}".format(
             GROOVY_PATH,
             JAVA_SEP,
-            vendored_path(os.path.join("codenarc", "CodeNarc-1.1.jar")),
+            CODENARC_PATH,
             JAVA_SEP,
             SLF4J_PATH,
             JAVA_SEP,
@@ -36,7 +37,7 @@ SLF4J_PATH = vendored_path(os.path.join("groovy", "slf4j-api-1.7.25.jar"))
         "{}{}{}{}{}{}{}{}{}".format(
             GROOVY_PATH,
             JAVA_SEP,
-            vendored_path(os.path.join("codenarc", "CodeNarc-1.1.jar")),
+            CODENARC_PATH,
             JAVA_SEP,
             SLF4J_PATH,
             JAVA_SEP,
@@ -55,7 +56,7 @@ SLF4J_PATH = vendored_path(os.path.join("groovy", "slf4j-api-1.7.25.jar"))
         "{}{}{}{}{}{}{}{}{}".format(
             GROOVY_PATH,
             JAVA_SEP,
-            vendored_path(os.path.join("codenarc", "CodeNarc-1.1.jar")),
+            CODENARC_PATH,
             JAVA_SEP,
             SLF4J_PATH,
             JAVA_SEP,
