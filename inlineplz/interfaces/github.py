@@ -50,7 +50,9 @@ class GitHubInterface(InterfaceBase):
         self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
         self.token = token
-        self.netloc = urlparse(url).netloc
+        print('url={}'.format(url))
+        self.netloc = urlparse(url).netloc.strip()
+        print('urlparse={}'.format(urlparse(url)))
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
         else:
