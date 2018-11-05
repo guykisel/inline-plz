@@ -10,6 +10,7 @@ from ..registry import register_pattern
 # import your linter here
 from ..linters.ansiblelint import AnsibleLintParser  # NOQA
 from ..linters.bandit import BanditParser  # NOQA
+from ..linters.black import BlackParser # NOQA
 from ..linters.codenarc import CodenarcParser  # NOQA
 from ..linters.coala import CoalaParser  # NOQA
 from ..linters.detectsecrets import DetectSecretsParser  # NOQA

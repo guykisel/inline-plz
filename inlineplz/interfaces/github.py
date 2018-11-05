@@ -25,6 +25,7 @@ class GitHubInterface(InterfaceBase):
         commit=None,
         ignore_paths=None,
         prefix=None,
+        autofix=False
     ):
         """
         GitHubInterface lets us post messages to GitHub.
@@ -45,6 +46,7 @@ class GitHubInterface(InterfaceBase):
         self.github = None
         self.stopped_early = False
         self.prefix = prefix
+        self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
@@ -279,6 +281,16 @@ class GitHubInterface(InterfaceBase):
                 break
 
         print("\n{} messages posted to Github.".format(messages_posted))
+
+        if self.autofix:
+            try:
+                for filename in self.filenames:
+                    git.add(filename)
+                git.commit("Autofix by inline-plz")
+                git.push()
+            except Exception:
+                traceback.print_exc()
+
         return valid_errors
 
     def is_duplicate(self, message, position):

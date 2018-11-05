@@ -26,12 +26,14 @@ class LinterRunner:
         config_dir=None,
         enabled_linters=None,
         disabled_linters=None,
+        autofix=False,
         trusted=False,
         filenames=None,
     ):
         # TODO: Break this class down with composition or something
         self.install = install
         self.autorun = autorun
+        self.autofix = autofix
         self.ignore_paths = ignore_paths or []
         self.config_dir = config_dir or os.getcwd()
         self.config_dir = os.path.abspath(self.config_dir)
@@ -288,7 +290,7 @@ class LinterRunner:
 
     def should_autorun(self, config):
         patterns = registry.PATTERNS.get(config.get("language"))
-        if config.get("autorun"):
+        if config.get("autorun") or config.get("autofix"):
             for pattern in patterns:
                 if fnmatch.filter(self.all_filenames, pattern):
                     return True
