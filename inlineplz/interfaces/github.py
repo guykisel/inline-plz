@@ -22,7 +22,7 @@ class GitHubInterface(InterfaceBase):
         pr=None,
         branch=None,
         token=None,
-        url="https://github.com",
+        url=None,
         commit=None,
         ignore_paths=None,
         prefix=None,
@@ -50,6 +50,7 @@ class GitHubInterface(InterfaceBase):
         self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
         self.token = token
+        url = url or "https://github.com"
         print('url={}'.format(url))
         self.netloc = urlparse(url).netloc.strip()
         print('urlparse={}'.format(urlparse(url)))
