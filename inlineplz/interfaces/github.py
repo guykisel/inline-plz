@@ -59,7 +59,7 @@ class GitHubInterface(InterfaceBase):
         try:
             # github.py == 0.9.6
             self.username = self.github.user().to_json()["login"]
-        except AttributeError:
+        except (TypeError, AttributeError):
             self.username = self.github.me().as_dict()["login"]
 
         self.owner = owner
