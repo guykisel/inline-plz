@@ -22,7 +22,7 @@ class GitHubInterface(InterfaceBase):
         pr=None,
         branch=None,
         token=None,
-        url=None,
+        url="https://github.com",
         commit=None,
         ignore_paths=None,
         prefix=None,
