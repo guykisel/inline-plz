@@ -61,6 +61,7 @@ class GitHubInterface(InterfaceBase):
         print("Master SHA: {0}".format(self.master_sha))
 
         print("Branch: {0}".format(branch))
+        self.branch = branch
         self.pull_request_number = None
         if branch and not pr:
             for github_repo in [self.github_repo, self.github_repo.parent]:
@@ -210,6 +211,17 @@ class GitHubInterface(InterfaceBase):
             print("Github connection is invalid.")
             return
 
+        if self.autofix and git.files_changed() and not self.out_of_date():
+            print("Files changed: attempting to push fixes")
+            for filename in self.filenames:
+                print("Adding {}".format(filename))
+                git.add(filename)
+            git.commit("Autofix by inline-plz")
+            print("Git pushing")
+            git.push(self.branch)
+            print("Successfully pushed - skipping message posting")
+            return 1
+
         valid_errors = 0
         messages_posted = 0
         paths = dict()
@@ -281,16 +293,6 @@ class GitHubInterface(InterfaceBase):
                 break
 
         print("\n{} messages posted to Github.".format(messages_posted))
-
-        if self.autofix:
-            try:
-                for filename in self.filenames:
-                    git.add(filename)
-                git.commit("Autofix by inline-plz")
-                git.push()
-            except Exception:
-                traceback.print_exc()
-
         return valid_errors
 
     def is_duplicate(self, message, position):

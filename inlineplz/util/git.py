@@ -66,9 +66,16 @@ def commit(message):
     )
 
 
-def push():
+def push(branch):
     return (
-        subprocess.check_output(["git", "push"])
-        .strip()
-        .decode("utf-8", errors="replace")
+        subprocess.check_output(["git", "push", "origin", "HEAD:{}".format(branch)])
+            .strip()
+            .decode("utf-8", errors="replace")
+    )
+
+def files_changed():
+    return (
+        subprocess.check_output(["git", "status", "--porcelain"])
+            .strip()
+            .decode("utf-8", errors="replace")
     )

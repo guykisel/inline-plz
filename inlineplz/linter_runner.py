@@ -223,7 +223,7 @@ class LinterRunner:
             disabled_linters.extend(disabled_linters[0].split(","))
         except (IndexError, AttributeError):
             pass
-        if not self.autorun:
+        if not (self.autorun or self.autofix):
             for linter, config in registry.LINTERS.items():
                 if linter in enabled_linters:
                     linters.add(linter)
@@ -252,7 +252,7 @@ class LinterRunner:
                     linters.add(linter)
                     continue
 
-                if config.get("language") in language_found and config.get("autorun"):
+                if config.get("language") in language_found and ((self.autorun and config.get("autorun")) or (self.autofix and config.get("autofix"))):
                     linters.add(linter)
                     continue
 
@@ -290,7 +290,7 @@ class LinterRunner:
 
     def should_autorun(self, config):
         patterns = registry.PATTERNS.get(config.get("language"))
-        if config.get("autorun") or config.get("autofix"):
+        if (self.autorun and config.get("autorun")) or (self.autofix and config.get("autofix")):
             for pattern in patterns:
                 if fnmatch.filter(self.all_filenames, pattern):
                     return True

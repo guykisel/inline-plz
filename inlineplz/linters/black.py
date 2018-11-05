@@ -2,8 +2,6 @@
 
 import sys
 
-import dirtyjson as json
-
 from ..decorators import linter
 from ..parsers.base import ParserBase
 
