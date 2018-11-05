@@ -62,7 +62,6 @@ class GitHubInterface(InterfaceBase):
         except AttributeError:
             self.username = self.github.me().as_dict()["login"]
 
-
         self.owner = owner
         self.repo = repo
 

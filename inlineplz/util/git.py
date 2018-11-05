@@ -81,6 +81,7 @@ def files_changed():
         .decode("utf-8", errors="replace")
     )
 
+
 def set_remote(remote):
     return (
         subprocess.check_output(["git", "config", "remote.origin.url", remote])
