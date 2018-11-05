@@ -5,6 +5,7 @@ import os
 import subprocess
 import time
 import traceback
+from urllib.parse import urlparse
 
 import github3
 import unidiff
@@ -48,10 +49,20 @@ class GitHubInterface(InterfaceBase):
         self.prefix = prefix
         self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
+        self.token = token
+        self.netloc = urlparse(url).netloc
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
         else:
             self.github = github3.GitHubEnterprise(url, token=token)
+
+        try:
+            # github.py == 0.9.6
+            self.username = self.github.user().to_json()["login"]
+        except AttributeError:
+            self.username = self.github.me().as_dict()["login"]
+
+
         self.owner = owner
         self.repo = repo
 
@@ -218,7 +229,11 @@ class GitHubInterface(InterfaceBase):
                 git.add(filename)
             git.commit("Autofix by inline-plz")
             print("Git pushing")
-            git.push(self.branch)
+            try:
+                git.push(self.branch)
+            except subprocess.CalledProcessError:
+                git.set_remote("https://{}:{}@{}/{}/{}.git".format(self.username, self.token, self.netloc, self.owner, self.repo))
+                git.push(self.branch)
             print("Successfully pushed - skipping message posting")
             return 1
 
