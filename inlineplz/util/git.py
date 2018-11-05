@@ -53,22 +53,22 @@ def fetch(git_url):
 def add(filename):
     return (
         subprocess.check_output(["git", "add", filename])
-            .strip()
-            .decode("utf-8", errors="replace")
+        .strip()
+        .decode("utf-8", errors="replace")
     )
 
 
 def commit(message):
     return (
         subprocess.check_output(["git", "commit", "-m", message])
-            .strip()
-            .decode("utf-8", errors="replace")
+        .strip()
+        .decode("utf-8", errors="replace")
     )
 
 
 def push():
     return (
         subprocess.check_output(["git", "push"])
-            .strip()
-            .decode("utf-8", errors="replace")
+        .strip()
+        .decode("utf-8", errors="replace")
     )
