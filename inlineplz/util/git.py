@@ -74,12 +74,12 @@ def push(branch):
     )
 
 
-def files_changed():
-    return (
-        subprocess.check_output(["git", "status", "--porcelain"])
-        .strip()
-        .decode("utf-8", errors="replace")
-    )
+def files_changed(files):
+    files_with_changes = []
+    for filename in files:
+        if subprocess.check_output(["git", "diff", "--name-only", filename]).strip().decode("utf-8", errors="replace"):
+            files_with_changes.append(filename)
+    return files_with_changes
 
 
 def set_remote(remote):

@@ -229,9 +229,9 @@ class GitHubInterface(InterfaceBase):
             print("Github connection is invalid.")
             return
 
-        if self.autofix and git.files_changed() and not self.out_of_date():
+        if self.autofix and git.files_changed(self.filenames) and not self.out_of_date():
             print("Files changed: attempting to push fixes")
-            print(git.files_changed())
+            print(git.files_changed(self.filenames))
             git.command('checkout', '-b', self.branch)
             for filename in self.filenames:
                 print("Adding {}".format(filename))
