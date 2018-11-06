@@ -88,3 +88,11 @@ def set_remote(remote):
         .strip()
         .decode("utf-8", errors="replace")
     )
+
+
+def command(*args):
+    return (
+        subprocess.check_output(["git"].extend(args))
+        .strip()
+        .decode("utf-8", errors="replace")
+    )

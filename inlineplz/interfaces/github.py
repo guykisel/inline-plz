@@ -232,6 +232,7 @@ class GitHubInterface(InterfaceBase):
         if self.autofix and git.files_changed() and not self.out_of_date():
             print("Files changed: attempting to push fixes")
             print(git.files_changed())
+            git.command('checkout', '-b', self.branch)
             for filename in self.filenames:
                 print("Adding {}".format(filename))
                 git.add(filename)
