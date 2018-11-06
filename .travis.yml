@@ -29,10 +29,10 @@ python:
 script:
   - tox
   # https://stackoverflow.com/questions/34405047/how-do-you-merge-into-another-branch-using-travis-with-git-commands
-  - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
-  - git fetch
-  - git fetch --tags
-  - for branch in $(git branch -r|grep -v HEAD); do git checkout -qf ${branch#origin/}; done
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git fetch; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git fetch --tags; fi'
+  - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then for branch in $(git branch -r|grep -v HEAD); do git checkout -qf ${branch#origin/}; done; fi'
   - 'if [ "$TRAVIS_PULL_REQUEST" != "false" ]; then git checkout "$TRAVIS_PULL_REQUEST_BRANCH"; fi'
   - inline-plz --dryrun --autorun
   - inline-plz --dryrun --autorun --config-dir=./inlineplz/linters/config
