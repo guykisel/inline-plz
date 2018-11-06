@@ -234,11 +234,11 @@ class GitHubInterface(InterfaceBase):
                 git.add(filename)
             git.commit("Autofix by inline-plz")
             print("Git pushing to {}".format(self.branch))
-            # try:
-            #     git.push(self.branch)
-            # except subprocess.CalledProcessError:
-            #     git.set_remote("https://{}:{}@{}/{}/{}.git".format(self.username, self.token, self.netloc, self.owner, self.repo))
-            #     git.push(self.branch)
+            try:
+                git.push(self.branch)
+            except subprocess.CalledProcessError:
+                git.set_remote("https://{}:{}@{}/{}/{}.git".format(self.username, self.token, self.netloc, self.owner, self.repo))
+                git.push(self.branch)
             print("Successfully pushed - skipping message posting")
             return 1
 
