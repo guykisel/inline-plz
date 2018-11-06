@@ -115,9 +115,11 @@ class GitHubInterface(InterfaceBase):
         self.pull_request_number = pr
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.target_sha = self.pull_request.base.sha
-        self.target_branch = self.pull_request.base.label
+        self.target_branch = self.pull_request.base.ref
         self.sha = self.pull_request.head.sha
-        self.branch = self.pull_request.head.label
+        self.branch = self.pull_request.head.ref
+        # if ":" in self.branch:
+        #     self.branch = self.branch.split(":")[-1]
         try:
             # github.py == 0.9.6
             try:
