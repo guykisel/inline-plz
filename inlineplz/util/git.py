@@ -68,7 +68,7 @@ def commit(message):
 
 def push(branch):
     return (
-        subprocess.check_output(["git", "push", "origin", "HEAD:{}".format(branch)])
+        subprocess.check_output(["git", "push", "origin", "{}".format(branch)])
         .strip()
         .decode("utf-8", errors="replace")
     )
