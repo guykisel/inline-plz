@@ -70,8 +70,7 @@ class GitHubInterface(InterfaceBase):
         self.email = ''
         try:
             self.username = self.github_user["login"]
-            print(self.github_user)
-            for email in self.github_user["emails"]:
+            for email in self.github.emails():
                 try:
                     email_obj = email.as_dict()
                 except (TypeError, AttributeError):
