@@ -60,10 +60,25 @@ class GitHubInterface(InterfaceBase):
             self.github = github3.GitHubEnterprise(url, token=token)
 
         try:
-            # github.py == 0.9.6
-            self.username = self.github.user().to_json()["login"]
+            self.github_user = self.github.me().as_dict()
         except (TypeError, AttributeError):
-            self.username = self.github.me().as_dict()["login"]
+            # github.py == 0.9.6
+            self.github_user = self.github.user().to_json()
+
+        self.username = ''
+        self.email = ''
+        try:
+            self.username = self.github_user["login"]
+            for email in self.github_user["emails"]:
+                try:
+                    email_obj = email.as_dict()
+                except (TypeError, AttributeError):
+                    # github.py == 0.9.6
+                    email_obj = email.to_json()
+                if email_obj['primary']:
+                    self.email = email_obj['email']
+        except (TypeError, AttributeError, KeyError):
+            traceback.print_exc()
 
         self.owner = owner
         self.repo = repo
@@ -232,6 +247,10 @@ class GitHubInterface(InterfaceBase):
         if self.autofix and git.files_changed(self.filenames) and not self.out_of_date():
             print("Files changed: attempting to push fixes")
             print(git.files_changed(self.filenames))
+            if self.username:
+                git.command("config", "--global", "user.name", self.username)
+            if self.email:
+                git.command("config", "--global", "user.email", self.email)
             git.command('checkout', self.branch)
             for filename in self.filenames:
                 print("Adding {}".format(filename))
@@ -241,7 +260,7 @@ class GitHubInterface(InterfaceBase):
             try:
                 git.push(self.branch)
             except subprocess.CalledProcessError:
-                git.set_remote("https://{}:{}@{}/{}/{}.git".format(self.username, self.token, self.netloc, self.owner, self.repo))
+                git.set_remote("https://{}@{}/{}/{}.git".format(self.token, self.netloc, self.owner, self.repo))
                 git.push(self.branch)
             print("Successfully pushed - skipping message posting")
             return 1
@@ -317,6 +336,7 @@ class GitHubInterface(InterfaceBase):
                 break
 
         print("\n{} messages posted to Github.".format(messages_posted))
+        print("\n{} valid errors.".format(valid_errors))
         return valid_errors
 
     def is_duplicate(self, message, position):
