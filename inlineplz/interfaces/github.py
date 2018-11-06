@@ -46,6 +46,7 @@ class GitHubInterface(InterfaceBase):
         """
         self.github = None
         self.stopped_early = False
+        self.autofixed = False
         self.prefix = prefix
         self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
@@ -69,6 +70,7 @@ class GitHubInterface(InterfaceBase):
         self.email = ''
         try:
             self.username = self.github_user["login"]
+            print(self.github_user)
             for email in self.github_user["emails"]:
                 try:
                     email_obj = email.as_dict()
@@ -263,6 +265,7 @@ class GitHubInterface(InterfaceBase):
                 git.set_remote("https://{}@{}/{}/{}.git".format(self.token, self.netloc, self.owner, self.repo))
                 git.push(self.branch)
             print("Successfully pushed - skipping message posting")
+            self.autofixed = True
             return 1
 
         valid_errors = 0
@@ -376,7 +379,7 @@ class GitHubInterface(InterfaceBase):
         obsolete_message = (
             "*This message is obsolete but is preserved because it has replies.*"
         )
-        if self.stopped_early:
+        if self.stopped_early or self.autofixed:
             return
 
         comments_to_delete = []
