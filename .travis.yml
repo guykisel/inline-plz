@@ -28,6 +28,15 @@ python:
   - "3.5"
 script:
   - tox
+  # https://stackoverflow.com/questions/34405047/how-do-you-merge-into-another-branch-using-travis-with-git-commands
+  - local build_head=$(git rev-parse HEAD)
+  - git config --replace-all remote.origin.fetch +refs/heads/*:refs/remotes/origin/*
+  - git fetch
+  - git fetch --tags
+  - for branch in $(git branch -r|grep -v HEAD) ; do \
+        git checkout -qf ${branch#origin/} \
+    done
+  - git checkout ${build_head}
   - inline-plz --dryrun --autorun
   - inline-plz --dryrun --autorun --config-dir=./inlineplz/linters/config
   - inline-plz --autorun --delete-outdated --autofix
