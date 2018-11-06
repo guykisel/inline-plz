@@ -72,7 +72,6 @@ class GitHubInterface(InterfaceBase):
         all_commits = self.repo_commits(self.github_repo)
         self.master_sha = all_commits[0].sha
         print("Master SHA: {0}".format(self.master_sha))
-
         print("Branch: {0}".format(branch))
         self.branch = branch
         self.pull_request_number = None
@@ -117,6 +116,8 @@ class GitHubInterface(InterfaceBase):
         self.pull_request = self.github.pull_request(self.owner, self.repo, pr)
         self.target_sha = self.pull_request.base.sha
         self.target_branch = self.pull_request.base.label
+        self.sha = self.pull_request.head.sha
+        self.branch = self.pull_request.head.label
         try:
             # github.py == 0.9.6
             try:
@@ -132,6 +133,8 @@ class GitHubInterface(InterfaceBase):
 
         print("Target SHA: {0}".format(self.target_sha))
         print("Target Branch: {0}".format(self.target_branch))
+        print("Head SHA: {0}".format(self.sha))
+        print("Head Branch: {0}".format(self.branch))
         self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
         print("Last SHA: {0}".format(self.last_sha))
