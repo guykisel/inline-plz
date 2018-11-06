@@ -91,8 +91,10 @@ def set_remote(remote):
 
 
 def command(*args):
+    git_command = ["git"]
+    git_command.extend(args)
     return (
-        subprocess.check_output(["git"].extend(args))
+        subprocess.check_output(git_command)
         .strip()
         .decode("utf-8", errors="replace")
     )
