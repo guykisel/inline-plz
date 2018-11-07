@@ -15,7 +15,7 @@ from ..parsers.base import ParserBase
     language="go",
     autorun=False,
     run_per_file=True,
-    autofix=True
+    autofix=True,
 )
 class GofmtParser(ParserBase):
     """gofmt isn't actually a linter, so no-op."""
