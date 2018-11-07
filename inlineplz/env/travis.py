@@ -10,7 +10,9 @@ from ..env.base import EnvBase
 class Travis(EnvBase):
     def __init__(self):
         self.pull_request = os.environ.get("TRAVIS_PULL_REQUEST")
-        self.branch = os.environ.get("TRAVIS_PULL_REQUEST_BRANCH") or os.environ.get("TRAVIS_BRANCH")
+        self.branch = os.environ.get("TRAVIS_PULL_REQUEST_BRANCH") or os.environ.get(
+            "TRAVIS_BRANCH"
+        )
         self.repo_slug = os.environ.get("TRAVIS_REPO_SLUG")
         self.commit = os.environ.get("TRAVIS_PULL_REQUEST_SHA")
         self.commit_range = os.environ.get("TRAVIS_COMMIT_RANGE")

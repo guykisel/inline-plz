@@ -26,7 +26,7 @@ class GitHubInterface(InterfaceBase):
         commit=None,
         ignore_paths=None,
         prefix=None,
-        autofix=False
+        autofix=False,
     ):
         """
         GitHubInterface lets us post messages to GitHub.
@@ -52,9 +52,9 @@ class GitHubInterface(InterfaceBase):
         self.ignore_paths = set(ignore_paths or [])
         self.token = token
         url = url or "https://github.com"
-        print('url={}'.format(url))
+        print("url={}".format(url))
         self.netloc = urlparse(url).netloc.strip()
-        print('urlparse={}'.format(urlparse(url)))
+        print("urlparse={}".format(urlparse(url)))
         if not url or url == "https://github.com":
             self.github = github3.GitHub(token=token)
         else:
@@ -66,8 +66,8 @@ class GitHubInterface(InterfaceBase):
             # github.py == 0.9.6
             self.github_user = self.github.user().to_json()
 
-        self.username = ''
-        self.email = ''
+        self.username = ""
+        self.email = ""
         try:
             self.username = self.github_user["login"]
             for email in self.github.emails():
@@ -76,9 +76,14 @@ class GitHubInterface(InterfaceBase):
                 except (TypeError, AttributeError):
                     # github.py == 0.9.6
                     email_obj = email.to_json()
-                if email_obj['primary']:
-                    self.email = email_obj['email']
-        except (TypeError, AttributeError, KeyError, github3.exceptions.GitHubException):
+                if email_obj["primary"]:
+                    self.email = email_obj["email"]
+        except (
+            TypeError,
+            AttributeError,
+            KeyError,
+            github3.exceptions.GitHubException,
+        ):
             traceback.print_exc()
 
         self.owner = owner
@@ -245,14 +250,18 @@ class GitHubInterface(InterfaceBase):
             print("Github connection is invalid.")
             return
 
-        if self.autofix and git.files_changed(self.filenames) and not self.out_of_date():
+        if (
+            self.autofix
+            and git.files_changed(self.filenames)
+            and not self.out_of_date()
+        ):
             print("Files changed: attempting to push fixes")
             print(git.files_changed(self.filenames))
             if self.username:
                 git.command("config", "--global", "user.name", self.username)
             if self.email:
                 git.command("config", "--global", "user.email", self.email)
-            git.command('checkout', self.branch)
+            git.command("checkout", self.branch)
             for filename in self.filenames:
                 print("Adding {}".format(filename))
                 git.add(filename)
@@ -261,7 +270,11 @@ class GitHubInterface(InterfaceBase):
             try:
                 git.push(self.branch)
             except subprocess.CalledProcessError:
-                git.set_remote("https://{}@{}/{}/{}.git".format(self.token, self.netloc, self.owner, self.repo))
+                git.set_remote(
+                    "https://{}@{}/{}/{}.git".format(
+                        self.token, self.netloc, self.owner, self.repo
+                    )
+                )
                 git.push(self.branch)
             print("Successfully pushed - skipping message posting")
             self.autofixed = True

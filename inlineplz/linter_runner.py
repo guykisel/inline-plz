@@ -252,7 +252,10 @@ class LinterRunner:
                     linters.add(linter)
                     continue
 
-                if config.get("language") in language_found and ((self.autorun and config.get("autorun")) or (self.autofix and config.get("autofix"))):
+                if config.get("language") in language_found and (
+                    (self.autorun and config.get("autorun"))
+                    or (self.autofix and config.get("autofix"))
+                ):
                     linters.add(linter)
                     continue
 
@@ -290,7 +293,9 @@ class LinterRunner:
 
     def should_autorun(self, config):
         patterns = registry.PATTERNS.get(config.get("language"))
-        if (self.autorun and config.get("autorun")) or (self.autofix and config.get("autofix")):
+        if (self.autorun and config.get("autorun")) or (
+            self.autofix and config.get("autofix")
+        ):
             for pattern in patterns:
                 if fnmatch.filter(self.all_filenames, pattern):
                     return True

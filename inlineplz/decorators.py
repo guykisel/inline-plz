@@ -36,7 +36,7 @@ def linter(
     patterns=None,
     url=None,
     always_install=False,
-    autofix=False
+    autofix=False,
 ):
     return partial(
         _create_linter,
@@ -55,6 +55,6 @@ def linter(
             "patterns": patterns,
             "url": url,
             "always_install": always_install,
-            "autofix": autofix
+            "autofix": autofix,
         },
     )
