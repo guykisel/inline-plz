@@ -18,7 +18,7 @@ from ..linters.dockerfilelint import DockerfileLintParser  # NOQA
 from ..linters.eclint import ECLintParser  # NOQA
 from ..linters.eslint import ESLintParser  # NOQA
 from ..linters.gherkinlint import GherkinLintParser  # NOQA
-from ..linters.gofmt import GofmtParser # NOQA
+from ..linters.gofmt import GofmtParser  # NOQA
 from ..linters.gometalinter import GometalinterParser  # NOQA
 from ..linters.hadolint import HadolintParser  # NOQA
 from ..linters.htmlhint import HTMLHintParser  # NOQA
