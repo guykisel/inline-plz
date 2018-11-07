@@ -48,6 +48,9 @@ def main():
     parser.add_argument(
         "--config-dir", help="default directory to search for linter config files"
     )
+    parser.add_argument(
+        "--autofix", action="store_true", help="run fixers and commit them back"
+    )
     args = parser.parse_args()
     args = env.update_args(args)
     if args.config_dir:
@@ -73,7 +76,8 @@ def update_from_config(args, config):
         "interface",
         "owner",
         "repo",
-        "config_dir" "repo_slug",
+        "config_dir",
+        "repo_slug",
         "pull_request",
         "zero_exit",
         "dryrun",
@@ -204,6 +208,7 @@ def inline(args):
             args.commit,
             args.ignore_paths,
             args.prefix,
+            args.autofix,
         )
         if not my_interface.is_valid():
             print("Invalid review. Exiting.")
@@ -218,6 +223,7 @@ def inline(args):
             args.config_dir,
             args.enabled_linters,
             args.disabled_linters,
+            args.autofix,
             trusted,
             filenames,
         )

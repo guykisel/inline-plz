@@ -48,3 +48,55 @@ def fetch(git_url):
         .strip()
         .decode("utf-8", errors="replace")
     )
+
+
+def add(filename):
+    return (
+        subprocess.check_output(["git", "add", filename])
+        .strip()
+        .decode("utf-8", errors="replace")
+    )
+
+
+def commit(message):
+    return (
+        subprocess.check_output(["git", "commit", "-m", message])
+        .strip()
+        .decode("utf-8", errors="replace")
+    )
+
+
+def push(branch):
+    return (
+        subprocess.check_output(["git", "push", "origin", "{}".format(branch)])
+        .strip()
+        .decode("utf-8", errors="replace")
+    )
+
+
+def files_changed(files):
+    files_with_changes = []
+    for filename in files:
+        if (
+            subprocess.check_output(["git", "diff", "--name-only", filename])
+            .strip()
+            .decode("utf-8", errors="replace")
+        ):
+            files_with_changes.append(filename)
+    return files_with_changes
+
+
+def set_remote(remote):
+    return (
+        subprocess.check_output(["git", "config", "remote.origin.url", remote])
+        .strip()
+        .decode("utf-8", errors="replace")
+    )
+
+
+def command(*args):
+    git_command = ["git"]
+    git_command.extend(args)
+    return (
+        subprocess.check_output(git_command).strip().decode("utf-8", errors="replace")
+    )
