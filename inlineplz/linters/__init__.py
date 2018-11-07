@@ -28,7 +28,7 @@ from ..linters.jsonlint import JSONLintParser  # NOQA
 from ..linters.markdownlint import MarkdownLintParser  # NOQA
 from ..linters.megacheck import MegacheckParser  # NOQA
 from ..linters.pmd import PMDParser  # NOQA
-from ..linters.prettier import PrettierParser # NOQA
+from ..linters.prettier import PrettierParser  # NOQA
 from ..linters.proselint import ProselintParser  # NOQA
 from ..linters.prospector import ProspectorParser  # NOQA
 from ..linters.rflint import RobotFrameworkLintParser  # NOQA
