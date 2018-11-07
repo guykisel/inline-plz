@@ -78,12 +78,7 @@ class GitHubInterface(InterfaceBase):
                     email_obj = email.to_json()
                 if email_obj["primary"]:
                     self.email = email_obj["email"]
-        except (
-            TypeError,
-            AttributeError,
-            KeyError,
-            github3.exceptions.GitHubException,
-        ):
+        except Exception:  # NOQA
             traceback.print_exc()
 
         self.owner = owner
