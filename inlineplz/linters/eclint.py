@@ -37,4 +37,4 @@ class ECLintParser(ParserBase):
                     print(
                         "({0}) Invalid message: {1}".format(type(self).__name__, line)
                     )
-        return []
+        return messages
