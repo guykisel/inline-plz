@@ -20,6 +20,7 @@ from ..linters.eslint import ESLintParser  # NOQA
 from ..linters.gherkinlint import GherkinLintParser  # NOQA
 from ..linters.gofmt import GofmtParser  # NOQA
 from ..linters.gometalinter import GometalinterParser  # NOQA
+from ..linters.isort import IsortParser # NOQA
 from ..linters.hadolint import HadolintParser  # NOQA
 from ..linters.htmlhint import HTMLHintParser  # NOQA
 from ..linters.jscs import JSCSParser  # NOQA
