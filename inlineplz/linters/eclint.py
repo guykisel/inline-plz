@@ -17,7 +17,7 @@ from ..parsers.base import ParserBase
     autorun=False,
     run_per_file=True,
     run_if_dotfile_in_root=False,
-    autofix=True
+    autofix=True,
 )
 class ECLintParser(ParserBase):
     """We're running eclint as an autofixer, so no-op."""
