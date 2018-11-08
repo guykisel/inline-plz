@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
-import random
 import os
+import random
 import subprocess
 import time
 import traceback

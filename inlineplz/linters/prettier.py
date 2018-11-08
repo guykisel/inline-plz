@@ -8,12 +8,20 @@ from ..parsers.base import ParserBase
 
 @linter(
     name="prettier",
-    install=[["npm", "install", "prettier"]],
+    install=[
+        [
+            "npm",
+            "install",
+            "prettier",
+            "@prettier/plugin-php",
+            "@prettier/plugin-swift",
+            "prettier-plugin-java",
+            "prettier-plugin-ruby",
+        ]
+    ],
     help_cmd=[os.path.normpath("./node_modules/.bin/prettier"), "-h"],
     run=[os.path.normpath("./node_modules/.bin/prettier"), "--write"],
-    rundefault=[
-        os.path.normpath("./node_modules/.bin/prettier"), "--write"
-    ],
+    rundefault=[os.path.normpath("./node_modules/.bin/prettier"), "--write"],
     dotfiles=[],
     language="all",
     autorun=False,
