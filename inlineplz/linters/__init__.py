@@ -33,6 +33,7 @@ from ..linters.proselint import ProselintParser  # NOQA
 from ..linters.prospector import ProspectorParser  # NOQA
 from ..linters.rflint import RobotFrameworkLintParser  # NOQA
 from ..linters.rstlint import RSTLintParser  # NOQA
+from ..linters.sh import ShfmtParser # NOQA
 from ..linters.shellcheck import ShellcheckParser  # NOQA
 from ..linters.spotbugsmaven import SpotbugsMavenParser  # NOQA
 from ..linters.stylint import StylintParser  # NOQA
