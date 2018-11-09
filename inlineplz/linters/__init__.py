@@ -43,7 +43,7 @@ from ..linters.yamllint import YAMLLintParser  # NOQA
 
 
 def register_patterns():
-    register_pattern("all", ["*.*"])
+    register_pattern("all", ["*.*", "*"])
     register_pattern("ansible", ["*.yaml", "*.yml"])
     register_pattern("docker", ["*Dockerfile", "*.dockerfile"])
     register_pattern("gherkin", ["*.feature"])
