@@ -9,7 +9,7 @@ from ..parsers.base import ParserBase
 @linter(
     name="prettier",
     install=[
-        ["yarn", "add", "--dev", "prettier", "@prettier/plugin-php","@prettier/plugin-swift",
+        ["yarn", "add", "--dev", "prettier", "@prettier/plugin-php", "@prettier/plugin-swift",
             "prettier-plugin-java",
             "prettier-plugin-ruby"],
         [
