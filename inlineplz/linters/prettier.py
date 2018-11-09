@@ -9,9 +9,16 @@ from ..parsers.base import ParserBase
 @linter(
     name="prettier",
     install=[
-        ["yarn", "add", "--dev", "prettier", "@prettier/plugin-php", "@prettier/plugin-swift",
+        [
+            "yarn",
+            "add",
+            "--dev",
+            "prettier",
+            "@prettier/plugin-php",
+            "@prettier/plugin-swift",
             "prettier-plugin-java",
-            "prettier-plugin-ruby"],
+            "prettier-plugin-ruby",
+        ],
         [
             "npm",
             "install",
@@ -20,7 +27,8 @@ from ..parsers.base import ParserBase
             "@prettier/plugin-swift",
             "prettier-plugin-java",
             "prettier-plugin-ruby",
-        ], ["npm", "install", "prettier"]
+        ],
+        ["npm", "install", "prettier"],
     ],
     help_cmd=[os.path.normpath("./node_modules/.bin/prettier"), "-h"],
     run=[os.path.normpath("./node_modules/.bin/prettier"), "--write"],
