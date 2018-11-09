@@ -9,7 +9,7 @@ from ..parsers.base import ParserBase
 @linter(
     name="eclint",
     install=[["npm", "install", "eclint"]],
-    help_cmd=[os.path.normpath("./node_modules/.bin/eclint"), "-h"],
+    help_cmd=[os.path.normpath("./node_modules/.bin/eclint"), "--help"],
     run=[os.path.normpath("./node_modules/.bin/eclint"), "fix"],
     rundefault=[os.path.normpath("./node_modules/.bin/eclint"), "fix"],
     dotfiles=[],
