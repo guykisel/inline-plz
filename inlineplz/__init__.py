@@ -1,4 +1,4 @@
 # -*- coding: utf-8 -*-
 __author__ = "Guy Kisel"
 __email__ = "guy.kisel@gmail.com"
-__version__ = "0.45.2"
+__version__ = "0.45.3"
