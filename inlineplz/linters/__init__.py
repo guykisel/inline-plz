@@ -95,6 +95,7 @@ TRUSTED_INSTALL = [
     [sys.executable, "-m", "pip", "install", "-r", "requirements_dev.txt"],
     [sys.executable, "-m", "pip", "install", "-r", "requirements-dev.txt"],
     ["pipenv", "install"],
+    ["terraform", "get"]
 ]
 
 # these dirs will get deleted after a run
