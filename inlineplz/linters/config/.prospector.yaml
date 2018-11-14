@@ -5,63 +5,63 @@ doc-warnings: false
 test-warnings: false
 
 ignore-paths:
-  - docs/
-  - node_modules/
-  - node_modules\\\\
-  - node_modules\\
-  - node_modules\
+    - docs/
+    - node_modules/
+    - node_modules\\\\
+    - node_modules\\
+    - node_modules\
 
 ignore-patterns:
-  - (^|/)docs(/|$)
-  - (^|/|\\|\\\\)node_modules(\\\\|\\|/|$)
-  - ^node_modules?/?
-  - /node_modules?(/|$)
+    - (^|/)docs(/|$)
+    - (^|/|\\|\\\\)node_modules(\\\\|\\|/|$)
+    - ^node_modules?/?
+    - /node_modules?(/|$)
 
 pylint:
-  disable:
-    - bad-builtin
-    - too-few-public-methods
-    - missing-docstring
-    - star-args
-    - redefined-variable-type
-    - superfluous-parens
-    - too-many-arguments
-    - inconsistent-return-statements
-    - broad-except
-    - line-too-long
-    - logging-format-interpolation
-    - logging-fstring-interpolation
-    - too-many-locals
+    disable:
+        - bad-builtin
+        - too-few-public-methods
+        - missing-docstring
+        - star-args
+        - redefined-variable-type
+        - superfluous-parens
+        - too-many-arguments
+        - inconsistent-return-statements
+        - broad-except
+        - line-too-long
+        - logging-format-interpolation
+        - logging-fstring-interpolation
+        - too-many-locals
 
 pep8:
-  full: true
-  disable:
-    - E126
-    - E501
+    full: true
+    disable:
+        - E126
+        - E501
 
 pep257:
-  disable:
-    - D000
-    - D100
-    - D101
-    - D102
-    - D103
-    - D105
-    - D107
-    - D203
-    - D205
-    - D212
-    - D213
-    - D400
-    - D401
-    - D403
-    - D404
+    disable:
+        - D000
+        - D100
+        - D101
+        - D102
+        - D103
+        - D105
+        - D107
+        - D203
+        - D205
+        - D212
+        - D213
+        - D400
+        - D401
+        - D403
+        - D404
 
 pyroma:
-  run: true
-  disable:
-    - PYR19
-    - PYR16
+    run: true
+    disable:
+        - PYR19
+        - PYR16
 
 vulture:
-  run: true
+    run: true
