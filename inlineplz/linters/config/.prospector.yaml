@@ -30,6 +30,7 @@ pylint:
     - broad-except
     - line-too-long
     - logging-format-interpolation
+    - logging-fstring-interpolation
 
 pep8:
   full: true
