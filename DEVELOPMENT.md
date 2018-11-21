@@ -24,7 +24,7 @@ $ py.test
 $ tox
 ```
 
-Note: Tox will run the unit tests against both python 3.5 add 3.6.
+Note: Tox will run the unit tests against python 3.5, 3.6, and 3.7.
 
 
 When you submit Pull Requests, `inline-plz` will kick off a [Travis job](blob/master/.travis.yml) that ... checks itself!   Please help keep `inline-plz` linted as an shining example of what great looks like!
@@ -129,7 +129,7 @@ In the `@linter` annotation, the parameters are:
 * `help` how to get help from the tool, this is also used to verify the tool can be called and is installed
 * `run` this is the shell command to run your tool with out specifying a configuration file
 * `rundefault` this is the shell command to run your tool with the default configuration file embedded in `inline-plz` (see `./inlineplz/linters/config/`)
-* `dotfiles` this is a set of defualt configuration files, embedded in `inline-plz`
+* `dotfiles` this is a set of default configuration files, embedded in `inline-plz`
 * `autorun` this is a boolean variable, when `True` will cause your linter to be run without having to be explicitly called
 * `run_per_file` a boolean, if `True`, the linter will be shelled out and called for each file (`run_per_file=True` can be slow), if `False` the linter will be run once for the entire source tree
 

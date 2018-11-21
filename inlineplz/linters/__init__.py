@@ -13,6 +13,7 @@ from ..linters.bandit import BanditParser  # NOQA
 from ..linters.black import BlackParser  # NOQA
 from ..linters.codenarc import CodenarcParser  # NOQA
 from ..linters.coala import CoalaParser  # NOQA
+from ..linters.clippy import ClippyParser  # NOQA
 from ..linters.detectsecrets import DetectSecretsParser  # NOQA
 from ..linters.dockerfilelint import DockerfileLintParser  # NOQA
 from ..linters.eclint import ECLintParser  # NOQA
@@ -34,6 +35,7 @@ from ..linters.proselint import ProselintParser  # NOQA
 from ..linters.prospector import ProspectorParser  # NOQA
 from ..linters.rflint import RobotFrameworkLintParser  # NOQA
 from ..linters.rstlint import RSTLintParser  # NOQA
+from ..linters.rustfmt import RustfmtParser  # NOQA
 from ..linters.sh import ShfmtParser  # NOQA
 from ..linters.shellcheck import ShellcheckParser  # NOQA
 from ..linters.spotbugsmaven import SpotbugsMavenParser  # NOQA
@@ -58,6 +60,7 @@ def register_patterns():
     register_pattern("shell", ["*.sh", "*.zsh", "*.ksh", "*.bsh", "*.csh", "*.bash"])
     register_pattern("stylus", ["*.styl"])
     register_pattern("robotframework", ["*.robot"])
+    register_pattern("rust", ["*.rs"])
     register_pattern("rst", ["*.rst"])
     register_pattern(
         "text", ["*.md", "*.txt", "*.rtf", "*.html", "*.tex", "*.markdown"]
