@@ -6,7 +6,7 @@ from ..parsers.base import ParserBase
 
 
 @linter(
-    name="gofmt",
+    name="sh",
     install=[["go", "get", "-u", "mvdan.cc/sh/cmd/shfmt"]],
     help_cmd=["shfmt", "-h"],
     run=["shfmt", "-w", "-s"],

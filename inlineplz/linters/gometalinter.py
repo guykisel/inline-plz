@@ -87,7 +87,7 @@ from ..parsers.base import ParserBase
     run_per_file=False,
 )
 class GometalinterParser(ParserBase):
-    """Parse json eslint output."""
+    """Parse json gometalinter output."""
 
     def parse(self, lint_data):
         messages = set()
