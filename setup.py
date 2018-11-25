@@ -29,7 +29,7 @@ test_requirements = [
 
 setup(
     name="inlineplz",
-    version="0.45.4",
+    version="0.46.0",
     description="Inline your lint messages",
     long_description=readme + "\n\n" + history,
     author="Guy Kisel",
@@ -51,6 +51,7 @@ setup(
         "Programming Language :: Python :: 3",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
     ],
     test_suite="tests",
     tests_require=test_requirements,
