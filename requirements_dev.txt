@@ -11,7 +11,7 @@ Sphinx==1.8.2
 py==1.7.0
 pytest==4.0.1
 PyYAML==3.13
-prospector[with_everything]==1.1.4
+prospector[with_everything]==1.1.6.2
 python-dateutil>=2.6.0
 requests>=2.18
 black>=18.9b0; python_version >= '3.6'
