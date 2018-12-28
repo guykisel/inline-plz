@@ -162,7 +162,7 @@ class GitHubInterface(InterfaceBase):
         self.review_comments = list(self.pull_request.review_comments())
         self.last_update = time.time()
         self.messages_in_files = dict()
-        self.filenames = []
+        self.filenames = set()
 
         try:
             try:
@@ -171,7 +171,7 @@ class GitHubInterface(InterfaceBase):
                 # github.py == 0.9.6
                 pr_files = self.pull_request.iter_files()
             self.filenames = set(
-                os.path.abspath(os.path.normcase(pr_file.filename))
+                os.path.relpath(pr_file.filename).replace("\\", "/").strip()
                 for pr_file in pr_files
             )
             print("Files in PR: {}".format(self.filenames))
@@ -301,7 +301,7 @@ class GitHubInterface(InterfaceBase):
             if not msg_position:
                 continue
 
-            if msg.path.split("/")[0] in self.ignore_paths:
+            if msg.path not in self.filenames or msg.path.split("/")[0] in self.ignore_paths:
                 continue
 
             paths.setdefault(msg.path, 0)
