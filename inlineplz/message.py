@@ -26,7 +26,7 @@ class Messages:
         # replace line numbers to improve deduping. we're commenting inline anyway,
         # so line numbers don't really matter
         if line > 1:
-            message = message.replace(str(line), "_")
+            message = " ".join(part for part in message.split(" ") if part != str(line))
         if (path, line) not in self.messages:
             try:
                 self.messages[(path, line)] = Message(path, line)
