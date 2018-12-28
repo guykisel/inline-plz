@@ -1,3 +1,4 @@
 enabled_linters:
     - coala
     - prospector
+autofix: true

@@ -1,24 +1,24 @@
 ignore_paths:
-  - node_modules
-  - vendors
-  - .tox
-  - .git
+    - node_modules
+    - vendors
+    - .tox
+    - .git
 enabled_linters:
-  - markdown
-  - eslint
-  - json
+    - markdown
+    - eslint
+    - json
 disabled_linters:
-  - bandit
-  - dockerfile_lint
-  - gherkin-lint
-  - gometalinter
-  - jscs
-  - jshint
-  - markdownlint-cli
-  - megacheck
-  - prospector
-  - robotframework-lint
-  - restructuredtext_lint
-  - shellcheck
-  - stylint
-  - yamllint
+    - bandit
+    - dockerfile_lint
+    - gherkin-lint
+    - gometalinter
+    - jscs
+    - jshint
+    - markdownlint-cli
+    - megacheck
+    - prospector
+    - robotframework-lint
+    - restructuredtext_lint
+    - shellcheck
+    - stylint
+    - yamllint

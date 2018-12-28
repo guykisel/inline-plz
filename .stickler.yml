@@ -3,15 +3,15 @@ linters:
         python: 3
         fixer: true
         max-line-length: 120
-        ignore: 'E1601,W503,E501'
+        ignore: "E1601,W503,E501"
     pep8:
         python: 3
-        ignore: 'E1601,W503,E501'
+        ignore: "E1601,W503,E501"
         max-line-length: 120
         fixer: true
 files:
     ignore:
-        - 'bower_components/*'
-        - 'node_modules/*'
+        - "bower_components/*"
+        - "node_modules/*"
 fixers:
     enable: true
