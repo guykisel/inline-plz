@@ -283,7 +283,9 @@ class LinterRunner:
                 if "text" in identify.tags_from_path(full_path):
                     if (
                         changed_filenames
-                        and os.path.abspath(os.path.normcase(full_path))
+                        and os.path.relpath(os.path.normcase(full_path))
+                        .replace("\\", "/")
+                        .strip()
                         not in changed_filenames
                     ):
                         continue
