@@ -25,7 +25,7 @@ from ..parsers.base import ParserBase
         "-P",
         "{config_dir}/.prospector.yaml",
     ],
-    dotfiles=[".prospector.yaml"],
+    dotfiles=[".prospector.yaml", ".prospector.yml"],
     language="python",
     autorun=True,
     run_per_file=False,
