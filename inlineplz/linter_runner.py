@@ -179,6 +179,7 @@ class LinterRunner:
     async def run_per_file(self, config):
         cmd = self.run_config(config)
         cmds_and_tasks = []
+        paths = set()
         per_file_limiter = None
         if config.get("concurrency"):
             per_file_limiter = asyncio.Semaphore(
@@ -187,7 +188,8 @@ class LinterRunner:
 
         for pattern in registry.PATTERNS.get(config.get("language")):
             for filepath in fnmatch.filter(self.all_filenames, pattern):
-                if "text" in identify.tags_from_path(filepath):
+                if "text" in identify.tags_from_path(filepath) and filepath not in paths:
+                    paths.add(filepath)
                     cmds_and_tasks.append(
                         (
                             cmd + [filepath],
