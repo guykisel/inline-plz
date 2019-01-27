@@ -188,7 +188,10 @@ class LinterRunner:
 
         for pattern in registry.PATTERNS.get(config.get("language")):
             for filepath in fnmatch.filter(self.all_filenames, pattern):
-                if "text" in identify.tags_from_path(filepath) and filepath not in paths:
+                if (
+                    "text" in identify.tags_from_path(filepath)
+                    and filepath not in paths
+                ):
                     paths.add(filepath)
                     cmds_and_tasks.append(
                         (
