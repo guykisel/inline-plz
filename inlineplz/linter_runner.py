@@ -45,6 +45,7 @@ class LinterRunner:
         self.trusted = trusted
 
         self.all_filenames = self.all_filenames_in_dir(filenames)
+        self.path_lock = dict()
 
         # Keep track of the parsed messages from all of the linters we're running
         self.messages = message.Messages()
@@ -64,12 +65,17 @@ class LinterRunner:
             value=multiprocessing.cpu_count(), loop=self.event_loop
         )
 
-    async def run_command(self, command, timeout=600, semaphore=None):  # noqa: MC0001
+    async def run_command(self, command, timeout=600, semaphore=None, path=None):  # noqa: MC0001
         print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
         if not semaphore:
-            semaphore = asyncio.Semaphore()
+            semaphore = asyncio.Lock(loop=self.event_loop)
+        # limit to
+        if path:
+            path_lock = self.path_lock.setdefault(path, asyncio.Lock(loop=self.event_loop))
+        else:
+            path_lock = asyncio.Lock(loop=self.event_loop)
 
         popen_kwargs = {
             "stdout": asyncio.subprocess.PIPE,
@@ -81,48 +87,49 @@ class LinterRunner:
             popen_kwargs["encoding"] = "utf-8"
 
         output = ""
-        async with semaphore:
-            async with self.process_limiter:
-                if sys.platform == "win32":
-                    proc = await asyncio.wait_for(
-                        asyncio.create_subprocess_shell(
-                            " ".join(command), loop=self.event_loop, **popen_kwargs
-                        ),
-                        timeout,
-                    )
-                else:
-                    try:
+        async with path_lock:
+            async with semaphore:
+                async with self.process_limiter:
+                    if sys.platform == "win32":
                         proc = await asyncio.wait_for(
-                            asyncio.create_subprocess_exec(
-                                *command, loop=self.event_loop, **popen_kwargs
+                            asyncio.create_subprocess_shell(
+                                " ".join(command), loop=self.event_loop, **popen_kwargs
                             ),
                             timeout,
                         )
-                    except FileNotFoundError:
-                        print(
-                            "{0} unable to execute because command {1} not found in PATH".format(
-                                command, command[0]
+                    else:
+                        try:
+                            proc = await asyncio.wait_for(
+                                asyncio.create_subprocess_exec(
+                                    *command, loop=self.event_loop, **popen_kwargs
+                                ),
+                                timeout,
                             )
-                        )
-                        return 1, ""
+                        except FileNotFoundError:
+                            print(
+                                "{0} unable to execute because command {1} not found in PATH".format(
+                                    command, command[0]
+                                )
+                            )
+                            return 1, ""
 
-                while True:
-                    try:
-                        line = await asyncio.wait_for(proc.stdout.readline(), timeout)
-                        # End of file will return empty
-                        if not line:
-                            break
-                        output += line.decode("utf-8", "replace")
-                        continue
-                    except asyncio.TimeoutError:
-                        print(
-                            "{0} timed out in {1} seconds while reading stdout:\n{2}".format(
-                                command, timeout, output
+                    while True:
+                        try:
+                            line = await asyncio.wait_for(proc.stdout.readline(), timeout)
+                            # End of file will return empty
+                            if not line:
+                                break
+                            output += line.decode("utf-8", "replace")
+                            continue
+                        except asyncio.TimeoutError:
+                            print(
+                                "{0} timed out in {1} seconds while reading stdout:\n{2}".format(
+                                    command, timeout, output
+                                )
                             )
-                        )
-                        proc.kill()
-                        output = output or ""
-                        return 1, output
+                            proc.kill()
+                            output = output or ""
+                            return 1, output
 
         try:
             return_code = await asyncio.wait_for(proc.wait(), timeout)
@@ -201,6 +208,7 @@ class LinterRunner:
                                     cmd + [filepath],
                                     timeout=60,
                                     semaphore=per_file_limiter,
+                                    path=filepath,
                                 ),
                                 loop=self.event_loop,
                             ),
