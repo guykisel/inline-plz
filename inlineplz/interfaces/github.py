@@ -257,23 +257,27 @@ class GitHubInterface(InterfaceBase):
             if self.email:
                 git.command("config", "--global", "user.email", self.email)
             git.command("checkout", self.branch)
+            files_added = 0
             for filename in self.filenames:
-                print("Adding {}".format(filename))
-                git.add(filename)
-            git.commit("Autofix by inline-plz")
-            print("Git pushing to {}".format(self.branch))
-            try:
-                git.push(self.branch)
-            except subprocess.CalledProcessError:
-                git.set_remote(
-                    "https://{}@{}/{}/{}.git".format(
-                        self.token, self.netloc, self.owner, self.repo
+                if os.path.getsize(filename) > 10:
+                    print("Adding {}".format(filename))
+                    git.add(filename)
+                    files_added += 1
+            if files_added:
+                git.commit("Autofix by inline-plz")
+                print("Git pushing to {}".format(self.branch))
+                try:
+                    git.push(self.branch)
+                except subprocess.CalledProcessError:
+                    git.set_remote(
+                        "https://{}@{}/{}/{}.git".format(
+                            self.token, self.netloc, self.owner, self.repo
+                        )
                     )
-                )
-                git.push(self.branch)
-            print("Successfully pushed - skipping message posting")
-            self.autofixed = True
-            return 1
+                    git.push(self.branch)
+                print("Successfully pushed - skipping message posting")
+                self.autofixed = True
+                return 1
 
         valid_errors = 0
         messages_posted = 0
@@ -301,7 +305,10 @@ class GitHubInterface(InterfaceBase):
             if not msg_position:
                 continue
 
-            if msg.path not in self.filenames or msg.path.split("/")[0] in self.ignore_paths:
+            if (
+                msg.path not in self.filenames
+                or msg.path.split("/")[0] in self.ignore_paths
+            ):
                 continue
 
             paths.setdefault(msg.path, 0)
