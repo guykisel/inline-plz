@@ -65,15 +65,15 @@ class LinterRunner:
             value=multiprocessing.cpu_count(), loop=self.event_loop
         )
 
-    async def run_command(
+    async def run_command(  # noqa: MC0001
         self, command, timeout=600, semaphore=None, path=None
-    ):  # noqa: MC0001
+    ):
         print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
         if not semaphore:
             semaphore = asyncio.Lock(loop=self.event_loop)
-        # limit to
+        # limit to running one command per file at a time to avoid file handle conflicts
         if path:
             path_lock = self.path_lock.setdefault(
                 path, asyncio.Lock(loop=self.event_loop)
