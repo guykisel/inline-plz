@@ -305,7 +305,10 @@ class GitHubInterface(InterfaceBase):
             if not msg_position:
                 continue
 
-            if msg.path not in self.filenames or msg.path.split("/")[0] in self.ignore_paths:
+            if (
+                msg.path not in self.filenames
+                or msg.path.split("/")[0] in self.ignore_paths
+            ):
                 continue
 
             paths.setdefault(msg.path, 0)

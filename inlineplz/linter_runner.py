@@ -65,7 +65,9 @@ class LinterRunner:
             value=multiprocessing.cpu_count(), loop=self.event_loop
         )
 
-    async def run_command(self, command, timeout=600, semaphore=None, path=None):  # noqa: MC0001
+    async def run_command(
+        self, command, timeout=600, semaphore=None, path=None
+    ):  # noqa: MC0001
         print("Running command: {}".format(" ".join(command)))
         sys.stdout.flush()
 
@@ -73,7 +75,9 @@ class LinterRunner:
             semaphore = asyncio.Lock(loop=self.event_loop)
         # limit to
         if path:
-            path_lock = self.path_lock.setdefault(path, asyncio.Lock(loop=self.event_loop))
+            path_lock = self.path_lock.setdefault(
+                path, asyncio.Lock(loop=self.event_loop)
+            )
         else:
             path_lock = asyncio.Lock(loop=self.event_loop)
 
@@ -115,7 +119,9 @@ class LinterRunner:
 
                     while True:
                         try:
-                            line = await asyncio.wait_for(proc.stdout.readline(), timeout)
+                            line = await asyncio.wait_for(
+                                proc.stdout.readline(), timeout
+                            )
                             # End of file will return empty
                             if not line:
                                 break
