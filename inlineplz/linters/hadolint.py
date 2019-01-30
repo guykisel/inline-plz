@@ -11,6 +11,7 @@ from ..parsers.base import ParserBase
     install=[
         ["cabal", "update"],
         ["cabal", "install", "hadolint"],
+        ["yum", "install", "hadolint"],
         ["apt-get", "install", "hadolint"],
         ["dnf", "install", "hadolint"],
         ["brew", "install", "hadolint"],
