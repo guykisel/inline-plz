@@ -21,6 +21,7 @@ install:
   - curl https://raw.githubusercontent.com/cs01/pipx/master/get-pipx.py | python || true
   - pip install tox-travis
   - pip install -r requirements_dev.txt
+  - pip install --upgrade twine 
   - python setup.py develop
 dist: xenial
 language: python
