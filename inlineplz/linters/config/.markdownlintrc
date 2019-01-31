@@ -20,5 +20,8 @@
   "no-trailing-punctuation": false,
   "header-style": false,
   "commands-show-output": false,
-  "first-line-h1": false
+  "first-line-h1": false,
+  "single-h1": false,
+  "first-heading-h1": false,
+  "no-emphasis-as-heading": false
 }
