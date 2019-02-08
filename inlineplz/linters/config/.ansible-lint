@@ -6,4 +6,3 @@ skip_list:
     - ANSIBLE0016
     - '206'
     - '204'
-
