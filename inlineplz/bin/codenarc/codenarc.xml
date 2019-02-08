@@ -138,7 +138,7 @@
     <rule class='org.codenarc.rule.exceptions.ExceptionExtendsThrowableRule'/>
     <rule class='org.codenarc.rule.exceptions.ExceptionNotThrownRule'/>
     <rule class='org.codenarc.rule.exceptions.MissingNewInThrowStatementRule'/>
-    <rule class='org.codenarc.rule.exceptions.ReturnNullFromCatchBlockRule'/>
+<!--     <rule class='org.codenarc.rule.exceptions.ReturnNullFromCatchBlockRule'/> -->
     <rule class='org.codenarc.rule.exceptions.SwallowThreadDeathRule'/>
 <!--     <rule class='org.codenarc.rule.exceptions.ThrowErrorRule'/> -->
 <!--     <rule class='org.codenarc.rule.exceptions.ThrowExceptionRule'/> -->
