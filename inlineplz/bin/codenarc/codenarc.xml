@@ -262,12 +262,12 @@
     <rule class='org.codenarc.rule.logging.MultipleLoggersRule'/>
     <rule class='org.codenarc.rule.logging.LoggingSwallowsStacktraceRule'/>
 
-    <rule class='org.codenarc.rule.naming.AbstractClassNameRule'/>
+<!--     <rule class='org.codenarc.rule.naming.AbstractClassNameRule'/>
     <rule class='org.codenarc.rule.naming.ClassNameRule'/>
     <rule class='org.codenarc.rule.naming.ClassNameSameAsFilenameRule'/>
     <rule class='org.codenarc.rule.naming.ClassNameSameAsSuperclassRule'/>
     <rule class='org.codenarc.rule.naming.ConfusingMethodNameRule'/>
-    <!--<rule class='org.codenarc.rule.naming.FactoryMethodNameRule'/>-->
+    <rule class='org.codenarc.rule.naming.FactoryMethodNameRule'/>
     <rule class='org.codenarc.rule.naming.FieldNameRule'/>
     <rule class='org.codenarc.rule.naming.InterfaceNameRule'/>
     <rule class='org.codenarc.rule.naming.MethodNameRule'/>
@@ -277,7 +277,7 @@
     <rule class='org.codenarc.rule.naming.ParameterNameRule'/>
     <rule class='org.codenarc.rule.naming.PropertyNameRule'/>
     <rule class='org.codenarc.rule.naming.VariableNameRule'/>
-    <rule class='org.codenarc.rule.naming.InterfaceNameSameAsSuperInterfaceRule'/>
+    <rule class='org.codenarc.rule.naming.InterfaceNameSameAsSuperInterfaceRule'/> -->
 
     <rule class='org.codenarc.rule.security.NonFinalSubclassOfSensitiveInterfaceRule'/>
     <rule class='org.codenarc.rule.security.InsecureRandomRule'/>
