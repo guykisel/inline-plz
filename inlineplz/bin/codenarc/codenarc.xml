@@ -254,7 +254,7 @@
     <rule class='org.codenarc.rule.junit.UseAssertSameInsteadOfAssertTrueRule'/>
 
     <rule class='org.codenarc.rule.logging.LoggerForDifferentClassRule'/>
-    <rule class='org.codenarc.rule.logging.PrintlnRule'/>
+<!--     <rule class='org.codenarc.rule.logging.PrintlnRule'/> -->
     <rule class='org.codenarc.rule.logging.PrintStackTraceRule'/>
     <rule class='org.codenarc.rule.logging.SystemErrPrintRule'/>
     <rule class='org.codenarc.rule.logging.SystemOutPrintRule'/>
