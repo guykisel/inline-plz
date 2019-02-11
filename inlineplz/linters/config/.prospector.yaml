@@ -32,12 +32,20 @@ pylint:
         - logging-format-interpolation
         - logging-fstring-interpolation
         - too-many-locals
+        - invalid-name
+        - logging-not-lazy
+        - wrong-import-position
+        - bad-whitespace
+        - missing-final-newline
 
 pep8:
     full: true
     disable:
         - E126
         - E501
+        - N806
+        - W391
+        - E121
 
 pep257:
     disable:
