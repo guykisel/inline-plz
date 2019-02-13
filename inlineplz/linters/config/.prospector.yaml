@@ -40,6 +40,8 @@ pylint:
         - pointless-string-statement
         - no-self-use
         - useless-object-inheritance
+        - wrong-import-order
+        - trailing-newlines
 
 pep8:
     full: true
