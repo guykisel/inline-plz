@@ -37,6 +37,9 @@ pylint:
         - wrong-import-position
         - bad-whitespace
         - missing-final-newline
+        - pointless-string-statement
+        - no-self-use
+        - useless-object-inheritance
 
 pep8:
     full: true
@@ -46,6 +49,8 @@ pep8:
         - N806
         - W391
         - E121
+        - E302
+        - E128
 
 pep257:
     disable:
