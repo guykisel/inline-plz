@@ -79,4 +79,4 @@ pyroma:
         - PYR16
 
 vulture:
-    run: true
+    run: false
