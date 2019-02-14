@@ -53,6 +53,7 @@ pep8:
         - E121
         - E302
         - E128
+        - W293
 
 pep257:
     disable:
