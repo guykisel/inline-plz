@@ -10,24 +10,24 @@ ignore: |
 
 rules:
   braces:
-    level: warning
+    level: disable
     max-spaces-inside: 1
   brackets:
-    level: warning
+    level: disable
     max-spaces-inside: 1
   colons:
-    level: warning
+    level: disable
   commas:
-    level: warning
+    level: disable
   comments: disable
   comments-indentation: disable
   document-start: disable
   empty-lines:
-    level: warning
+    level: disable
   hyphens:
-    level: warning
+    level: disable
   indentation:
-    level: warning
+    level: disable
     indent-sequences: consistent
   trailing-spaces: disable
   new-line-at-end-of-file: disable
