@@ -58,6 +58,7 @@ pep8:
         - N803
 
 pep257:
+    run: false
     disable:
         - D000
         - D100
