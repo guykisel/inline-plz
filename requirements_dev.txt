@@ -2,14 +2,14 @@
 bump2version==0.5.10
 wheel==0.33.0
 watchdog==0.9.0
-flake8==3.7.5
+flake8==3.7.6
 tox==3.7.0
 coverage==4.5.2
 Sphinx==1.8.4
 # only used for setup script
 # cryptography==1.0.1
 py==1.7.0
-pytest==4.2.1
+pytest==4.3.0
 PyYAML==3.13
 prospector[with_everything]==1.1.6.2
 python-dateutil>=2.6.0
