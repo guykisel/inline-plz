@@ -37,6 +37,11 @@ pylint:
         - wrong-import-position
         - bad-whitespace
         - missing-final-newline
+        - pointless-string-statement
+        - no-self-use
+        - useless-object-inheritance
+        - wrong-import-order
+        - trailing-newlines
 
 pep8:
     full: true
@@ -46,8 +51,14 @@ pep8:
         - N806
         - W391
         - E121
+        - E302
+        - E128
+        - W293
+        - N802
+        - N803
 
 pep257:
+    run: false
     disable:
         - D000
         - D100
@@ -72,4 +83,4 @@ pyroma:
         - PYR16
 
 vulture:
-    run: true
+    run: false
