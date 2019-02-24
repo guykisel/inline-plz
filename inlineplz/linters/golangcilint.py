@@ -9,7 +9,7 @@ from ..parsers.base import ParserBase
 @linter(
     name="golangci-lint",
     install=[
-        ["go", "get", "-u", "github.com/golangci/golangci-lint/cmd/golangci-lint"],
+        ["go", "get", "-u", "github.com/golangci/golangci-lint/cmd/golangci-lint"]
     ],
     help_cmd=["golangci-lint", "--help"],
     run=[
@@ -20,7 +20,7 @@ from ..parsers.base import ParserBase
         "--max-issues-per-linter",
         "0",
         "--max-same-issues",
-        "0"
+        "0",
     ],
     rundefault=[
         "golangci-lint",
@@ -28,11 +28,9 @@ from ..parsers.base import ParserBase
         "--config",
         "{config_dir}/.golangci.yml",
         "--out-format",
-        "json"
+        "json",
     ],
-    dotfiles=[".golangci.yml",
-              ".golangci.toml",
-              ".golangci.json"],
+    dotfiles=[".golangci.yml", ".golangci.toml", ".golangci.json"],
     language="go",
     autorun=True,
     run_per_file=False,
