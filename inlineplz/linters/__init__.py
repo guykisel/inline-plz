@@ -20,6 +20,7 @@ from ..linters.eclint import ECLintParser  # NOQA
 from ..linters.eslint import ESLintParser  # NOQA
 from ..linters.gherkinlint import GherkinLintParser  # NOQA
 from ..linters.gofmt import GofmtParser  # NOQA
+from ..linters.golangcilint import GolangcilintParser  # NOQA
 from ..linters.gometalinter import GometalinterParser  # NOQA
 from ..linters.isort import IsortParser  # NOQA
 from ..linters.hadolint import HadolintParser  # NOQA
