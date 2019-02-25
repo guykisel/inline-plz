@@ -32,7 +32,7 @@ from ..parsers.base import ParserBase
     ],
     dotfiles=[".golangci.yml", ".golangci.toml", ".golangci.json"],
     language="go",
-    autorun=True,
+    autorun=False,
     run_per_file=False,
 )
 class GolangcilintParser(ParserBase):
