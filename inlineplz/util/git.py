@@ -109,25 +109,19 @@ def clone(url, dir=None, token=None, ref=None):
         dir = os.getcwd()
     if token:
         # https://github.com/blog/1270-easier-builds-and-deployments-using-git-over-https-and-oauth
-        url = url.replace('https://', 'https://{}@'.format(token))
-    print('Cloning: {}'.format(url))
+        url = url.replace("https://", "https://{}@".format(token))
+    print("Cloning: {}".format(url))
     try:
         os.makedirs(dir)
     except OSError:
         pass
     try:
-        subprocess.check_call(
-            ['git', 'init'],
-            cwd=dir
-        )
+        subprocess.check_call(["git", "init"], cwd=dir)
 
-        pull_cmd = ['git', 'pull', url]
+        pull_cmd = ["git", "pull", url]
         if ref:
             pull_cmd.append(ref)
-        subprocess.check_call(
-            pull_cmd,
-            cwd=dir
-        )
+        subprocess.check_call(pull_cmd, cwd=dir)
         return True
     except subprocess.CalledProcessError:
         return False
@@ -136,8 +130,8 @@ def clone(url, dir=None, token=None, ref=None):
 def clone_dotfiles(url, org, token=None):
     dotfile_dir = tempfile.mkdtemp()
     for repo in ["dotfiles", ".dotfiles", ".github"]:
-        clone_url = '/'.join([url, org, repo]) + '.git'
-        print('Cloning: {}'.format(clone_url))
+        clone_url = "/".join([url, org, repo]) + ".git"
+        print("Cloning: {}".format(clone_url))
         dotfile_path = os.path.join(dotfile_dir, repo)
         if clone(clone_url, dotfile_path, token):
             return dotfile_path
