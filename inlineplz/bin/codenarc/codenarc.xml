@@ -149,12 +149,12 @@
     <!--<rule class='org.codenarc.rule.formatting.BlankLineBeforePackageRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.BlockEndsWithBlankLineRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.BlockStartsWithBlankLineRule'/>-->
-    <rule class='org.codenarc.rule.formatting.BracesForClassRule'/>
+<!--     <rule class='org.codenarc.rule.formatting.BracesForClassRule'/>
     <rule class='org.codenarc.rule.formatting.BracesForForLoopRule'/>
     <rule class='org.codenarc.rule.formatting.BracesForIfElseRule'/>
     <rule class='org.codenarc.rule.formatting.BracesForMethodRule'/>
     <rule class='org.codenarc.rule.formatting.BracesForTryCatchFinallyRule'/>
-    <rule class='org.codenarc.rule.formatting.ClosureStatementOnOpeningLineOfMultipleLineClosureRule'/>
+    <rule class='org.codenarc.rule.formatting.ClosureStatementOnOpeningLineOfMultipleLineClosureRule'/> -->
     <!--<rule class='org.codenarc.rule.formatting.ConsecutiveBlankLinesRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.FileEndsWithoutNewlineRule'/>-->
     <!--<rule class='org.codenarc.rule.formatting.IndentationRule'/>-->
