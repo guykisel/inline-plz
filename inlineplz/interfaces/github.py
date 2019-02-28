@@ -296,12 +296,6 @@ class GitHubInterface(InterfaceBase):
             self.stopped_early = True
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
-            # rate limit
-            if system.should_stop() or self.out_of_date():
-                print("Stopping early.")
-                self.stopped_early = True
-                break
-
             if not msg.comments:
                 continue
 
@@ -320,12 +314,14 @@ class GitHubInterface(InterfaceBase):
             valid_errors += 1
             self.messages_in_files.setdefault(msg.path, []).append((msg, msg_position))
             if self.is_duplicate(msg, msg_position):
+                print("Dupe comment at {}:{}".format(msg.path, msg_position))
                 msg.status = "DUPLICATE"
                 continue
 
             msg_at_position = self.message_at_position(msg, msg_position)
             if msg_at_position:
                 try:
+                    print("Trying to edit comment at {}:{}".format(msg.path, msg_position))
                     msg_at_position.edit(self.format_message(msg))
                     print("Comment edited successfully: {0}".format(msg))
                     msg.status = "EDITED"
@@ -338,6 +334,7 @@ class GitHubInterface(InterfaceBase):
                     pass
 
             try:
+                print("Trying to post comment at {}:{}".format(msg.path, msg_position))
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
@@ -352,7 +349,8 @@ class GitHubInterface(InterfaceBase):
             paths[msg.path] += 1
             messages_posted += 1
             time.sleep(0.1)
-            if max_comments and messages_posted > max_comments:
+            if (max_comments and messages_posted > max_comments) or system.should_stop() or self.out_of_date():
+                print("Stopping early.")
                 self.stopped_early = True
                 break
 
