@@ -34,6 +34,7 @@ def main():
     parser.add_argument("--install", action="store_true")
     parser.add_argument("--prefix", type=str, default="[inline-plz]")
     parser.add_argument("--delete-outdated", action="store_true")
+    parser.add_argument("--set-status", action="store_true")
     parser.add_argument(
         "--trusted", action="store_true", help="allow installing all local dependencies"
     )
@@ -209,6 +210,7 @@ def inline(args):
             args.ignore_paths,
             args.prefix,
             args.autofix,
+            args.set_status,
         )
         if not my_interface.is_valid():
             print("Invalid review. Exiting.")
