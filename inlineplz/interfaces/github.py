@@ -87,8 +87,7 @@ class GitHubInterface(InterfaceBase):
         self.repo = repo
 
         self.github_repo = self.github.repository(self.owner, self.repo)
-        all_commits = self.repo_commits(self.github_repo)
-        self.master_sha = all_commits[0].sha
+        self.master_sha = self.repo_commits(self.github_repo, self.github_repo.default_branch, 1)[0].sha
         print("Master SHA: {0}".format(self.master_sha))
         print("Branch: {0}".format(branch))
         self.branch = branch
@@ -193,13 +192,13 @@ class GitHubInterface(InterfaceBase):
             return [c for c in pull_request.iter_commits()]
 
     @staticmethod
-    def repo_commits(repo):
+    def repo_commits(repo, sha, number):
         # github3 has naming/compatibility issues
         try:
-            return [c for c in repo.commits()]
+            return [c for c in repo.commits(sha=sha, number=number)]
 
         except (AttributeError, TypeError):
-            return [c for c in repo.iter_commits()]
+            return [c for c in repo.iter_commits(sha=sha, number=number)]
 
     def start_review(self):
         """Mark our review as started."""
