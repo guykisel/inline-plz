@@ -236,7 +236,9 @@ class GitHubInterface(InterfaceBase):
         try:
             latest_remote_sha = self.pr_commits(self.pull_request.refresh(True))[-1].sha
             print("Latest remote sha: {}".format(latest_remote_sha))
-            print("Ratelimit remaining: {}".format(self.pull_request.ratelimit_remaining))
+            print(
+                "Ratelimit remaining: {}".format(self.pull_request.ratelimit_remaining)
+            )
             return self.last_sha != latest_remote_sha
         except IndexError:
             return False
