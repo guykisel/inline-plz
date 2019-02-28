@@ -27,6 +27,7 @@ class GitHubInterface(InterfaceBase):
         ignore_paths=None,
         prefix=None,
         autofix=False,
+        set_status=False,
     ):
         """
         GitHubInterface lets us post messages to GitHub.
@@ -51,6 +52,7 @@ class GitHubInterface(InterfaceBase):
         self.autofix = autofix
         self.ignore_paths = set(ignore_paths or [])
         self.token = token
+        self.set_status = set_status
         url = url or "https://github.com"
         print("url={}".format(url))
         self.netloc = urlparse(url).netloc.strip()
@@ -201,36 +203,38 @@ class GitHubInterface(InterfaceBase):
 
     def start_review(self):
         """Mark our review as started."""
-        self.github_repo.create_status(
-            state="pending",
-            description="Static analysis in progress.",
-            context="inline-plz",
-            sha=self.last_sha,
-        )
+        if self.set_status:
+            self.github_repo.create_status(
+                state="pending",
+                description="Static analysis in progress.",
+                context="inline-plz",
+                sha=self.last_sha,
+            )
 
     def finish_review(self, success=True, error=False):
         """Mark our review as finished."""
-        if error:
-            self.github_repo.create_status(
-                state="error",
-                description="Static analysis error! inline-plz failed to run.",
-                context="inline-plz",
-                sha=self.last_sha,
-            )
-        elif success:
-            self.github_repo.create_status(
-                state="success",
-                description="Static analysis complete! No errors found in your PR.",
-                context="inline-plz",
-                sha=self.last_sha,
-            )
-        else:
-            self.github_repo.create_status(
-                state="failure",
-                description="Static analysis complete! Found errors in your PR.",
-                context="inline-plz",
-                sha=self.last_sha,
-            )
+        if self.set_status:
+            if error:
+                self.github_repo.create_status(
+                    state="error",
+                    description="Static analysis error! inline-plz failed to run.",
+                    context="inline-plz",
+                    sha=self.last_sha,
+                )
+            elif success:
+                self.github_repo.create_status(
+                    state="success",
+                    description="Static analysis complete! No errors found in your PR.",
+                    context="inline-plz",
+                    sha=self.last_sha,
+                )
+            else:
+                self.github_repo.create_status(
+                    state="failure",
+                    description="Static analysis complete! Found errors in your PR.",
+                    context="inline-plz",
+                    sha=self.last_sha,
+                )
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
