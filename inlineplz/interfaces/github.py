@@ -152,10 +152,8 @@ class GitHubInterface(InterfaceBase):
         print("Target Branch: {0}".format(self.target_branch))
         print("Head SHA: {0}".format(self.sha))
         print("Head Branch: {0}".format(self.branch))
-        self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
         print("Last SHA: {0}".format(self.last_sha))
-        self.first_sha = self.commits[0].sha
         self.diff = git.diff(self.target_sha, self.last_sha)
         self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
@@ -181,13 +179,13 @@ class GitHubInterface(InterfaceBase):
         return self.pull_request_number is not None
 
     @staticmethod
-    def pr_commits(pull_request, since=None):
+    def pr_commits(pull_request, number=-1, since=None):
         # github3 has naming/compatibility issues
         try:
-            return [c for c in pull_request.commits(since=since)]
+            return [c for c in pull_request.commits(number=number)]
 
         except (AttributeError, TypeError):
-            return [c for c in pull_request.iter_commits(since=since)]
+            return [c for c in pull_request.iter_commits(number=number, since=since)]
 
     @staticmethod
     def repo_commits(repo, sha, number):
@@ -239,7 +237,7 @@ class GitHubInterface(InterfaceBase):
             self.owner, self.repo, self.pull_request_number
         )
         try:
-            latest_remote_sha = self.pr_commits(pull_request, since=self.start)[-1].sha
+            latest_remote_sha = self.pr_commits(pull_request, number=1, since=self.start)[-1].sha
             return self.last_sha != latest_remote_sha
         except IndexError:
             return False
