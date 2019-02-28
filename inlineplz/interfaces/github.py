@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import os
 import random
 import subprocess
@@ -45,6 +46,7 @@ class GitHubInterface(InterfaceBase):
 
         ignore_paths are paths to ignore comments from
         """
+        self.start = datetime.datetime.now()
         self.github = None
         self.stopped_early = False
         self.autofixed = False
@@ -87,10 +89,6 @@ class GitHubInterface(InterfaceBase):
         self.repo = repo
 
         self.github_repo = self.github.repository(self.owner, self.repo)
-        self.master_sha = self.repo_commits(
-            self.github_repo, self.github_repo.default_branch, 1
-        )[0].sha
-        print("Master SHA: {0}".format(self.master_sha))
         print("Branch: {0}".format(branch))
         self.branch = branch
         self.pull_request_number = None
@@ -137,8 +135,6 @@ class GitHubInterface(InterfaceBase):
         self.target_branch = self.pull_request.base.ref
         self.sha = self.pull_request.head.sha
         self.branch = self.pull_request.head.ref
-        # if ":" in self.branch:
-        #     self.branch = self.branch.split(":")[-1]
         try:
             # github.py == 0.9.6
             try:
@@ -185,13 +181,13 @@ class GitHubInterface(InterfaceBase):
         return self.pull_request_number is not None
 
     @staticmethod
-    def pr_commits(pull_request):
+    def pr_commits(pull_request, since=None):
         # github3 has naming/compatibility issues
         try:
-            return [c for c in pull_request.commits()]
+            return [c for c in pull_request.commits(since=since)]
 
         except (AttributeError, TypeError):
-            return [c for c in pull_request.iter_commits()]
+            return [c for c in pull_request.iter_commits(since=since)]
 
     @staticmethod
     def repo_commits(repo, sha, number):
@@ -242,8 +238,11 @@ class GitHubInterface(InterfaceBase):
         pull_request = self.github.pull_request(
             self.owner, self.repo, self.pull_request_number
         )
-        latest_remote_sha = self.pr_commits(pull_request)[-1].sha
-        return self.last_sha != latest_remote_sha
+        try:
+            latest_remote_sha = self.pr_commits(pull_request, since=self.start)[-1].sha
+            return self.last_sha != latest_remote_sha
+        except IndexError:
+            return False
 
     def post_messages(self, messages, max_comments):
         if not self.github:
