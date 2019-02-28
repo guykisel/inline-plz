@@ -233,11 +233,10 @@ class GitHubInterface(InterfaceBase):
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
-        pull_request = self.github.pull_request(
-            self.owner, self.repo, self.pull_request_number
-        )
         try:
-            latest_remote_sha = self.pr_commits(pull_request, number=1, since=self.start)[-1].sha
+            latest_remote_sha = self.pr_commits(self.pull_request.refresh(True), since=self.start)[-1].sha
+            print("Latest remote sha: {}".format(latest_remote_sha))
+            print("Ratelimit remaining: {}".format(self.pull_request.ratelimit_remaining))
             return self.last_sha != latest_remote_sha
         except IndexError:
             return False
