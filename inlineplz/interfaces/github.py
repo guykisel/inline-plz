@@ -87,7 +87,9 @@ class GitHubInterface(InterfaceBase):
         self.repo = repo
 
         self.github_repo = self.github.repository(self.owner, self.repo)
-        self.master_sha = self.repo_commits(self.github_repo, self.github_repo.default_branch, 1)[0].sha
+        self.master_sha = self.repo_commits(
+            self.github_repo, self.github_repo.default_branch, 1
+        )[0].sha
         print("Master SHA: {0}".format(self.master_sha))
         print("Branch: {0}".format(branch))
         self.branch = branch
@@ -320,7 +322,9 @@ class GitHubInterface(InterfaceBase):
             msg_at_position = self.message_at_position(msg, msg_position)
             if msg_at_position:
                 try:
-                    print("Trying to edit comment at {}:{}".format(msg.path, msg_position))
+                    print(
+                        "Trying to edit comment at {}:{}".format(msg.path, msg_position)
+                    )
                     msg_at_position.edit(self.format_message(msg))
                     print("Comment edited successfully: {0}".format(msg))
                     msg.status = "EDITED"
@@ -348,7 +352,11 @@ class GitHubInterface(InterfaceBase):
             paths[msg.path] += 1
             messages_posted += 1
             time.sleep(0.1)
-            if (max_comments and messages_posted > max_comments) or system.should_stop() or self.out_of_date():
+            if (
+                (max_comments and messages_posted > max_comments)
+                or system.should_stop()
+                or self.out_of_date()
+            ):
                 print("Stopping early.")
                 self.stopped_early = True
                 break
