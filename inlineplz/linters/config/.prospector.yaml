@@ -6,16 +6,10 @@ test-warnings: false
 
 ignore-paths:
     - docs/
-    - node_modules/
-    - node_modules\\\\
-    - node_modules\\
-    - node_modules\
 
 ignore-patterns:
     - (^|/)docs(/|$)
-    - (^|/|\\|\\\\)node_modules(\\\\|\\|/|$)
-    - ^node_modules?/?
-    - /node_modules?(/|$)
+    - .*node_modules.*
 
 pylint:
     disable:
@@ -44,37 +38,10 @@ pylint:
         - trailing-newlines
 
 pep8:
-    full: true
-    disable:
-        - E126
-        - E501
-        - N806
-        - W391
-        - E121
-        - E302
-        - E128
-        - W293
-        - N802
-        - N803
+    run: false
 
 pep257:
     run: false
-    disable:
-        - D000
-        - D100
-        - D101
-        - D102
-        - D103
-        - D105
-        - D107
-        - D203
-        - D205
-        - D212
-        - D213
-        - D400
-        - D401
-        - D403
-        - D404
 
 pyroma:
     run: true
