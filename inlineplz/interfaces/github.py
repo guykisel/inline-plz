@@ -179,13 +179,13 @@ class GitHubInterface(InterfaceBase):
         return self.pull_request_number is not None
 
     @staticmethod
-    def pr_commits(pull_request, number=-1, since=None):
+    def pr_commits(pull_request, number=-1):
         # github3 has naming/compatibility issues
         try:
             return [c for c in pull_request.commits(number=number)]
 
         except (AttributeError, TypeError):
-            return [c for c in pull_request.iter_commits(number=number, since=since)]
+            return [c for c in pull_request.iter_commits(number=number)]
 
     @staticmethod
     def repo_commits(repo, sha, number):
@@ -234,7 +234,7 @@ class GitHubInterface(InterfaceBase):
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
         try:
-            latest_remote_sha = self.pr_commits(self.pull_request.refresh(True), since=self.start)[-1].sha
+            latest_remote_sha = self.pr_commits(self.pull_request.refresh(True))[-1].sha
             print("Latest remote sha: {}".format(latest_remote_sha))
             print("Ratelimit remaining: {}".format(self.pull_request.ratelimit_remaining))
             return self.last_sha != latest_remote_sha
