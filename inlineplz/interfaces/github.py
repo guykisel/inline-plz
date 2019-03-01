@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import datetime
 import os
 import random
 import subprocess
@@ -45,6 +46,7 @@ class GitHubInterface(InterfaceBase):
 
         ignore_paths are paths to ignore comments from
         """
+        self.start = datetime.datetime.now()
         self.github = None
         self.stopped_early = False
         self.autofixed = False
@@ -87,9 +89,6 @@ class GitHubInterface(InterfaceBase):
         self.repo = repo
 
         self.github_repo = self.github.repository(self.owner, self.repo)
-        all_commits = self.repo_commits(self.github_repo)
-        self.master_sha = all_commits[0].sha
-        print("Master SHA: {0}".format(self.master_sha))
         print("Branch: {0}".format(branch))
         self.branch = branch
         self.pull_request_number = None
@@ -136,8 +135,6 @@ class GitHubInterface(InterfaceBase):
         self.target_branch = self.pull_request.base.ref
         self.sha = self.pull_request.head.sha
         self.branch = self.pull_request.head.ref
-        # if ":" in self.branch:
-        #     self.branch = self.branch.split(":")[-1]
         try:
             # github.py == 0.9.6
             try:
@@ -155,10 +152,8 @@ class GitHubInterface(InterfaceBase):
         print("Target Branch: {0}".format(self.target_branch))
         print("Head SHA: {0}".format(self.sha))
         print("Head Branch: {0}".format(self.branch))
-        self.commits = self.pr_commits(self.pull_request)
         self.last_sha = commit or git.current_sha()
         print("Last SHA: {0}".format(self.last_sha))
-        self.first_sha = self.commits[0].sha
         self.diff = git.diff(self.target_sha, self.last_sha)
         self.patch = unidiff.PatchSet(self.diff.split("\n"))
         self.review_comments = list(self.pull_request.review_comments())
@@ -184,22 +179,22 @@ class GitHubInterface(InterfaceBase):
         return self.pull_request_number is not None
 
     @staticmethod
-    def pr_commits(pull_request):
+    def pr_commits(pull_request, number=-1):
         # github3 has naming/compatibility issues
         try:
-            return [c for c in pull_request.commits()]
+            return [c for c in pull_request.commits(number=number)]
 
         except (AttributeError, TypeError):
-            return [c for c in pull_request.iter_commits()]
+            return [c for c in pull_request.iter_commits(number=number)]
 
     @staticmethod
-    def repo_commits(repo):
+    def repo_commits(repo, sha, number):
         # github3 has naming/compatibility issues
         try:
-            return [c for c in repo.commits()]
+            return [c for c in repo.commits(sha=sha, number=number)]
 
         except (AttributeError, TypeError):
-            return [c for c in repo.iter_commits()]
+            return [c for c in repo.iter_commits(sha=sha, number=number)]
 
     def start_review(self):
         """Mark our review as started."""
@@ -238,11 +233,15 @@ class GitHubInterface(InterfaceBase):
 
     def out_of_date(self):
         """Check if our local latest sha matches the remote latest sha"""
-        pull_request = self.github.pull_request(
-            self.owner, self.repo, self.pull_request_number
-        )
-        latest_remote_sha = self.pr_commits(pull_request)[-1].sha
-        return self.last_sha != latest_remote_sha
+        try:
+            latest_remote_sha = self.pr_commits(self.pull_request.refresh(True))[-1].sha
+            print("Latest remote sha: {}".format(latest_remote_sha))
+            print(
+                "Ratelimit remaining: {}".format(self.pull_request.ratelimit_remaining)
+            )
+            return self.last_sha != latest_remote_sha
+        except IndexError:
+            return False
 
     def post_messages(self, messages, max_comments):
         if not self.github:
@@ -296,12 +295,6 @@ class GitHubInterface(InterfaceBase):
             self.stopped_early = True
         print("Considering {} messages for posting.".format(len(messages)))
         for msg in messages:
-            # rate limit
-            if system.should_stop() or self.out_of_date():
-                print("Stopping early.")
-                self.stopped_early = True
-                break
-
             if not msg.comments:
                 continue
 
@@ -320,12 +313,16 @@ class GitHubInterface(InterfaceBase):
             valid_errors += 1
             self.messages_in_files.setdefault(msg.path, []).append((msg, msg_position))
             if self.is_duplicate(msg, msg_position):
+                print("Dupe comment at {}:{}".format(msg.path, msg_position))
                 msg.status = "DUPLICATE"
                 continue
 
             msg_at_position = self.message_at_position(msg, msg_position)
             if msg_at_position:
                 try:
+                    print(
+                        "Trying to edit comment at {}:{}".format(msg.path, msg_position)
+                    )
                     msg_at_position.edit(self.format_message(msg))
                     print("Comment edited successfully: {0}".format(msg))
                     msg.status = "EDITED"
@@ -338,6 +335,7 @@ class GitHubInterface(InterfaceBase):
                     pass
 
             try:
+                print("Trying to post comment at {}:{}".format(msg.path, msg_position))
                 self.pull_request.create_review_comment(
                     self.format_message(msg), self.last_sha, msg.path, msg_position
                 )
@@ -352,7 +350,12 @@ class GitHubInterface(InterfaceBase):
             paths[msg.path] += 1
             messages_posted += 1
             time.sleep(0.1)
-            if max_comments and messages_posted > max_comments:
+            if (
+                (max_comments and messages_posted > max_comments)
+                or system.should_stop()
+                or self.out_of_date()
+            ):
+                print("Stopping early.")
                 self.stopped_early = True
                 break
 
