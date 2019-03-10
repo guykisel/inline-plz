@@ -44,7 +44,7 @@ module.exports = {
     //
     // Reasons: stylistic
     // See http://eslint.org/docs/rules/camelcase
-    "camelcase" : [2, {"properties": "never"}],
+    //"camelcase" : [2, {"properties": "never"}],
 
     // Require use of === and !== to avoid problematic
     // type coercion
@@ -73,7 +73,7 @@ module.exports = {
     //
     // Reasons: safety, stylistic, readability
     // See http://eslint.org/docs/rules/curly
-    "curly" : 2,
+    //"curly" : 2,
 
     // Prevent extension of built-in objects.
     //
@@ -92,21 +92,21 @@ module.exports = {
     //
     // Reasons: stylistic, consistency
     // See http://eslint.org/docs/rules/indent
-    "indent" : [2, 2], // {int} Number of spaces to use for indentation
+    //"indent" : [2, 2], // {int} Number of spaces to use for indentation
 
     // Require that `new`-able objects are represented
     // by a symbol with a capital letter
     //
     // Reasons: stylistic
     // See http://eslint.org/docs/rules/new-cap
-    "new-cap" : 2, // true: Require capitalization of all constructor functions e.g. `new F()`
+    //"new-cap" : 2, // true: Require capitalization of all constructor functions e.g. `new F()`
 
     // Require that parentheses are used when `new`-ing a
     // constructor, even if the constructor has no arguments.
     //
     // Reasons: stylistic
     // See http://eslint.org/docs/rules/new-parens
-    "new-parens": 2,
+    //"new-parens": 2,
 
     // Forbid use of `new` without assigning the result
     //
@@ -125,7 +125,7 @@ module.exports = {
     //
     // Reasons: stylistic
     // See http://eslint.org/docs/rules/no-trailing-spaces
-    "no-trailing-spaces": 2,
+    //"no-trailing-spaces": 2,
 
     // Limit arity of functions. While you may occasionally
     // need to create a function with higher arity than recommended,
@@ -172,32 +172,32 @@ module.exports = {
     //
     // Reasons: stylistic
     // See http://eslint.org/docs/rules/no-mixed-spaces-and-tabs
-    "no-mixed-spaces-and-tabs": [2, true],
+    //"no-mixed-spaces-and-tabs": [2, true],
 
     // Require space after:
     // if, else, for, while, do, switch, try, catch, finally, and with.
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/keyword-spacing
-    "keyword-spacing": [2],
+    //"keyword-spacing": [2],
 
     // Require spaces around operators
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/space-infix-ops
-    "space-infix-ops": 2,
+    //"space-infix-ops": 2,
 
     // Forbid spaces between function name and parens when calling
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/no-spaced-func
-    "no-spaced-func": 2,
+    //"no-spaced-func": 2,
 
     // Require commas at end of line, never start
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/comma-style
-    "comma-style": [2, "last"],
+    //"comma-style": [2, "last"],
 
     // Require linefeed at end of file
     //
@@ -209,64 +209,64 @@ module.exports = {
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/consistent-this
-    "consistent-this": [2, "self"],
+    //"consistent-this": [2, "self"],
 
     // Require no space between function and open parenthsis
     //
     // Reasons: readability, stylistic
     // See http://eslint.org/docs/rules/space-before-function-paren
-    "space-before-function-paren": [2, "never"],
+    //"space-before-function-paren": [2, "never"],
 
     // Braces should start on the same line as the corresponidng
     // statement or decleration.
     //
     // Reason: readability, stylistic
     // See http://eslint.org/docs/rules/brace-style
-    "brace-style": [2, "1tbs", { "allowSingleLine": true }],
+    //"brace-style": [2, "1tbs", { "allowSingleLine": true }],
 
     // Require space before blocks
     //
     // Reason: readability, stylistic
     // See: http://eslint.org/docs/rules/space-before-blocks
-    "space-before-blocks": [2, { "functions": "always", "keywords": "always", "classes": "always" }],
+    //"space-before-blocks": [2, { "functions": "always", "keywords": "always", "classes": "always" }],
 
     // Disallow spaces directly after '(' and before ')'
     //
     // Reason: readability, stylistic
     // See http://eslint.org/docs/rules/space-in-parens
-    "space-in-parens": [2, "never"],
+    //"space-in-parens": [2, "never"],
 
     // Disallow spaces inside of curly braces in objects
     //
     // Reason: stylistic
     // See http://eslint.org/docs/rules/object-curly-spacing
-    "object-curly-spacing": [2, "never"],
+    //"object-curly-spacing": [2, "never"],
 
     // Disallow spaces inside of computed properties
     //
     // Reason: stylistic
     // See http://eslint.org/docs/rules/computed-property-spacing
-    "computed-property-spacing": [2, "never"],
+    //"computed-property-spacing": [2, "never"],
 
     // Disallow spaces inside of brackets
     //
     // Reason: stylistic
     // See http://eslint.org/docs/rules/array-bracket-spacing
-    "array-bracket-spacing": [2, "never"],
+    //"array-bracket-spacing": [2, "never"],
 
     // Disallow space before comma and require space after comma
     //
     // Reason: readability, stylistic
     // See http://eslint.org/docs/rules/comma-spacing
-    "comma-spacing": [2, {"before": false, "after": true}],
+    //"comma-spacing": [2, {"before": false, "after": true}],
 
     // Disallow space before semicolon and require space after semicolon
     //
     // Reason: readability, stylistic
     // http://eslint.org/docs/rules/semi-spacing
-     "semi-spacing": [2, {"before": false, "after": true}],
+     //"semi-spacing": [2, {"before": false, "after": true}],
 
-     "no-console": "warn"
+     //"no-console": "warn"
   }
 
 }
