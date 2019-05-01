@@ -9,7 +9,7 @@ Sphinx==2.0.1
 # only used for setup script
 # cryptography==1.0.1
 py==1.8.0
-pytest==4.3.0
+pytest==4.4.1
 PyYAML==3.13
 prospector[with_everything]==1.1.6.2
 python-dateutil>=2.6.0
