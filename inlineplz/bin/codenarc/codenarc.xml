@@ -284,7 +284,7 @@
     <rule class='org.codenarc.rule.security.FileCreateTempFileRule'/>
     <rule class='org.codenarc.rule.security.SystemExitRule'/>
     <rule class='org.codenarc.rule.security.ObjectFinalizeRule'/>
-    <rule class='org.codenarc.rule.security.JavaIoPackageAccessRule'/>
+<!--     <rule class='org.codenarc.rule.security.JavaIoPackageAccessRule'/> -->
     <rule class='org.codenarc.rule.security.UnsafeArrayDeclarationRule'/>
     <rule class='org.codenarc.rule.security.PublicFinalizeMethodRule'/>
     <rule class='org.codenarc.rule.security.NonFinalPublicFieldRule'/>
