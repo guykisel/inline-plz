@@ -25,7 +25,7 @@ class YAMLLintParser(ParserBase):
         for line in lint_data.split("\n"):
             try:
                 if line.strip():
-                    parts = line.split(":")
+                    parts = line.split(":", 3)
                     path = parts[0].strip()
                     line = int(parts[1].strip())
                     msgbody = parts[3].strip()
