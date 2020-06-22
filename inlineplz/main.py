@@ -60,6 +60,7 @@ def main():
             args.config_dir = None
     print("inline-plz version: {}".format(__version__))
     print("Python version: {}".format(sys.version))
+    print("sys.path: {}".format(sys.path))
     start = time.time()
     result = inline(args)
     print("inline-plz version: {}".format(__version__))

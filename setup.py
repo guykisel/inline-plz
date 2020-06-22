@@ -37,7 +37,7 @@ setup(
     url="https://github.com/guykisel/inline-plz",
     packages=["inlineplz"],
     package_dir={"inlineplz": "inlineplz"},
-    package_data={"inlineplz": "linters/config/*"},
+    package_data={"inlineplz": ["linters/config/*"]},
     include_package_data=True,
     install_requires=requirements,
     license="ISCL",
