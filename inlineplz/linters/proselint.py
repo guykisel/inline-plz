@@ -14,7 +14,7 @@ from ..parsers.base import ParserBase
     rundefault=["proselint"],
     dotfiles=[],
     language="text",
-    autorun=True,
+    autorun=False,
     run_per_file=True,
     concurrency=1,
 )
