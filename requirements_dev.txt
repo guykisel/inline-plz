@@ -10,7 +10,7 @@ Sphinx==1.8.4
 # cryptography==1.0.1
 py==1.8.0
 pytest==4.3.0
-PyYAML==3.13
+PyYAML==5.4
 prospector[with_everything]==1.1.6.2
 python-dateutil>=2.6.0
 requests>=2.18
