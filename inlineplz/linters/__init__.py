@@ -43,6 +43,7 @@ from ..linters.spotbugsmaven import SpotbugsMavenParser  # NOQA
 from ..linters.stylint import StylintParser  # NOQA
 from ..linters.tflint import TFLintParser  # NOQA
 from ..linters.yamllint import YAMLLintParser  # NOQA
+from ..linters.woke import WokeParser #NOQA
 
 
 def register_patterns():
