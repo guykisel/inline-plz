@@ -23,8 +23,8 @@ class WokeParser(ParserBase):
 
     def parse(self, lint_data):
         messages = set()
-        lines = re.compile(r"\^\n").split(lint_data)
-        line_pat = re.compile(r"^(.+?):(\d+):(.+): (.+)\n")
+        lines = re.compile(r"\n").split(lint_data)
+        line_pat = re.compile(r"^(.+?):(\d+):(.+): (.+ \(.+\))")
 
         for line in lines:
             match = line_pat.search(line)
