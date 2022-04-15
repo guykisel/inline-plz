@@ -39,5 +39,3 @@ class WokeParser(ParserBase):
             )
 
         return messages
-
-
