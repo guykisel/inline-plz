@@ -35,7 +35,7 @@ def test_woke():
         messages = sorted(list(woke.WokeParser().parse(inputfile.read())))
         assert len(expected_messages) == len(messages)
 
-        for i in range(len(messages)):
+        for i, _ in enumerate(messages):
             assert messages[i][2] == expected_messages[i][2]
             assert messages[i][1] == expected_messages[i][1]
             assert messages[i][0] == expected_messages[i][0]
