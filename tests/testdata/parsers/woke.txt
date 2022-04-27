@@ -1,0 +1,10 @@
+sql/core/src/main/scala/org/apache/spark/sql/execution/joins/HashedRelation.scala:406:38-43: `dummy` may be insensitive, use `placeholder`, `sample` instead (error)
+    // TODO(josh): We won't need this dummy memory manager after future refactorings; revisit
+                                      ^
+sql/core/src/main/scala/org/apache/spark/sql/execution/datasources/FileFormatWriter.scala:208:82-87: `dummy` may be insensitive, use `placeholder`, `sample` instead (error)
+      // SPARK-23271 If we are attempting to write a zero partition rdd, create a dummy single
+                                                                                  ^
+docs/js/vendor/bootstrap.bundle.min.js.map:1:289699-289708: `whiteList` may be insensitive, use `allowlist`, `inclusion list` instead (warning)
+sql/core/src/main/scala/org/apache/spark/sql/execution/adaptive/InsertAdaptiveSparkPlan.scala:107:14-20: `sanity` may be insensitive, use `confidence`, `quick check`, `coherence check` instead (error)
+  private def sanityCheck(plan: SparkPlan): Boolean =
+              ^
