@@ -15,4 +15,4 @@ prospector[with_everything]==1.7.7
 python-dateutil>=2.6.0
 requests>=2.18
 black>=18.9b0; python_version >= '3.6'
-pyOpenSSL==20.0.1
+pyOpenSSL==22.1.0
