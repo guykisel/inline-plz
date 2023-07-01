@@ -4,7 +4,7 @@ wheel==0.40.0
 watchdog==3.0.0
 flake8==6.0.0
 tox==4.6.3
-coverage==5.5
+coverage==7.2.7
 Sphinx==4.0.2
 # only used for setup script
 # cryptography==1.0.1
